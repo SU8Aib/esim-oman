@@ -1,12 +1,8 @@
 window.ESIM_CONFIG = {
-  // الموقع يعمل مباشرة بالقيم الافتراضية حتى قبل ربط Supabase.
-  // بعد إنشاء مشروع Supabase، ضع القيمتين أدناه لتفعيل لوحة الإدارة والمزامنة العامة.
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: "",
+  SUPABASE_URL: "https://zdwnjwndowkjcxidqpld.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_56Izv8jz4ddcRwaV35NasQ_6CdOJXJo",
 
-  // البريد الإداري لا يظهر للزائر. شاشة الإدارة تطلب كلمة المرور فقط.
-  // استخدم نفس البريد عند إنشاء المستخدم في Supabase Auth، وغيّره أيضاً في supabase-setup.sql.
-  ADMIN_EMAIL: "admin@example.com",
+  ADMIN_EMAIL: "suhiap2016@gmail.com",
 
   DEFAULT_WHATSAPP_NUMBER: "96876746977"
 };
