@@ -1,125 +1,206 @@
-:root{
-  --bg:#08111f;--bg-soft:#0d192b;--surface:#101e32;--surface-2:#142740;--text:#f7fbff;--muted:#91a5bd;
-  --line:rgba(255,255,255,.09);--line-strong:rgba(255,255,255,.16);--accent:#24d7bd;--accent-2:#13bca5;--gold:#ffbf3f;
-  --shadow:0 24px 70px rgba(0,0,0,.28);--radius:24px;--radius-sm:16px;--max:1160px;
-}
-html[data-theme="light"]{
-  --bg:#f7fafc;--bg-soft:#edf3f7;--surface:#ffffff;--surface-2:#f5f8fa;--text:#0a1728;--muted:#62758a;
-  --line:rgba(8,25,45,.09);--line-strong:rgba(8,25,45,.16);--shadow:0 22px 60px rgba(35,58,82,.12);
-}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.7;overflow-x:hidden;transition:background .25s,color .25s}a{text-decoration:none;color:inherit}button,input,select,textarea{font:inherit}button{color:inherit}.container{width:min(var(--max),calc(100% - 36px));margin:auto}.narrow{max-width:780px}.section-space{padding:78px 0;position:relative}.ambient{position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(620px 420px at 85% -8%,rgba(36,215,189,.15),transparent 60%),radial-gradient(480px 340px at 8% 20%,rgba(255,191,63,.08),transparent 65%)}
-.site-header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.nav-shell{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:1.14rem;direction:ltr}.brand strong{color:var(--accent)}.brand-mark{width:30px;height:30px;border:1px solid var(--line-strong);border-radius:10px;display:grid;place-items:center;background:var(--surface)}.brand-mark i{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(36,215,189,.13)}.desktop-nav{display:flex;align-items:center;gap:28px;color:var(--muted);font-size:.92rem}.desktop-nav a:hover{color:var(--text)}.nav-actions{display:flex;align-items:center;gap:10px}.theme-toggle,.menu-toggle{border:1px solid var(--line);background:var(--surface);border-radius:50%;width:42px;height:42px;display:grid;place-items:center;cursor:pointer}.theme-toggle{position:relative;overflow:hidden}.theme-toggle span{position:absolute;transition:.22s}.theme-moon{opacity:1;transform:translateY(0)}.theme-sun{opacity:0;transform:translateY(18px)}html[data-theme="light"] .theme-moon{opacity:0;transform:translateY(-18px)}html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}.menu-toggle{display:none;padding:11px}.menu-toggle span{display:block;height:2px;background:var(--text);border-radius:2px;margin:3px 0}.mobile-nav{display:none;padding:8px 18px 18px;background:var(--bg);border-bottom:1px solid var(--line)}.mobile-nav.open{display:grid}.mobile-nav a{padding:13px 8px;border-bottom:1px solid var(--line);color:var(--muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 22px;border-radius:999px;border:1px solid transparent;font-weight:700;cursor:pointer;transition:.18s;white-space:nowrap}.btn:active{transform:scale(.98)}.btn-primary{background:var(--accent);color:#031a15;box-shadow:0 10px 30px rgba(36,215,189,.18)}.btn-primary:hover{background:var(--accent-2);transform:translateY(-1px)}.btn-secondary{background:var(--surface);border-color:var(--line-strong)}.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}.btn-sm{padding:10px 16px;font-size:.84rem}.btn-block{width:100%}
-.hero{padding-top:92px}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:64px}.kicker,.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(36,215,189,.25);background:rgba(36,215,189,.08);color:var(--accent);padding:7px 14px;border-radius:999px;font-size:.78rem;font-weight:700}.kicker span{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(36,215,189,.11)}.hero h1{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:clamp(2.6rem,5vw,4.7rem);line-height:1.15;margin:22px 0 20px;letter-spacing:-.025em}.hero h1 em,.section-head h2 em{font-style:normal;color:var(--accent)}.hero-copy>p{max-width:590px;color:var(--muted);font-size:1.05rem}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 32px}.trust-row{display:flex;gap:34px;flex-wrap:wrap}.trust-row div{display:grid}.trust-row b{font-family:'JetBrains Mono',monospace;font-size:1.3rem}.trust-row span{font-size:.76rem;color:var(--muted)}.hero-visual{min-height:450px;display:grid;place-items:center;position:relative}.orbit{position:absolute;border:1px solid var(--line);border-radius:50%}.orbit-a{width:430px;height:430px}.orbit-b{width:330px;height:330px;border-style:dashed;border-color:rgba(36,215,189,.18)}.sim-card{position:absolute;width:290px;min-height:194px;padding:24px;border-radius:24px;background:linear-gradient(145deg,var(--surface-2),var(--surface));border:1px solid var(--line-strong);box-shadow:var(--shadow)}.sim-card-back{transform:translate(-42px,58px) rotate(10deg);opacity:.82}.sim-card-front{transform:translate(25px,-30px) rotate(-5deg);z-index:2}.sim-top{display:flex;justify-content:space-between;direction:ltr;margin-bottom:24px}.chip{width:39px;height:29px;border-radius:7px;background:linear-gradient(135deg,#ffd16f,#ba7e16);display:block}.signal{display:flex;gap:3px;align-items:flex-end;height:18px}.signal i{display:block;width:4px;background:var(--accent);border-radius:3px}.signal i:nth-child(1){height:5px}.signal i:nth-child(2){height:9px}.signal i:nth-child(3){height:13px}.signal i:nth-child(4){height:18px}.sim-card small{display:block;color:var(--muted);font-size:.72rem}.sim-card b{font-family:'JetBrains Mono',monospace;font-size:.96rem;direction:ltr;display:inline-block}.qr-art{width:68px;height:68px;border-radius:9px;margin-bottom:18px;background:repeating-linear-gradient(0deg,#f9fcff 0 4px,transparent 4px 8px),repeating-linear-gradient(90deg,#f9fcff 0 4px,transparent 4px 8px);background-color:#0b1625}.floating-note{position:absolute;background:var(--surface);border:1px solid var(--line-strong);box-shadow:var(--shadow);padding:11px 15px;border-radius:14px;font-size:.78rem;font-weight:700;z-index:3}.note-a{top:36px;right:4px}.note-b{bottom:46px;left:0}
-.network-strip{border-block:1px solid var(--line);padding:25px 0}.network-inner{display:flex;align-items:center;gap:18px;justify-content:space-between}.muted-label{font-size:.79rem;color:var(--muted)}.network-pills{display:flex;gap:9px;flex-wrap:wrap}.network-pills span{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);padding:7px 13px;border-radius:999px;font-size:.82rem;color:var(--muted)}.network-pills i{width:6px;height:6px;background:var(--accent);border-radius:50%}
-.section-head{text-align:center;max-width:680px;margin:0 auto 42px}.section-head .eyebrow{margin-bottom:14px}.section-head h2{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:clamp(1.9rem,3vw,2.7rem);line-height:1.3;margin-bottom:12px}.section-head p{color:var(--muted)}.benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.benefit{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:25px}.benefit>span{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:rgba(36,215,189,.1);margin-bottom:16px}.benefit h3{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:1rem;margin-bottom:7px}.benefit p{font-size:.87rem;color:var(--muted)}
-.featured-section{padding-top:50px}.featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}.package-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 25px;display:flex;flex-direction:column;min-height:100%}.package-card.best-value{border-color:rgba(36,215,189,.45);background:linear-gradient(155deg,rgba(36,215,189,.08),var(--surface) 45%);box-shadow:0 24px 65px rgba(36,215,189,.12);transform:translateY(-9px)}.best-badge{position:absolute;top:-13px;right:24px;background:var(--gold);color:#251700;padding:6px 13px;border-radius:999px;font-size:.7rem;font-weight:700}.package-label{font-size:.78rem;color:var(--muted);margin-bottom:4px}.package-card h3{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:2rem;line-height:1.2;direction:ltr;text-align:right}.package-card>p{color:var(--muted);font-size:.85rem;margin-top:4px}.price{display:flex;align-items:baseline;gap:6px;margin:20px 0;padding-bottom:20px;border-bottom:1px solid var(--line)}.price b{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:1.7rem}.best-value .price b{color:var(--gold)}.price span{font-size:.78rem;color:var(--muted)}.package-card ul{display:grid;gap:9px;color:var(--muted);font-size:.84rem;margin-bottom:24px;flex:1}.package-card li::first-letter{color:var(--accent)}
-.segmented{display:flex;margin:0 auto 28px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px;width:max-content;max-width:100%}.segment{border:0;background:transparent;padding:10px 22px;border-radius:999px;color:var(--muted);cursor:pointer;font-weight:700}.segment.active{background:var(--accent);color:#031a15}.package-list{display:none;grid-template-columns:repeat(2,1fr);gap:12px}.package-list.active{display:grid}.package-row{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.package-row>div{display:flex;align-items:center;gap:14px}.package-row b{font-family:'JetBrains Mono',monospace;direction:ltr;min-width:88px}.package-row span{font-size:.82rem;color:var(--muted)}.package-row strong{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.9rem;white-space:nowrap}.package-row a{background:var(--accent);color:#031a15;padding:8px 13px;border-radius:999px;font-size:.76rem;font-weight:700}.micro-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:22px}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}.steps-grid article{padding:28px;border-left:1px solid var(--line)}.steps-grid article:last-child{border-left:0}.steps-grid span{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700}.steps-grid h3{font-family:'IBM Plex Sans Arabic',sans-serif;margin:10px 0 6px}.steps-grid p{color:var(--muted);font-size:.86rem}.faq-list{display:grid;gap:11px}.faq-list details{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px}.faq-list summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font-weight:700}.faq-list summary::-webkit-details-marker{display:none}.faq-list summary span{color:var(--accent);font-size:1.2rem}.faq-list p{color:var(--muted);font-size:.88rem;margin-top:12px}.cta-section{padding-top:30px}.cta-card{text-align:center;border:1px solid rgba(36,215,189,.25);border-radius:30px;padding:52px 25px;background:radial-gradient(420px 200px at 50% 0,rgba(36,215,189,.13),transparent 70%),var(--surface)}.cta-card>span{color:var(--accent);font-size:.8rem;font-weight:700}.cta-card h2{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:clamp(1.8rem,3vw,2.5rem);margin:6px 0 8px}.cta-card p{color:var(--muted);margin:0 auto 24px;max-width:600px}footer{border-top:1px solid var(--line);padding:30px 0 94px}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;color:var(--muted);font-size:.78rem}.mobile-sticky-wa{display:none}
-@media(max-width:900px){.desktop-nav{display:none}.menu-toggle{display:block}.nav-actions .btn-sm{display:none}.hero{padding-top:62px}.hero-grid{grid-template-columns:1fr;gap:26px}.hero-copy{text-align:center}.hero-copy>p{margin:auto}.kicker{margin:auto}.hero-actions,.trust-row{justify-content:center}.hero-visual{min-height:390px}.orbit-a{width:360px;height:360px}.orbit-b{width:285px;height:285px}.benefits-grid{grid-template-columns:repeat(2,1fr)}.featured-grid{
-  display:flex;
-  grid-template-columns:none;
-  max-width:none;
-  margin:0 -13px;
-  padding:14px 13px 18px;
-  gap:12px;
-  overflow-x:auto;
-  overflow-y:visible;
-  scroll-snap-type:x mandatory;
-  scroll-padding-inline:13px;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-inline:contain;
-  scrollbar-width:none
-}
-.featured-grid::-webkit-scrollbar{display:none}
-.featured-grid .package-card{
-  flex:0 0 min(78vw,330px);
-  scroll-snap-align:center;
-  min-height:auto
-}.package-card.best-value{transform:none}.package-list{grid-template-columns:1fr}.steps-grid{grid-template-columns:repeat(2,1fr)}.steps-grid article{border-bottom:1px solid var(--line)}.network-inner{align-items:flex-start;flex-direction:column}.footer-inner{flex-direction:column;text-align:center}}
-@media(max-width:620px){
-/* Mobile featured packages:
-   Best-value package on top, two compact packages below */
-.featured-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  margin:0;
-  padding:8px 0 2px;
-  overflow:visible;
-  scroll-snap-type:none
-}
-.featured-grid .package-card{
-  min-width:0;
-  min-height:0;
-  padding:18px 14px 14px;
-  border-radius:20px
-}
-.featured-grid .package-card.best-value{
-  grid-column:1 / -1;
-  grid-row:1;
-  width:min(100%,360px);
-  justify-self:center;
-  transform:none;
-  padding:21px 18px 16px
-}
-.featured-grid .package-card:not(.best-value){
-  grid-row:2;
-}
-.featured-grid .package-label{
-  font-size:.66rem;
-  text-align:center;
-  margin-bottom:3px
-}
-.featured-grid .package-card h3{
-  font-size:1.45rem;
-  text-align:center;
-  white-space:nowrap
-}
-.featured-grid .package-card.best-value h3{
-  font-size:1.8rem
-}
-.featured-grid .package-card>p{
-  font-size:.68rem;
-  text-align:center;
-  margin-top:2px
-}
-.featured-grid .price{
-  justify-content:center;
-  gap:4px;
-  margin:12px 0;
-  padding-bottom:12px
-}
-.featured-grid .price b{
-  font-size:1.18rem
-}
-.featured-grid .package-card.best-value .price b{
-  font-size:1.35rem
-}
-.featured-grid .price span{
-  font-size:.58rem
-}
-.featured-grid .package-card ul{
-  display:none
-}
-.featured-grid .btn{
-  padding:10px 8px;
-  font-size:.7rem;
-  line-height:1.25;
-  white-space:normal;
-  text-align:center
-}
-.featured-grid .package-card.best-value .btn{
-  font-size:.78rem;
-  padding:11px 12px
-}
-.featured-grid .best-badge{
-  top:-10px;
-  right:50%;
-  transform:translateX(50%);
-  padding:5px 10px;
-  font-size:.58rem;
-  white-space:nowrap
-}
-.container{width:min(100% - 26px,var(--max))}.section-space{padding:62px 0}.nav-shell{height:68px}.hero h1{font-size:2.55rem}.hero-actions{display:grid}.hero-actions .btn{width:100%}.trust-row{gap:23px}.hero-visual{min-height:338px}.orbit-a{width:305px;height:305px}.orbit-b{width:245px;height:245px}.sim-card{width:235px;min-height:164px;padding:19px}.sim-card-back{transform:translate(-30px,46px) rotate(9deg)}.sim-card-front{transform:translate(18px,-25px) rotate(-5deg)}.qr-art{width:55px;height:55px}.floating-note{font-size:.7rem;padding:9px 12px}.note-a{right:0;top:20px}.note-b{left:0;bottom:30px}.benefits-grid{grid-template-columns:1fr}.package-row{align-items:stretch;flex-direction:column}.package-row>div{justify-content:space-between;width:100%}.package-row b{min-width:auto}.steps-grid{grid-template-columns:1fr}.steps-grid article{border-left:0}.section-head{margin-bottom:32px}.mobile-sticky-wa{display:flex;position:fixed;z-index:45;left:13px;right:13px;bottom:calc(10px + env(safe-area-inset-bottom));height:54px;border-radius:18px;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#031a15;font-weight:700;box-shadow:0 18px 40px rgba(0,0,0,.28)}footer{padding-bottom:92px}.network-pills{gap:7px}.network-pills span{font-size:.76rem}.segmented{width:100%}.segment{flex:1;padding-inline:10px}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#08111f" />
+  <title>eSIM.OM — باقات eSIM عُمانية</title>
+  <meta name="description" content="باقات eSIM عُمانية رقمية، تفعيل سريع عبر واتساب، بدون شريحة فيزيائية." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260819-1749" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="#top" aria-label="eSIM.OM">
+        <span class="brand-mark"><i></i></span>
+        <span>eSIM<strong>.OM</strong></span>
+      </a>
+      <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+        <a href="#featured">الأكثر طلباً</a>
+        <a href="#packages">كل الباقات</a>
+        <a href="#how">طريقة الطلب</a>
+        <a href="#faq">الأسئلة</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل الوضع" title="تبديل الوضع">
+          <span class="theme-sun">☀</span><span class="theme-moon">☾</span>
+        </button>
+        <a class="btn btn-primary btn-sm js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب الآن</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#featured">الأكثر طلباً</a><a href="#packages">كل الباقات</a><a href="#how">طريقة الطلب</a><a href="#faq">الأسئلة</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero section-space">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="kicker"><span></span> eSIM عُمانية رقمية 100٪</div>
+          <h1>إنترنت جاهز بدقايق، <em>بدون شريحة فيزيائية</em></h1>
+          <p>اختر الباقة المناسبة، أرسل طلبك على واتساب، واستلم كود QR لتفعيل eSIM على جهازك. تجربة سريعة وواضحة من أول ضغطة.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب باقتك عبر واتساب</a>
+            <a class="btn btn-secondary" href="#packages">استعرض الباقات</a>
+          </div>
+          <div class="trust-row">
+            <div><b>3</b><span>شبكات رئيسية</span></div>
+            <div><b>&lt;5m</b><span>تفعيل سريع</span></div>
+            <div><b>100%</b><span>دعم طوال المدة</span></div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="تصميم توضيحي لشريحة eSIM">
+          <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+          <div class="sim-card sim-card-back">
+            <div class="sim-top"><span class="chip"></span><span class="signal"><i></i><i></i><i></i><i></i></span></div>
+            <small>الباقة</small><b>10GB — 30 يوم</b>
+          </div>
+          <div class="sim-card sim-card-front">
+            <div class="sim-top"><span class="chip"></span><span class="signal"><i></i><i></i><i></i><i></i></span></div>
+            <div class="qr-art" aria-hidden="true"></div>
+            <small>eSIM.OM</small><b>جاهزة للتفعيل</b>
+          </div>
+          <div class="floating-note note-a">⚡ تفعيل سريع</div>
+          <div class="floating-note note-b">✓ بدون زيارة محل</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="network-strip">
+      <div class="container network-inner">
+        <span class="muted-label">متوافقة مع</span>
+        <div class="network-pills">
+          <span><i></i> عُمانتل</span><span><i></i> أوريدو</span><span><i></i> فودافون</span><span><i></i> iPhone & Android</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">ليش eSIM.OM؟</span>
+          <h2>تجربة <em>بسيطة، سريعة وواضحة</em></h2>
+          <p>واجهة نظيفة، اختيار مباشر، ورسالة واتساب جاهزة بتفاصيل الباقة التي اخترتها.</p>
+        </div>
+        <div class="benefits-grid">
+          <article class="benefit"><span>⚡</span><h3>تفعيل سريع</h3><p>اطلب، استلم QR، ثم فعّل الشريحة من إعدادات جهازك.</p></article>
+          <article class="benefit"><span>🛡</span><h3>دعم طوال المدة</h3><p>إذا واجهتك مشكلة في الباقة، تواصل معنا ونساعدك مباشرة.</p></article>
+          <article class="benefit"><span>📶</span><h3>خيارات متعددة</h3><p>باقات بيانات محددة وخيارات إنترنت غير محدود.</p></article>
+          <article class="benefit"><span>📱</span><h3>كل شيء من الجوال</h3><p>الموقع مصمم للجوال أولاً وبأزرار كبيرة وسهلة.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space featured-section" id="featured">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">الأكثر طلباً</span>
+          <h2>ثلاث باقات <em>نرشحها لك</em></h2>
+          <p>الباقة المحددة كـ “الأفضل قيمة” تظهر دائماً في المنتصف.</p>
+        </div>
+        <div class="featured-grid" id="featuredGrid">
+          <!-- Fallback content remains visible even if a phone file preview blocks JavaScript. -->
+          <article class="package-card">
+            <div class="package-label">بداية اقتصادية</div><h3>5GB</h3><p>30 يوم</p><div class="price"><b>1.500</b><span>ر.ع</span></div>
+            <ul><li>✓ استخدام يومي</li><li>✓ تفعيل سريع</li><li>✓ دعم طوال المدة</li></ul>
+            <a class="btn btn-secondary btn-block" href="https://wa.me/96876746977?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%B7%D9%84%D8%A8%20%D8%A8%D8%A7%D9%82%D8%A9%205GB%20%D9%84%D9%85%D8%AF%D8%A9%2030%20%D9%8A%D9%88%D9%85" target="_blank" rel="noopener">اطلب الباقة</a>
+          </article>
+          <article class="package-card best-value">
+            <span class="best-badge">الأفضل قيمة</span><div class="package-label">الأكثر طلباً</div><h3>10GB</h3><p>30 يوم</p><div class="price"><b>2.500</b><span>ر.ع</span></div>
+            <ul><li>✓ قيمة ممتازة</li><li>✓ للتصفح والتطبيقات</li><li>✓ دعم طوال المدة</li></ul>
+            <a class="btn btn-primary btn-block" href="https://wa.me/96876746977?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%B7%D9%84%D8%A8%20%D8%A8%D8%A7%D9%82%D8%A9%2010GB%20%D9%84%D9%85%D8%AF%D8%A9%2030%20%D9%8A%D9%88%D9%85" target="_blank" rel="noopener">اطلب الباقة</a>
+          </article>
+          <article class="package-card">
+            <div class="package-label">بلا حدود</div><h3>غير محدود</h3><p>30 يوم</p><div class="price"><b>10.500</b><span>ر.ع</span></div>
+            <ul><li>✓ استخدام مكثف</li><li>✓ بيانات غير محدودة</li><li>✓ دعم طوال المدة</li></ul>
+            <a class="btn btn-secondary btn-block" href="https://wa.me/96876746977?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%B7%D9%84%D8%A8%20%D8%A8%D8%A7%D9%82%D8%A9%20%D8%BA%D9%8A%D8%B1%20%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D8%A9%20%D9%84%D9%85%D8%AF%D8%A9%2030%20%D9%8A%D9%88%D9%85" target="_blank" rel="noopener">اطلب الباقة</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space" id="packages">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">كل الباقات</span>
+          <h2>اختر الباقة <em>المناسبة لك</em></h2>
+          <p>بدّل بين الباقات المحددة والإنترنت غير المحدود، ثم أرسل الطلب مباشرة.</p>
+        </div>
+        <div class="segmented" role="tablist" aria-label="نوع الباقة">
+          <button class="segment active" data-tab="data" role="tab" aria-selected="true">باقات محددة</button>
+          <button class="segment" data-tab="unlimited" role="tab" aria-selected="false">غير محدود</button>
+        </div>
+
+        <div class="package-list active" id="dataGrid" data-panel="data">
+          <article class="package-row"><div><b>1GB</b><span>3 أيام</span></div><div><strong>0.200 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>3GB</b><span>شهر كامل</span></div><div><strong>0.900 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>5GB</b><span>15 يوم</span></div><div><strong>1.100 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>5GB</b><span>30 يوم</span></div><div><strong>1.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>10GB</b><span>30 يوم</span></div><div><strong>2.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>20GB</b><span>شهر كامل</span></div><div><strong>4.100 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+        </div>
+        <div class="package-list" id="unlimitedGrid" data-panel="unlimited">
+          <article class="package-row"><div><b>غير محدود</b><span>يوم واحد</span></div><div><strong>0.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>غير محدود</b><span>14 يوم</span></div><div><strong>6.100 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+          <article class="package-row"><div><b>غير محدود</b><span>30 يوم</span></div><div><strong>10.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
+        </div>
+        <div class="micro-note">🔒 الباقات النشطة فقط تظهر للزوار عند ربط لوحة الإدارة.</div>
+      </div>
+    </section>
+
+    <section class="section-space" id="how">
+      <div class="container">
+        <div class="section-head"><span class="eyebrow">طريقة الطلب</span><h2>أربع خطوات <em>بدون تعقيد</em></h2></div>
+        <div class="steps-grid">
+          <article><span>01</span><h3>اختر</h3><p>حدد الباقة حسب البيانات والمدة والسعر.</p></article>
+          <article><span>02</span><h3>أرسل</h3><p>زر الطلب يفتح واتساب برسالة جاهزة.</p></article>
+          <article><span>03</span><h3>استلم QR</h3><p>بعد تأكيد الطلب تستلم كود التفعيل.</p></article>
+          <article><span>04</span><h3>فعّل</h3><p>أضف eSIM من إعدادات جهازك واستمتع.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space" id="faq">
+      <div class="container narrow">
+        <div class="section-head"><span class="eyebrow">أسئلة شائعة</span><h2>معلومات سريعة <em>قبل الطلب</em></h2></div>
+        <div class="faq-list">
+          <details open><summary>كيف أستلم الشريحة؟ <span>＋</span></summary><p>بعد تأكيد الطلب، يتم إرسال كود QR الخاص بالـ eSIM لتضيفه من إعدادات جهازك.</p></details>
+          <details><summary>هل تشتغل على كل الأجهزة؟ <span>＋</span></summary><p>تحتاج جهازاً يدعم eSIM. تأكد من دعم جهازك قبل الطلب.</p></details>
+          <details><summary>كيف أطلب باقة محددة؟ <span>＋</span></summary><p>اضغط “اطلب” بجانب الباقة، وستفتح رسالة واتساب فيها تفاصيل الباقة تلقائياً.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-space cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <span>جاهز تبدأ؟</span><h2>اختر الباقة وخلك أونلاين خلال دقائق</h2><p>راسلنا على واتساب وسنساعدك في اختيار الأنسب لجهازك واستخدامك.</p>
+          <a class="btn btn-primary js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener">تواصل على واتساب</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="brand" href="#top"><span class="brand-mark"><i></i></span><span>eSIM<strong>.OM</strong></span></a>
+      <p>شرائح eSIM عُمانية رقمية — العروض قابلة للتحديث.</p>
+      <span>© 2026 eSIM.OM</span>
+    </div>
+  </footer>
+
+  <a class="mobile-sticky-wa js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener"><span>💬</span> اطلب عبر واتساب</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
