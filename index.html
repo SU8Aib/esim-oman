@@ -1,384 +1,514 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#08111f" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>eSIM.OM — باقات eSIM عُمانية</title>
-  <meta name="description" content="باقات eSIM عُمانية رقمية، تفعيل سريع عبر واتساب، بدون شريحة فيزيائية." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260819-1923" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<meta name="robots" content="noindex,nofollow">
+<title>eSIM.OM — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07111f;--surface:#0d1a2c;--surface2:#12243b;--surface3:#172b45;
+  --text:#f7fbff;--muted:#8ea1b8;--line:rgba(255,255,255,.10);
+  --accent:#28d5bd;--accent2:#18bca6;--gold:#ffbf47;--red:#ff6f7d;
+  --shadow:0 18px 50px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{
+  min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:'Tajawal',sans-serif;line-height:1.55;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+[hidden]{display:none!important}
+
+.brand{display:flex;align-items:center;gap:9px;direction:ltr;font-family:'IBM Plex Sans Arabic';font-weight:700;font-size:1.15rem}
+.brand strong{color:var(--accent)}
+.brand-mark{width:34px;height:34px;border:1px solid var(--line);background:var(--surface2);border-radius:11px;display:grid;place-items:center}
+.brand-mark:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(40,213,189,.12)}
+
+.btn{border:0;border-radius:13px;padding:12px 15px;font-weight:700}
+.btn-primary{background:var(--accent);color:#04201b}
+.btn-primary:active{background:var(--accent2)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--line)}
+.btn-danger{background:rgba(255,111,125,.08);color:var(--red);border:1px solid rgba(255,111,125,.18)}
+.full{width:100%}
+.small{padding:9px 11px;border-radius:10px;font-size:.76rem}
+
+input,select,textarea{
+  width:100%;border:1px solid var(--line);background:var(--surface2);color:var(--text);
+  border-radius:12px;padding:12px;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(40,213,189,.08)}
+textarea{resize:vertical}
+label{display:grid;gap:7px;color:var(--muted);font-size:.78rem;font-weight:700}
+.muted{color:var(--muted)}
+.kicker{color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.06em}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:18px}
+.login-card{
+  width:min(430px,100%);background:var(--surface);border:1px solid var(--line);
+  border-radius:24px;padding:24px;box-shadow:var(--shadow);
+}
+.login-card .brand{margin-bottom:26px}
+.login-card h1{font-family:'IBM Plex Sans Arabic';font-size:1.9rem;margin:6px 0}
+.login-card p{color:var(--muted);font-size:.84rem}
+.login-card form{display:grid;gap:14px;margin-top:24px}
+.password-box{position:relative}
+.password-box input{padding-left:48px}
+.eye{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;background:transparent;color:var(--muted)}
+.msg{min-height:20px;font-size:.76rem}
+.msg.error{color:var(--red)} .msg.success{color:var(--accent)}
+.login-foot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;font-size:.74rem;color:var(--muted)}
+
+/* APP */
+.app{min-height:100vh;padding-bottom:86px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:#081523;border-bottom:1px solid var(--line);
+  min-height:64px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:12px;background:var(--accent);color:#04201b;display:grid;place-items:center;font-weight:700}
+.topbar-title{display:grid}
+.topbar-title b{font-size:.86rem}
+.topbar-title span{font-size:.62rem;color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar-actions{display:flex;gap:7px}
+.icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--surface2);color:var(--text);display:grid;place-items:center}
+
+.main{width:min(1100px,100%);margin:auto;padding:16px}
+.page{display:none}.page.active{display:block}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.page-head h2{font-family:'IBM Plex Sans Arabic';font-size:1.35rem}
+.page-head p{font-size:.75rem;color:var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+.stat span{color:var(--muted);font-size:.68rem}
+.stat b{display:block;font-family:'JetBrains Mono';font-size:1.25rem;margin-top:2px}
+.stat.accent b{color:var(--accent)} .stat.gold b{color:var(--gold)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.panel-head h3{font-family:'IBM Plex Sans Arabic';font-size:1rem}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quick{border:1px solid var(--line);background:var(--surface2);color:var(--text);border-radius:13px;padding:12px;text-align:right}
+.quick b{display:block;font-size:.78rem}.quick span{color:var(--muted);font-size:.66rem}
+
+.featured-list{display:grid;gap:8px}
+.featured-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface2);border:1px solid var(--line);border-radius:13px;padding:11px}
+.featured-item.best{border-color:rgba(255,191,71,.28)}
+.featured-item div{display:grid}.featured-item b{font-size:.8rem}.featured-item span{font-size:.65rem;color:var(--muted)}
+.featured-item strong{font-family:'JetBrains Mono';font-size:.75rem;color:var(--accent)}
+
+.toolbar{display:grid;gap:8px;margin-bottom:10px}
+.toolbar-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.package-list{display:grid;gap:9px}
+.pkg-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:13px}
+.pkg-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pkg-main{display:flex;align-items:center;gap:10px;min-width:0}
+.pkg-icon{width:40px;height:40px;border-radius:12px;background:rgba(40,213,189,.08);color:var(--accent);display:grid;place-items:center;font-family:'JetBrains Mono';font-size:.67rem}
+.pkg-info{min-width:0}.pkg-info b{display:block;font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pkg-info span{font-size:.65rem;color:var(--muted)}
+.pkg-price{text-align:left;font-family:'JetBrains Mono';font-size:.79rem;color:var(--accent)}
+.pkg-flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pill{border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:5px 8px;font-size:.62rem;color:var(--muted)}
+.pill.on{color:var(--accent)} .pill.featured{color:var(--gold)}
+.pkg-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.pkg-actions button{padding:8px 5px;font-size:.65rem;border-radius:9px}
+.empty{padding:28px 12px;text-align:center;color:var(--muted);font-size:.78rem}
+
+.settings-form{display:grid;gap:14px}
+.system-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.72rem}
+.system-row:last-child{border-bottom:0}.system-row span{color:var(--muted)}.ok{color:var(--accent)}
+
+.bottom-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;background:#081523;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(3,1fr);padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+}
+.bottom-nav button{border:0;background:transparent;color:var(--muted);display:grid;justify-items:center;gap:2px;padding:6px;border-radius:10px}
+.bottom-nav button.active{color:var(--accent);background:rgba(40,213,189,.07)}
+.bottom-nav i{font-style:normal;font-size:1rem}.bottom-nav span{font-size:.62rem;font-weight:700}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.62);display:none;align-items:flex-end}
+.modal.open{display:flex}
+.sheet{
+  width:100%;max-height:92vh;overflow:auto;background:var(--surface);border-radius:22px 22px 0 0;border-top:1px solid var(--line);
+  padding:16px 14px calc(16px + env(safe-area-inset-bottom));
+}
+.sheet-head{position:sticky;top:-16px;background:var(--surface);z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0 12px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.sheet-head h3{font-family:'IBM Plex Sans Arabic';font-size:1.05rem}
+.close-btn{width:36px;height:36px;border:1px solid var(--line);background:var(--surface2);border-radius:11px;color:var(--text)}
+.form-grid{display:grid;gap:11px}
+.switches{display:grid;gap:8px;margin:13px 0}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:var(--surface2);padding:11px;border-radius:12px}
+.switch-row div{display:grid}.switch-row b{font-size:.74rem}.switch-row small{font-size:.61rem;color:var(--muted)}
+.switch-row input{width:20px;height:20px;accent-color:var(--accent)}
+.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:sticky;bottom:-16px;background:var(--surface);padding-top:12px}
+
+.toast{position:fixed;left:12px;right:12px;bottom:90px;z-index:100;background:var(--surface2);border:1px solid var(--line);padding:11px 13px;border-radius:13px;box-shadow:var(--shadow);font-size:.74rem;display:none}
+.toast.show{display:block}.toast.error{border-color:rgba(255,111,125,.28);color:var(--red)}
+
+@media(min-width:760px){
+  .app{padding-bottom:20px}
+  .bottom-nav{position:sticky;top:64px;bottom:auto;width:min(560px,calc(100% - 32px));margin:14px auto;border:1px solid var(--line);border-radius:14px;padding:5px;background:var(--surface)}
+  .main{padding-top:2px}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .quick-grid{grid-template-columns:repeat(4,1fr)}
+  .toolbar{grid-template-columns:1.5fr .8fr .8fr}
+  .toolbar-row{display:contents}
+  .package-list{grid-template-columns:repeat(2,1fr)}
+  .modal{align-items:center;justify-content:center;padding:20px}
+  .sheet{width:min(680px,100%);border-radius:22px;max-height:90vh;padding:20px}
+  .sheet-head{top:-20px}
+  .form-grid{grid-template-columns:1fr 1fr}
+  .span2{grid-column:1/-1}
+  .switches{grid-template-columns:repeat(3,1fr)}
+  .switch-row{align-items:flex-start}
+}
+</style>
 </head>
 <body>
-  <div class="ambient" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <div class="container nav-shell">
-      <a class="brand" href="#top" aria-label="eSIM.OM">
-        <span class="brand-mark"><i></i></span>
-        <span>eSIM<strong>.OM</strong></span>
-      </a>
-      <nav class="desktop-nav" aria-label="التنقل الرئيسي">
-        <a href="#featured">الأكثر طلباً</a>
-        <a href="#packages">كل الباقات</a>
-        <a href="#how">طريقة الطلب</a>
-        <a href="#faq">الأسئلة</a>
-      </nav>
-      <div class="nav-actions">
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل الوضع" title="تبديل الوضع">
-          <span class="theme-sun">☀</span><span class="theme-moon">☾</span>
-        </button>
-        <a class="btn btn-primary btn-sm js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب الآن</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة" aria-expanded="false"><span></span><span></span><span></span></button>
-      </div>
+<section id="loginView" class="login-wrap">
+  <div class="login-card">
+    <a class="brand" href="index.html"><span class="brand-mark"></span><span>eSIM<strong>.OM</strong></span></a>
+    <span class="kicker">ADMIN PORTAL</span>
+    <h1>دخول الإدارة</h1>
+    <p>لوحة مصممة للعمل من الجوال والكمبيوتر بنفس الوظائف.</p>
+    <form id="loginForm">
+      <label>كلمة المرور
+        <div class="password-box">
+          <input id="password" type="password" required autocomplete="current-password" placeholder="••••••••">
+          <button class="eye" id="togglePassword" type="button">👁</button>
+        </div>
+      </label>
+      <button id="loginBtn" class="btn btn-primary full" type="submit">دخول</button>
+      <div id="loginMsg" class="msg"></div>
+    </form>
+    <div class="login-foot"><a href="index.html">العودة للموقع</a><span>Supabase Secure</span></div>
+  </div>
+</section>
+
+<section id="appView" class="app" hidden>
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="avatar">A</div>
+      <div class="topbar-title"><b>إدارة eSIM.OM</b><span id="adminEmail">—</span></div>
     </div>
-    <div class="mobile-nav" id="mobileNav">
-      <a href="#featured">الأكثر طلباً</a><a href="#packages">كل الباقات</a><a href="#how">طريقة الطلب</a><a href="#faq">الأسئلة</a>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="refreshBtn" type="button">↻</button>
+      <a class="icon-btn" href="index.html" target="_blank">↗</a>
+      <button class="icon-btn" id="logoutBtn" type="button">⎋</button>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero section-space">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <div class="kicker"><span></span> eSIM عُمانية رقمية 100٪</div>
-          <h1>إنترنت جاهز بدقايق، <em>بدون شريحة فيزيائية</em></h1>
-          <p>اختر الباقة المناسبة، أرسل طلبك على واتساب، واستلم كود QR لتفعيل eSIM على جهازك. تجربة سريعة وواضحة من أول ضغطة.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب باقتك عبر واتساب</a>
-            <a class="btn btn-secondary" href="#packages">استعرض الباقات</a>
-          </div>
-          <div class="trust-row">
-            <div><b>3</b><span>شبكات رئيسية</span></div>
-            <div><b>&lt;5m</b><span>تفعيل سريع</span></div>
-            <div><b>100%</b><span>دعم طوال المدة</span></div>
-          </div>
-        </div>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="home"><i>⌂</i><span>الرئيسية</span></button>
+    <button class="nav-btn" data-page="packages"><i>▦</i><span>الباقات</span></button>
+    <button class="nav-btn" data-page="settings"><i>⚙</i><span>الإعدادات</span></button>
+  </nav>
 
-        <div class="hero-visual" aria-label="تصميم توضيحي لشريحة eSIM">
-          <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
-          <div class="sim-card sim-card-back">
-            <div class="sim-top"><span class="chip"></span><span class="signal"><i></i><i></i><i></i><i></i></span></div>
-            <small>الباقة</small><b>10GB — 30 يوم</b>
-          </div>
-          <div class="sim-card sim-card-front">
-            <div class="sim-top"><span class="chip"></span><span class="signal"><i></i><i></i><i></i><i></i></span></div>
-            <div class="qr-art" aria-hidden="true"></div>
-            <small>eSIM.OM</small><b>جاهزة للتفعيل</b>
-          </div>
-          <div class="floating-note note-a">⚡ تفعيل سريع</div>
-          <div class="floating-note note-b">✓ بدون زيارة محل</div>
+  <main class="main">
+    <section class="page active" data-page-panel="home">
+      <div class="page-head"><div><span class="kicker">Dashboard</span><h2>نظرة عامة</h2><p>كل التعديلات تحفظ مباشرة في Supabase.</p></div><button class="btn btn-primary small" id="homeAdd">＋ باقة</button></div>
+      <div class="stats">
+        <div class="stat"><span>إجمالي</span><b id="countAll">0</b></div>
+        <div class="stat accent"><span>نشطة</span><b id="countActive">0</b></div>
+        <div class="stat gold"><span>الأكثر طلباً</span><b id="countFeatured">0</b></div>
+        <div class="stat"><span>غير محدود</span><b id="countUnlimited">0</b></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><span class="kicker">Featured</span><h3>الباقات المميزة</h3></div><button class="btn btn-secondary small" id="goPackages">إدارة</button></div>
+        <div class="featured-list" id="featuredList"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><span class="kicker">Quick</span><h3>إجراءات سريعة</h3></div></div>
+        <div class="quick-grid">
+          <button class="quick" id="quickAdd"><b>＋ إضافة باقة</b><span>إنشاء باقة جديدة</span></button>
+          <button class="quick" id="quickWA"><b>☏ واتساب</b><span>تغيير رقم الطلبات</span></button>
+          <button class="quick" id="quickRefresh"><b>↻ تحديث</b><span>جلب آخر البيانات</span></button>
+          <a class="quick" href="index.html" target="_blank"><b>↗ الموقع</b><span>فتح صفحة الزوار</span></a>
         </div>
       </div>
     </section>
 
-    <section class="network-strip">
-      <div class="container network-inner">
-        <span class="muted-label">متوافقة مع</span>
-        <div class="network-pills">
-          <span><i></i> عُمانتل</span><span><i></i> أوريدو</span><span><i></i> فودافون</span><span><i></i> iPhone & Android</span>
+    <section class="page" data-page-panel="packages">
+      <div class="page-head"><div><span class="kicker">Packages</span><h2>إدارة الباقات</h2><p>إضافة، تعديل، إخفاء، تمييز وحذف.</p></div><button class="btn btn-primary small" id="addPackageBtn">＋ إضافة</button></div>
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="ابحث عن باقة...">
+        <div class="toolbar-row">
+          <select id="typeFilter"><option value="all">كل الأنواع</option><option value="data">بيانات</option><option value="unlimited">غير محدود</option></select>
+          <select id="statusFilter"><option value="all">كل الحالات</option><option value="active">نشطة</option><option value="inactive">مخفية</option><option value="featured">مميزة</option></select>
         </div>
       </div>
+      <div class="package-list" id="packageList"></div>
     </section>
 
-<section class="section-space featured-section" id="featured">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">الأكثر طلباً</span>
-          <h2>ثلاث باقات <em>نرشحها لك</em></h2>
-          <p>الباقة المحددة كـ “الأفضل قيمة” تظهر دائماً في المنتصف.</p>
-        </div>
-        <div class="featured-grid" id="featuredGrid">
-          <!-- Fallback content remains visible even if a phone file preview blocks JavaScript. -->
-          <article class="package-card">
-            <div class="package-label">بداية اقتصادية</div><h3>5GB</h3><p>30 يوم</p><div class="price"><b>1.500</b><span>ر.ع</span></div>
-            <ul><li>✓ استخدام يومي</li><li>✓ تفعيل سريع</li><li>✓ دعم طوال المدة</li></ul>
-            <a class="btn btn-secondary btn-block" href="https://wa.me/96876746977?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%B7%D9%84%D8%A8%20%D8%A8%D8%A7%D9%82%D8%A9%205GB%20%D9%84%D9%85%D8%AF%D8%A9%2030%20%D9%8A%D9%88%D9%85" target="_blank" rel="noopener">اطلب الباقة</a>
-          </article>
-          <article class="package-card best-value">
-            <span class="best-badge">الأفضل قيمة</span><div class="package-label">الأكثر طلباً</div><h3>10GB</h3><p>30 يوم</p><div class="price"><b>2.500</b><span>ر.ع</span></div>
-            <ul><li>✓ قيمة ممتازة</li><li>✓ للتصفح والتطبيقات</li><li>✓ دعم طوال المدة</li></ul>
-            <a class="btn btn-primary btn-block" href="https://wa.me/96876746977?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%B7%D9%84%D8%A8%20%D8%A8%D8%A7%D9%82%D8%A9%2010GB%20%D9%84%D9%85%D8%AF%D8%A9%2030%20%D9%8A%D9%88%D9%85" target="_blank" rel="noopener">اطلب الباقة</a>
-          </article>
-          <article class="package-card">
-            <div class="package-label">بلا حدود</div><h3>غير محدود</h3><p>30 يوم</p><div class="price"><b>10.500</b><span>ر.ع</span></div>
-            <ul><li>✓ استخدام مكثف</li><li>✓ بيانات غير محدودة</li><li>✓ دعم طوال المدة</li></ul>
-            <a class="btn btn-secondary btn-block" href="https://wa.me/96876746977?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%B7%D9%84%D8%A8%20%D8%A8%D8%A7%D9%82%D8%A9%20%D8%BA%D9%8A%D8%B1%20%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D8%A9%20%D9%84%D9%85%D8%AF%D8%A9%2030%20%D9%8A%D9%88%D9%85" target="_blank" rel="noopener">اطلب الباقة</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-space" id="packages">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">كل الباقات</span>
-          <h2>اختر الباقة <em>المناسبة لك</em></h2>
-          <p>بدّل بين الباقات المحددة والإنترنت غير المحدود، ثم أرسل الطلب مباشرة.</p>
-        </div>
-        <div class="segmented" role="tablist" aria-label="نوع الباقة">
-          <button class="segment active" data-tab="data" role="tab" aria-selected="true">باقات محددة</button>
-          <button class="segment" data-tab="unlimited" role="tab" aria-selected="false">غير محدود</button>
-        </div>
-
-        <div class="package-list active" id="dataGrid" data-panel="data">
-          <article class="package-row"><div><b>1GB</b><span>3 أيام</span></div><div><strong>0.200 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>3GB</b><span>شهر كامل</span></div><div><strong>0.900 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>5GB</b><span>15 يوم</span></div><div><strong>1.100 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>5GB</b><span>30 يوم</span></div><div><strong>1.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>10GB</b><span>30 يوم</span></div><div><strong>2.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>20GB</b><span>شهر كامل</span></div><div><strong>4.100 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-        </div>
-        <div class="package-list" id="unlimitedGrid" data-panel="unlimited">
-          <article class="package-row"><div><b>غير محدود</b><span>يوم واحد</span></div><div><strong>0.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>غير محدود</b><span>14 يوم</span></div><div><strong>6.100 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-          <article class="package-row"><div><b>غير محدود</b><span>30 يوم</span></div><div><strong>10.500 ر.ع</strong><a href="https://wa.me/96876746977" target="_blank" rel="noopener">اطلب</a></div></article>
-        </div>
-        <div class="micro-note">🔒 الباقات النشطة فقط تظهر للزوار عند ربط لوحة الإدارة.</div>
-      </div>
-    </section>
-
-    <section class="section-space" id="how">
-      <div class="container">
-        <div class="section-head"><span class="eyebrow">طريقة الطلب</span><h2>أربع خطوات <em>بدون تعقيد</em></h2></div>
-        <div class="steps-grid">
-          <article><span>01</span><h3>اختر</h3><p>حدد الباقة حسب البيانات والمدة والسعر.</p></article>
-          <article><span>02</span><h3>أرسل</h3><p>زر الطلب يفتح واتساب برسالة جاهزة.</p></article>
-          <article><span>03</span><h3>استلم QR</h3><p>بعد تأكيد الطلب تستلم كود التفعيل.</p></article>
-          <article><span>04</span><h3>فعّل</h3><p>أضف eSIM من إعدادات جهازك واستمتع.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-space" id="faq">
-      <div class="container narrow">
-        <div class="section-head"><span class="eyebrow">أسئلة شائعة</span><h2>معلومات سريعة <em>قبل الطلب</em></h2></div>
-        <div class="faq-list">
-          <details open><summary>كيف أستلم الشريحة؟ <span>＋</span></summary><p>بعد تأكيد الطلب، يتم إرسال كود QR الخاص بالـ eSIM لتضيفه من إعدادات جهازك.</p></details>
-          <details><summary>هل تشتغل على كل الأجهزة؟ <span>＋</span></summary><p>تحتاج جهازاً يدعم eSIM. تأكد من دعم جهازك قبل الطلب.</p></details>
-          <details><summary>كيف أطلب باقة محددة؟ <span>＋</span></summary><p>اضغط “اطلب” بجانب الباقة، وستفتح رسالة واتساب فيها تفاصيل الباقة تلقائياً.</p></details>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-space cta-section">
-      <div class="container">
-        <div class="cta-card">
-          <span>جاهز تبدأ؟</span><h2>اختر الباقة وخلك أونلاين خلال دقائق</h2><p>راسلنا على واتساب وسنساعدك في اختيار الأنسب لجهازك واستخدامك.</p>
-          <a class="btn btn-primary js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener">تواصل على واتساب</a>
-        </div>
+    <section class="page" data-page-panel="settings">
+      <div class="page-head"><div><span class="kicker">Settings</span><h2>الإعدادات</h2><p>إعدادات مرتبطة بالموقع العام.</p></div></div>
+      <form class="panel settings-form" id="settingsForm">
+        <div class="panel-head"><div><span class="kicker">WhatsApp</span><h3>رقم استقبال الطلبات</h3></div></div>
+        <label>رقم واتساب بصيغة دولية بدون +
+          <input id="waInput" inputmode="numeric" placeholder="968XXXXXXXX">
+        </label>
+        <button class="btn btn-primary" type="submit">حفظ رقم واتساب</button>
+        <div id="settingsMsg" class="msg"></div>
+      </form>
+      <div class="panel">
+        <div class="panel-head"><div><span class="kicker">System</span><h3>حالة النظام</h3></div></div>
+        <div class="system-row"><span>Supabase</span><b class="ok">● متصل</b></div>
+        <div class="system-row"><span>RLS</span><b class="ok">● مفعّل</b></div>
+        <div class="system-row"><span>حساب الإدارة</span><b id="systemEmail">—</b></div>
       </div>
     </section>
   </main>
+</section>
 
-  <footer>
-    <div class="container footer-inner">
-      <a class="brand" href="#top"><span class="brand-mark"><i></i></span><span>eSIM<strong>.OM</strong></span></a>
-      <p>شرائح eSIM عُمانية رقمية — العروض قابلة للتحديث.</p>
-      <span>© 2026 eSIM.OM</span>
-    </div>
-  </footer>
+<div id="packageModal" class="modal">
+  <div class="sheet">
+    <div class="sheet-head"><div><span class="kicker">PACKAGE EDITOR</span><h3 id="modalTitle">إضافة باقة</h3></div><button class="close-btn" id="closeModal" type="button">×</button></div>
+    <form id="packageForm">
+      <input id="pkgId" type="hidden">
+      <div class="form-grid">
+        <label>نوع الباقة<select id="pkgType"><option value="data">بيانات محددة</option><option value="unlimited">غير محدود</option></select></label>
+        <label>اسم / حجم الباقة<input id="pkgLabel" required placeholder="10GB"></label>
+        <label>المدة<input id="pkgDuration" required placeholder="30 يوم"></label>
+        <label>السعر (ر.ع)<input id="pkgPrice" type="number" min="0" step="0.001" required placeholder="2.500"></label>
+        <label class="span2">الوصف القصير<input id="pkgTagline" placeholder="الأكثر طلباً"></label>
+        <label class="span2">المزايا — كل ميزة في سطر<textarea id="pkgPerks" rows="4" placeholder="قيمة ممتازة&#10;تفعيل سريع&#10;دعم طوال المدة"></textarea></label>
+        <label>ترتيب الظهور<input id="pkgSort" type="number" min="0" value="100"></label>
+      </div>
+      <div class="switches">
+        <label class="switch-row"><div><b>إظهار الباقة</b><small>تظهر للزوار</small></div><input id="pkgActive" type="checkbox" checked></label>
+        <label class="switch-row"><div><b>الأكثر طلباً</b><small>ضمن 3 باقات مميزة</small></div><input id="pkgFeatured" type="checkbox"></label>
+        <label class="switch-row"><div><b>الأفضل قيمة</b><small>باقة واحدة فقط</small></div><input id="pkgBest" type="checkbox"></label>
+      </div>
+      <div id="packageMsg" class="msg"></div>
+      <div class="sheet-actions"><button class="btn btn-secondary" id="cancelModal" type="button">إلغاء</button><button class="btn btn-primary" id="savePackageBtn" type="submit">حفظ</button></div>
+    </form>
+  </div>
+</div>
 
-  <a class="mobile-sticky-wa js-generic-wa" href="https://wa.me/96876746977" target="_blank" rel="noopener"><span>💬</span> اطلب عبر واتساب</a>
-  <script>
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2'"></script>
+<script>
 (() => {
-  const API_URL = "https://zdwnjwndowkjcxidqpld.supabase.co";
-  const PUBLIC_KEY = "sb_publishable_56Izv8jz4ddcRwaV35NasQ_6CdOJXJo";
-  const DEFAULT_WHATSAPP = "96876746977";
-
-  const FALLBACK = [
-    {id:'d1', type:'data', label:'1GB', duration:'3 أيام', price:0.200, tagline:'', perks:['تفعيل سريع','دعم طوال المدة'], featured:false, best_value:false, sort_order:10, active:true},
-    {id:'d2', type:'data', label:'3GB', duration:'شهر كامل', price:0.900, tagline:'', perks:['تفعيل سريع','دعم طوال المدة'], featured:false, best_value:false, sort_order:20, active:true},
-    {id:'d3', type:'data', label:'5GB', duration:'15 يوم', price:1.100, tagline:'', perks:['تفعيل سريع','دعم طوال المدة'], featured:false, best_value:false, sort_order:30, active:true},
-    {id:'d4', type:'data', label:'5GB', duration:'30 يوم', price:1.500, tagline:'بداية اقتصادية', perks:['يكفي للاستخدام اليومي','تفعيل سريع','دعم طوال المدة'], featured:true, best_value:false, sort_order:40, active:true},
-    {id:'d5', type:'data', label:'10GB', duration:'30 يوم', price:2.500, tagline:'الأكثر طلباً', perks:['أفضل قيمة مقابل السعر','مناسبة للتصفح والتطبيقات','دعم طوال المدة'], featured:true, best_value:true, sort_order:50, active:true},
-    {id:'d6', type:'data', label:'20GB', duration:'شهر كامل', price:4.100, tagline:'', perks:['تفعيل سريع','دعم طوال المدة'], featured:false, best_value:false, sort_order:60, active:true},
-    {id:'u1', type:'unlimited', label:'غير محدود', duration:'يوم واحد', price:0.500, tagline:'', perks:['إنترنت غير محدود','تفعيل سريع'], featured:false, best_value:false, sort_order:70, active:true},
-    {id:'u2', type:'unlimited', label:'غير محدود', duration:'14 يوم', price:6.100, tagline:'', perks:['إنترنت غير محدود','استخدام مكثف'], featured:false, best_value:false, sort_order:80, active:true},
-    {id:'u3', type:'unlimited', label:'غير محدود', duration:'30 يوم', price:10.500, tagline:'بلا حدود', perks:['إنترنت غير محدود بالكامل','مثالية للاستخدام المكثف','دعم طوال المدة'], featured:true, best_value:false, sort_order:90, active:true}
-  ];
-
-  let whatsapp = DEFAULT_WHATSAPP;
-  let packages = FALLBACK;
-  let loading = false;
-
-  const headers = {
-    "apikey": PUBLIC_KEY,
-    "Accept": "application/json"
+  const CFG = {
+    url:"https://zdwnjwndowkjcxidqpld.supabase.co",
+    key:"sb_publishable_56Izv8jz4ddcRwaV35NasQ_6CdOJXJo",
+    email:"suhiap2016@gmail.com",
+    whatsapp:"96876746977"
   };
 
-  function money(v){
-    const n = Number(v);
-    return Number.isFinite(n) ? n.toFixed(3) : "0.000";
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  let sb = null, packages = [], whatsapp = CFG.whatsapp;
+
+  function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+  function money(v){const n=Number(v);return Number.isFinite(n)?n.toFixed(3):'0.000'}
+  function msg(el,t='',type=''){el.textContent=t;el.className='msg'+(type?' '+type:'')}
+  function toast(t,type=''){const e=$('#toast');e.textContent=t;e.className='toast show'+(type?' '+type:'');clearTimeout(e._t);e._t=setTimeout(()=>e.className='toast',2800)}
+  function busy(btn,on,text='جاري...'){if(!btn)return;if(on){btn.dataset.old=btn.textContent;btn.disabled=true;btn.textContent=text;btn.style.opacity='.65'}else{btn.disabled=false;btn.textContent=btn.dataset.old||btn.textContent;btn.style.opacity=''}}
+
+  function initClient(){
+    if(!window.supabase){msg($('#loginMsg'),'تعذر تحميل مكتبة Supabase. حدّث الصفحة أو افتحها في Safari/Chrome مباشرة.','error');return false}
+    sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+    return true;
   }
 
-  function escapeHtml(v){
-    return String(v ?? "").replace(/[&<>'"]/g, c => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"
-    }[c]));
+  async function showApp(){
+    $('#loginView').hidden=true;$('#appView').hidden=false;
+    $('#adminEmail').textContent=CFG.email;$('#systemEmail').textContent=CFG.email;
+    await loadAll();
   }
 
-  function waLink(text='مرحبًا 👋، أبغى أعرف أكثر عن باقات eSIM.OM.'){
-    return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
+  async function checkSession(){
+    if(!initClient())return;
+    const {data}=await sb.auth.getSession();
+    if(data?.session)showApp();
   }
 
-  function pkgMessage(p){
-    return `مرحبًا 👋، أبغى أطلب باقة eSIM:\n📦 ${p.label}\n⏳ المدة: ${p.duration}\n💵 السعر: ${money(p.price)} ر.ع`;
-  }
+  $('#togglePassword').onclick=()=>{const i=$('#password');i.type=i.type==='password'?'text':'password'};
 
-  function setWhatsAppLinks(){
-    document.querySelectorAll('.js-generic-wa').forEach(a => a.href = waLink());
-  }
+  $('#loginForm').onsubmit=async e=>{
+    e.preventDefault();
+    if(!sb && !initClient())return;
+    const btn=$('#loginBtn');busy(btn,true,'جاري التحقق...');msg($('#loginMsg'));
+    const {error}=await sb.auth.signInWithPassword({email:CFG.email,password:$('#password').value});
+    busy(btn,false);
+    if(error){msg($('#loginMsg'),'كلمة المرور غير صحيحة أو الحساب غير مكتمل.','error');return}
+    msg($('#loginMsg'),'تم الدخول.','success');await showApp();
+  };
 
-  function card(p){
-    const perks = Array.isArray(p.perks) ? p.perks : [];
-    return `<article class="package-card ${p.best_value ? 'best-value' : ''}">
-      ${p.best_value ? '<span class="best-badge">الأفضل قيمة</span>' : ''}
-      <div class="package-label">${escapeHtml(p.tagline || (p.type === 'unlimited' ? 'بلا حدود' : 'باقة مختارة'))}</div>
-      <h3>${escapeHtml(p.label)}</h3>
-      <p>${escapeHtml(p.duration)}</p>
-      <div class="price"><b>${money(p.price)}</b><span>ر.ع</span></div>
-      <ul>${perks.map(x => `<li>✓ ${escapeHtml(x)}</li>`).join('')}</ul>
-      <a class="btn ${p.best_value ? 'btn-primary' : 'btn-secondary'} btn-block"
-         href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب الباقة</a>
-    </article>`;
-  }
+  $('#logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 
-  function row(p){
-    return `<article class="package-row">
-      <div><b>${escapeHtml(p.label)}</b><span>${escapeHtml(p.duration)}</span></div>
-      <div><strong>${money(p.price)} ر.ع</strong>
-      <a href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب</a></div>
-    </article>`;
+  async function loadAll(){
+    const [{data:p,error:pe},{data:s,error:se}]=await Promise.all([
+      sb.from('packages').select('*').order('sort_order',{ascending:true}),
+      sb.from('site_settings').select('*')
+    ]);
+    if(pe){toast('تعذر تحميل الباقات: '+pe.message,'error')} else packages=p||[];
+    if(!se){const w=(s||[]).find(x=>x.key==='whatsapp_number');whatsapp=w?.value||CFG.whatsapp;$('#waInput').value=whatsapp}
+    render();
   }
 
   function render(){
-    const active = packages
-      .filter(p => p.active !== false)
-      .sort((a,b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
-
-    const featured = active.filter(p => p.featured).slice(0,3);
-    const best = featured.find(p => p.best_value);
-
-    let ordered = [...featured];
-    if (best && ordered.includes(best)) {
-      ordered = ordered.filter(p => p !== best);
-      ordered = [ordered[0], best, ordered[1]].filter(Boolean);
-    }
-
-    const featuredGrid = document.getElementById('featuredGrid');
-    const dataGrid = document.getElementById('dataGrid');
-    const unlimitedGrid = document.getElementById('unlimitedGrid');
-
-    if (featuredGrid) {
-      featuredGrid.innerHTML = ordered.length
-        ? ordered.map(card).join('')
-        : '<div class="micro-note">لا توجد باقات مميزة حالياً.</div>';
-    }
-
-    if (dataGrid) {
-      dataGrid.innerHTML = active.filter(p => p.type === 'data').map(row).join('')
-        || '<div class="micro-note">لا توجد باقات بيانات حالياً.</div>';
-    }
-
-    if (unlimitedGrid) {
-      unlimitedGrid.innerHTML = active.filter(p => p.type === 'unlimited').map(row).join('')
-        || '<div class="micro-note">لا توجد باقات غير محدودة حالياً.</div>';
-    }
-
-    setWhatsAppLinks();
+    $('#countAll').textContent=packages.length;
+    $('#countActive').textContent=packages.filter(x=>x.active).length;
+    $('#countFeatured').textContent=packages.filter(x=>x.featured).length;
+    $('#countUnlimited').textContent=packages.filter(x=>x.type==='unlimited').length;
+    renderFeatured();renderPackages();
   }
 
-  async function fetchJson(path){
-    const res = await fetch(`${API_URL}/rest/v1/${path}`, {
-      method: "GET",
-      headers,
-      cache: "no-store"
-    });
-
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      throw new Error(`Supabase ${res.status}: ${body}`);
-    }
-
-    return res.json();
+  function renderFeatured(){
+    const list=packages.filter(x=>x.featured).slice(0,3);
+    $('#featuredList').innerHTML=list.length?list.map(p=>`<div class="featured-item ${p.best_value?'best':''}"><div><b>${esc(p.label)} ${p.best_value?'★':''}</b><span>${esc(p.duration)} • ${esc(p.tagline||'باقة مميزة')}</span></div><strong>${money(p.price)} ر.ع</strong></div>`).join(''):'<div class="empty">لا توجد باقات مميزة.</div>';
   }
 
-  async function loadRemote(){
-    if (loading) return;
-    loading = true;
-
-    try {
-      const [remotePackages, settings] = await Promise.all([
-        fetchJson('packages?select=*&order=sort_order.asc'),
-        fetchJson('site_settings?select=*')
-      ]);
-
-      if (Array.isArray(remotePackages)) packages = remotePackages;
-
-      if (Array.isArray(settings)) {
-        const wa = settings.find(x => x.key === 'whatsapp_number');
-        if (wa?.value) whatsapp = String(wa.value).replace(/\D/g, '');
-      }
-
-      render();
-      document.documentElement.dataset.dataSource = 'remote';
-    } catch (err) {
-      console.warn('تعذر جلب بيانات Supabase؛ تم استخدام البيانات الاحتياطية.', err);
-      render();
-      document.documentElement.dataset.dataSource = 'fallback';
-    } finally {
-      loading = false;
-    }
+  function filtered(){
+    const q=$('#searchInput').value.trim().toLowerCase(),type=$('#typeFilter').value,status=$('#statusFilter').value;
+    return packages.filter(p=>{
+      if(q && !`${p.label} ${p.duration} ${p.tagline||''}`.toLowerCase().includes(q))return false;
+      if(type!=='all'&&p.type!==type)return false;
+      if(status==='active'&&!p.active)return false;
+      if(status==='inactive'&&p.active)return false;
+      if(status==='featured'&&!p.featured)return false;
+      return true;
+    });
   }
 
-  document.querySelectorAll('.segment').forEach(btn => btn.addEventListener('click', () => {
-    document.querySelectorAll('.segment').forEach(b => {
-      b.classList.toggle('active', b === btn);
-      b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
-    });
-    document.querySelectorAll('.package-list').forEach(p => {
-      p.classList.toggle('active', p.dataset.panel === btn.dataset.tab);
-    });
-  }));
+  function renderPackages(){
+    const list=filtered();
+    $('#packageList').innerHTML=list.length?list.map(p=>`
+      <article class="pkg-card">
+        <div class="pkg-top">
+          <div class="pkg-main"><div class="pkg-icon">${p.type==='unlimited'?'∞':esc(p.label)}</div><div class="pkg-info"><b>${esc(p.label)} ${p.best_value?'⭐':''}</b><span>${esc(p.duration)}${p.tagline?' • '+esc(p.tagline):''}</span></div></div>
+          <div class="pkg-price">${money(p.price)}<br><small>ر.ع</small></div>
+        </div>
+        <div class="pkg-flags">
+          <button class="pill ${p.active?'on':''}" data-act="active" data-id="${p.id}">${p.active?'● نشطة':'○ مخفية'}</button>
+          <button class="pill ${p.featured?'featured':''}" data-act="featured" data-id="${p.id}">${p.featured?'★ الأكثر طلباً':'＋ تمييز'}</button>
+          <button class="pill ${p.best_value?'featured':''}" data-act="best" data-id="${p.id}">${p.best_value?'★ الأفضل قيمة':'أفضل قيمة'}</button>
+        </div>
+        <div class="pkg-actions">
+          <button class="btn btn-secondary" data-act="edit" data-id="${p.id}">تعديل</button>
+          <button class="btn btn-secondary" data-act="duplicate" data-id="${p.id}">نسخ</button>
+          <button class="btn btn-secondary" data-act="refresh" data-id="${p.id}">↻</button>
+          <button class="btn btn-danger" data-act="delete" data-id="${p.id}">حذف</button>
+        </div>
+      </article>`).join(''):'<div class="empty">لا توجد نتائج.</div>';
+  }
 
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileNav = document.getElementById('mobileNav');
+  $('#searchInput').oninput=renderPackages;$('#typeFilter').onchange=renderPackages;$('#statusFilter').onchange=renderPackages;
 
-  menuToggle?.addEventListener('click', () => {
-    const open = mobileNav.classList.toggle('open');
-    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
+  $('#packageList').onclick=async e=>{
+    const b=e.target.closest('[data-act]');if(!b)return;
+    const p=packages.find(x=>x.id===b.dataset.id);if(!p)return;
+    const a=b.dataset.act;
+    if(a==='edit')openModal(p);
+    if(a==='refresh'){await loadAll();toast('تم تحديث البيانات')}
+    if(a==='active')await updatePkg(p.id,{active:!p.active},'تم تحديث الحالة');
+    if(a==='featured'){
+      if(!p.featured && packages.filter(x=>x.featured&&x.id!==p.id).length>=3){toast('يمكن اختيار 3 باقات فقط كالأكثر طلباً','error');return}
+      await updatePkg(p.id,{featured:!p.featured,best_value:p.featured?false:p.best_value},'تم تحديث الباقة');
+    }
+    if(a==='best')await setBest(p);
+    if(a==='duplicate')await duplicate(p);
+    if(a==='delete')await remove(p);
+  };
 
-  mobileNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    mobileNav.classList.remove('open');
-    menuToggle?.setAttribute('aria-expanded', 'false');
-  }));
+  async function updatePkg(id,payload,text){
+    const {error}=await sb.from('packages').update(payload).eq('id',id);
+    if(error){toast(error.message,'error');return}
+    await loadAll();toast(text);
+  }
 
-  const root = document.documentElement;
-  const savedTheme = localStorage.getItem('esim-theme');
-  if (savedTheme === 'light' || savedTheme === 'dark') root.dataset.theme = savedTheme;
+  async function setBest(p){
+    if(!p.best_value && !p.featured && packages.filter(x=>x.featured&&x.id!==p.id).length>=3){toast('أزل باقة مميزة أولاً','error');return}
+    const {error:r}=await sb.from('packages').update({best_value:false}).neq('id',p.id);
+    if(r){toast(r.message,'error');return}
+    const {error}=await sb.from('packages').update({best_value:!p.best_value,featured:p.best_value?p.featured:true}).eq('id',p.id);
+    if(error){toast(error.message,'error');return}
+    await loadAll();toast('تم تحديث الأفضل قيمة');
+  }
 
-  document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const next = root.dataset.theme === 'light' ? 'dark' : 'light';
-    root.dataset.theme = next;
-    localStorage.setItem('esim-theme', next);
-  });
+  async function duplicate(p){
+    const payload={type:p.type,label:p.label,duration:p.duration,price:Number(p.price),tagline:(p.tagline||'')+' نسخة',perks:p.perks||[],featured:false,best_value:false,sort_order:Number(p.sort_order||100)+1,active:false};
+    const {error}=await sb.from('packages').insert(payload);
+    if(error){toast(error.message,'error');return}await loadAll();toast('تم نسخ الباقة وهي مخفية');
+  }
 
-  loadRemote();
-  window.addEventListener('pageshow', loadRemote);
-  window.addEventListener('focus', loadRemote);
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') loadRemote();
-  });
-  setInterval(loadRemote, 20000);
+  async function remove(p){
+    if(!confirm(`حذف باقة ${p.label} نهائياً؟`))return;
+    const {error}=await sb.from('packages').delete().eq('id',p.id);
+    if(error){toast(error.message,'error');return}await loadAll();toast('تم حذف الباقة');
+  }
+
+  function nextSort(){return packages.reduce((m,p)=>Math.max(m,Number(p.sort_order||0)),0)+10}
+  function openModal(p=null){
+    $('#modalTitle').textContent=p?'تعديل الباقة':'إضافة باقة';
+    $('#pkgId').value=p?.id||'';$('#pkgType').value=p?.type||'data';$('#pkgLabel').value=p?.label||'';
+    $('#pkgDuration').value=p?.duration||'';$('#pkgPrice').value=p?money(p.price):'';$('#pkgTagline').value=p?.tagline||'';
+    $('#pkgPerks').value=Array.isArray(p?.perks)?p.perks.join('\n'):'';$('#pkgSort').value=p?.sort_order??nextSort();
+    $('#pkgActive').checked=p?.active??true;$('#pkgFeatured').checked=p?.featured??false;$('#pkgBest').checked=p?.best_value??false;
+    msg($('#packageMsg'));$('#packageModal').classList.add('open');document.body.style.overflow='hidden';
+  }
+  function closeModal(){$('#packageModal').classList.remove('open');document.body.style.overflow=''}
+  $('#closeModal').onclick=closeModal;$('#cancelModal').onclick=closeModal;
+  $('#packageModal').onclick=e=>{if(e.target===$('#packageModal'))closeModal()};
+  $('#pkgBest').onchange=e=>{if(e.target.checked)$('#pkgFeatured').checked=true};
+  $('#pkgFeatured').onchange=e=>{if(!e.target.checked)$('#pkgBest').checked=false};
+
+  $('#packageForm').onsubmit=async e=>{
+    e.preventDefault();
+    const id=$('#pkgId').value;
+    const payload={
+      type:$('#pkgType').value,label:$('#pkgLabel').value.trim(),duration:$('#pkgDuration').value.trim(),
+      price:Number($('#pkgPrice').value),tagline:$('#pkgTagline').value.trim(),
+      perks:$('#pkgPerks').value.split('\n').map(x=>x.trim()).filter(Boolean),sort_order:Number($('#pkgSort').value||100),
+      active:$('#pkgActive').checked,featured:$('#pkgFeatured').checked,best_value:$('#pkgBest').checked
+    };
+    if(payload.best_value)payload.featured=true;
+    const count=packages.filter(x=>x.featured&&x.id!==id).length;
+    if(payload.featured&&count>=3){msg($('#packageMsg'),'يمكن اختيار 3 باقات فقط كالأكثر طلباً.','error');return}
+    const btn=$('#savePackageBtn');busy(btn,true,'جاري الحفظ...');
+    if(payload.best_value){const {error:r}=await sb.from('packages').update({best_value:false}).neq('id',id||'00000000-0000-0000-0000-000000000000');if(r){busy(btn,false);msg($('#packageMsg'),r.message,'error');return}}
+    const result=id?await sb.from('packages').update(payload).eq('id',id):await sb.from('packages').insert(payload);
+    busy(btn,false);
+    if(result.error){msg($('#packageMsg'),result.error.message,'error');return}
+    await loadAll();closeModal();toast(id?'تم تحديث الباقة':'تمت إضافة الباقة');
+  };
+
+  $('#settingsForm').onsubmit=async e=>{
+    e.preventDefault();const v=$('#waInput').value.replace(/\D/g,'');if(!v){msg($('#settingsMsg'),'أدخل الرقم','error');return}
+    const btn=e.submitter;busy(btn,true,'جاري الحفظ...');
+    const {error}=await sb.from('site_settings').upsert({key:'whatsapp_number',value:v},{onConflict:'key'});
+    busy(btn,false);if(error){msg($('#settingsMsg'),error.message,'error');return}
+    whatsapp=v;msg($('#settingsMsg'),'تم الحفظ','success');toast('تم تحديث رقم واتساب');
+  };
+
+  function page(name){
+    $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+    $$('.page').forEach(p=>p.classList.toggle('active',p.dataset.pagePanel===name));
+    scrollTo({top:0,behavior:'smooth'});
+  }
+  $$('.nav-btn').forEach(b=>b.onclick=()=>page(b.dataset.page));
+  $('#goPackages').onclick=()=>page('packages');$('#quickWA').onclick=()=>page('settings');
+  $('#homeAdd').onclick=()=>{page('packages');openModal()};$('#quickAdd').onclick=()=>{page('packages');openModal()};$('#addPackageBtn').onclick=()=>openModal();
+  $('#refreshBtn').onclick=async()=>{await loadAll();toast('تم التحديث')};$('#quickRefresh').onclick=$('#refreshBtn').onclick;
+
+  checkSession();
 })();
-
-  </script>
+</script>
 </body>
 </html>
