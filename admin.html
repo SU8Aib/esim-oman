@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#07111f">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
   <title>eSIM.OM — لوحة الإدارة</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -518,6 +515,71 @@ textarea{resize:vertical}
 }
 
 </style>
+
+<style id="desktop-package-dialog-fix">
+@media (min-width:861px){
+  .package-dialog{
+    margin:auto !important;
+    width:min(1060px,calc(100% - 64px)) !important;
+    max-height:82vh !important;
+    height:min(760px,82vh) !important;
+    inset:0 !important;
+  }
+
+  .dialog-layout{
+    height:100% !important;
+    max-height:none !important;
+    grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr) !important;
+  }
+
+  .dialog-form-side{
+    overflow-y:auto !important;
+    min-height:0 !important;
+  }
+
+  .preview-side{
+    overflow-y:auto !important;
+    min-height:0 !important;
+  }
+
+  .dialog-actions{
+    position:sticky !important;
+    bottom:-20px !important;
+    z-index:20 !important;
+    background:color-mix(in srgb,var(--surface) 97%,transparent) !important;
+    backdrop-filter:blur(14px) !important;
+    border-top:1px solid var(--line) !important;
+    margin:16px -20px -20px !important;
+    padding:14px 20px 18px !important;
+    box-shadow:0 -12px 28px rgba(0,0,0,.12) !important;
+  }
+
+  .dialog-actions .primary-btn,
+  .dialog-actions .secondary-btn{
+    min-width:140px !important;
+  }
+
+  #packageMessage{
+    margin-top:8px !important;
+  }
+}
+</style>
+
+
+<style id="auth-visibility-final-fix">
+/* Never show dashboard before successful login — including mobile */
+#dashboardView[hidden],
+#loginView[hidden]{
+  display:none !important;
+}
+
+@media (max-width:860px){
+  #dashboardView[hidden]{
+    display:none !important;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -568,6 +630,10 @@ textarea{resize:vertical}
 
             <div class="form-message" id="loginMessage"></div>
           </form>
+
+          <div class="setup-warning" id="setupWarning">
+            لم يتم ربط Supabase بعد. تحقق من ملف <b>config.js</b>.
+          </div>
 
           <a class="back-link" href="index.html">← العودة إلى الموقع</a>
         </div>
@@ -858,8 +924,9 @@ textarea{resize:vertical}
             </label>
 
             <label>
-              <span>ترتيب الظهور</span>
+              <span>ترتيب الظهور في الموقع</span>
               <input id="pkgSort" type="number" min="0" value="100">
+              <small style="font-weight:400;color:var(--muted)">الرقم الأصغر يظهر أولاً — مثال: 10 ثم 20 ثم 30.</small>
             </label>
           </div>
 
