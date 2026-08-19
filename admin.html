@@ -424,7 +424,7 @@ textarea{resize:vertical}
           </form>
 
           <div class="setup-warning" id="setupWarning">
-            لم يتم ربط Supabase بعد. تحقق من ملف <b>config.js</b>.
+            تعذر تحميل اتصال Supabase. حدّث الصفحة مرة أخرى.
           </div>
 
           <a class="back-link" href="index.html">← العودة إلى الموقع</a>
@@ -771,8 +771,15 @@ textarea{resize:vertical}
 
   <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js?v=20260819-1918"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2'"></script>
+  <script>
+window.ESIM_CONFIG = {
+  SUPABASE_URL: "https://zdwnjwndowkjcxidqpld.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_56Izv8jz4ddcRwaV35NasQ_6CdOJXJo",
+  ADMIN_EMAIL: "suhiap2016@gmail.com",
+  DEFAULT_WHATSAPP_NUMBER: "96876746977"
+};
+</script>
   <script>
 (() => {
   const cfg = window.ESIM_CONFIG || {};
