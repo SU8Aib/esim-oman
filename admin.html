@@ -838,8 +838,8 @@ textarea{resize:vertical}
             <form class="panel settings-form" id="settingsForm">
               <div class="panel-head">
                 <div>
-                  <span class="top-eyebrow">WhatsApp</span>
-                  <h3>رقم استقبال الطلبات</h3>
+                  <span class="top-eyebrow">Contact & Payment</span>
+                  <h3>إعدادات الطلب والتحويل</h3>
                 </div>
               </div>
 
@@ -849,7 +849,13 @@ textarea{resize:vertical}
                 <small>مثال: 96876746977</small>
               </label>
 
-              <button class="primary-btn fit" type="submit">حفظ رقم واتساب</button>
+              <label>
+                <span>رقم التحويل — بنك مسقط</span>
+                <input id="transferNumberSetting" inputmode="numeric" placeholder="91772654">
+                <small>سيظهر هذا الرقم تلقائياً داخل رسالة طلب الباقة على واتساب.</small>
+              </label>
+
+              <button class="primary-btn fit" type="submit">حفظ الإعدادات</button>
               <div class="form-message" id="settingsMessage"></div>
             </form>
 
@@ -992,6 +998,7 @@ textarea{resize:vertical}
   const SESSION_KEY = "esim_admin_session_rest_v1";
   let packages = [];
   let whatsapp = CFG.whatsapp;
+  let transferNumber = '91772654';
 
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
@@ -1168,9 +1175,13 @@ textarea{resize:vertical}
 
   async function loadSettings(){
     const data = await db('site_settings?select=*');
-    const wa = (Array.isArray(data)?data:[]).find(x=>x.key==='whatsapp_number');
+    const rows = Array.isArray(data) ? data : [];
+    const wa = rows.find(x=>x.key==='whatsapp_number');
+    const transfer = rows.find(x=>x.key==='bank_transfer_number');
     whatsapp = wa?.value || CFG.whatsapp;
+    transferNumber = transfer?.value || '91772654';
     $('#whatsappSetting').value = whatsapp;
+    $('#transferNumberSetting').value = transferNumber;
   }
 
   async function loadAll(){
@@ -1480,8 +1491,12 @@ textarea{resize:vertical}
 
   $('#settingsForm')?.addEventListener('submit',async e=>{
     e.preventDefault();
-    const value=$('#whatsappSetting').value.replace(/\D/g,'');
-    if(!value) return msg($('#settingsMessage'),'أدخل رقم واتساب.','error');
+
+    const whatsappValue = $('#whatsappSetting').value.replace(/\D/g,'');
+    const transferValue = $('#transferNumberSetting').value.replace(/\D/g,'');
+
+    if(!whatsappValue) return msg($('#settingsMessage'),'أدخل رقم واتساب.','error');
+    if(!transferValue) return msg($('#settingsMessage'),'أدخل رقم التحويل.','error');
 
     const btn=e.submitter;
     setBusy(btn,true);
@@ -1489,12 +1504,17 @@ textarea{resize:vertical}
     try{
       await db('site_settings?on_conflict=key',{
         method:'POST',
-        body:{key:'whatsapp_number',value},
+        body:[
+          {key:'whatsapp_number',value:whatsappValue},
+          {key:'bank_transfer_number',value:transferValue}
+        ],
         prefer:'resolution=merge-duplicates,return=representation'
       });
-      whatsapp=value;
-      msg($('#settingsMessage'),'تم حفظ رقم واتساب.','success');
-      toast('تم تحديث رقم واتساب.');
+
+      whatsapp=whatsappValue;
+      transferNumber=transferValue;
+      msg($('#settingsMessage'),'تم حفظ إعدادات واتساب والتحويل بنجاح.','success');
+      toast('تم تحديث إعدادات الطلب والتحويل.');
     }catch(err){
       msg($('#settingsMessage'),err.message,'error');
     }finally{
@@ -1503,7 +1523,7 @@ textarea{resize:vertical}
   });
 
   $('#exportBtn')?.addEventListener('click',()=>{
-    const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,packages};
+    const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,bank_transfer_number:transferNumber,packages};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
