@@ -13,6 +13,7 @@
   ];
 
   let whatsapp = String(cfg.DEFAULT_WHATSAPP_NUMBER || '96876746977').replace(/\D/g,'');
+  let transferNumber = '91772654';
   let packages = FALLBACK;
   let supabaseClient = null;
 
@@ -20,11 +21,25 @@
   if(configured()) supabaseClient = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
 
   function money(v){ return Number(v).toFixed(3); }
+
   function waLink(text='مرحبًا 👋، أبغى أعرف أكثر عن باقات eSIM.OM.'){
     return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
   }
-  function pkgMessage(p){ return `مرحبًا 👋، أبغى أطلب باقة eSIM:\n📦 ${p.label}\n⏳ المدة: ${p.duration}\n💵 السعر: ${money(p.price)} ر.ع`; }
-  function setWhatsAppLinks(){ document.querySelectorAll('.js-generic-wa').forEach(a => a.href = waLink()); }
+
+  function pkgMessage(p){
+    return `مرحبًا 👋
+أرغب في طلب باقة eSIM:
+📶 ${p.label} | ${p.duration} | ${money(p.price)} ر.ع
+
+💳 التحويل عبر بنك مسقط
+📱 رقم التحويل: ${transferNumber}
+
+يرجى تأكيد الطلب وإرسال خطوات التفعيل. شكرًا لكم.`;
+  }
+
+  function setWhatsAppLinks(){
+    document.querySelectorAll('.js-generic-wa').forEach(a => a.href = waLink());
+  }
 
   function card(p){
     const perks = Array.isArray(p.perks) ? p.perks : [];
@@ -37,19 +52,30 @@
       <a class="btn ${p.best_value?'btn-primary':'btn-secondary'} btn-block" href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب الباقة</a>
     </article>`;
   }
-  function row(p){ return `<article class="package-row"><div><b>${escapeHtml(p.label)}</b><span>${escapeHtml(p.duration)}</span></div><div><strong>${money(p.price)} ر.ع</strong><a href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب</a></div></article>`; }
-  function escapeHtml(v){ return String(v ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+
+  function row(p){
+    return `<article class="package-row"><div><b>${escapeHtml(p.label)}</b><span>${escapeHtml(p.duration)}</span></div><div><strong>${money(p.price)} ر.ع</strong><a href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب</a></div></article>`;
+  }
+
+  function escapeHtml(v){
+    return String(v ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  }
 
   function render(){
     const active = packages.filter(p=>p.active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
     const featured = active.filter(p=>p.featured).slice(0,3);
     const best = featured.find(p=>p.best_value) || active.find(p=>p.best_value && p.featured);
+
     let ordered = [...featured];
     if(best && ordered.includes(best)){
       ordered = ordered.filter(p=>p!==best);
       ordered = [ordered[0], best, ordered[1]].filter(Boolean);
     }
-    document.getElementById('featuredGrid').innerHTML = ordered.length ? ordered.map(card).join('') : '<div class="micro-note">لا توجد باقات مميزة حالياً.</div>';
+
+    document.getElementById('featuredGrid').innerHTML = ordered.length
+      ? ordered.map(card).join('')
+      : '<div class="micro-note">لا توجد باقات مميزة حالياً.</div>';
+
     document.getElementById('dataGrid').innerHTML = active.filter(p=>p.type==='data').map(row).join('');
     document.getElementById('unlimitedGrid').innerHTML = active.filter(p=>p.type==='unlimited').map(row).join('');
     setWhatsAppLinks();
@@ -57,33 +83,61 @@
 
   async function loadRemote(){
     if(!supabaseClient){ render(); return; }
+
     try{
       const [{data:p,error:pe},{data:s,error:se}] = await Promise.all([
         supabaseClient.from('packages').select('*').order('sort_order',{ascending:true}),
         supabaseClient.from('site_settings').select('*')
       ]);
+
       if(!pe && Array.isArray(p) && p.length) packages = p;
+
       if(!se && Array.isArray(s)){
         const wa = s.find(x=>x.key==='whatsapp_number');
+        const transfer = s.find(x=>x.key==='bank_transfer_number');
+
         if(wa?.value) whatsapp = String(wa.value).replace(/\D/g,'');
+        if(transfer?.value) transferNumber = String(transfer.value).replace(/\D/g,'');
       }
-    }catch(e){ console.warn('Using local fallback data.', e); }
+    }catch(e){
+      console.warn('Using local fallback data.', e);
+    }
+
     render();
   }
 
   document.querySelectorAll('.segment').forEach(btn=>btn.addEventListener('click',()=>{
-    document.querySelectorAll('.segment').forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-selected',b===btn?'true':'false')});
-    document.querySelectorAll('.package-list').forEach(p=>p.classList.toggle('active',p.dataset.panel===btn.dataset.tab));
+    document.querySelectorAll('.segment').forEach(b=>{
+      b.classList.toggle('active',b===btn);
+      b.setAttribute('aria-selected',b===btn?'true':'false');
+    });
+    document.querySelectorAll('.package-list').forEach(p=>{
+      p.classList.toggle('active',p.dataset.panel===btn.dataset.tab);
+    });
   }));
 
-  const menuToggle = document.getElementById('menuToggle'), mobileNav = document.getElementById('mobileNav');
-  menuToggle?.addEventListener('click',()=>{const open=mobileNav.classList.toggle('open');menuToggle.setAttribute('aria-expanded',open?'true':'false')});
-  mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileNav.classList.remove('open');menuToggle?.setAttribute('aria-expanded','false')}));
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+
+  menuToggle?.addEventListener('click',()=>{
+    const open=mobileNav.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded',open?'true':'false');
+  });
+
+  mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+    mobileNav.classList.remove('open');
+    menuToggle?.setAttribute('aria-expanded','false');
+  }));
 
   const root = document.documentElement;
   const savedTheme = localStorage.getItem('esim-theme');
   if(savedTheme==='light' || savedTheme==='dark') root.dataset.theme=savedTheme;
-  document.getElementById('themeToggle')?.addEventListener('click',()=>{const next=root.dataset.theme==='light'?'dark':'light';root.dataset.theme=next;localStorage.setItem('esim-theme',next)});
+
+  document.getElementById('themeToggle')?.addEventListener('click',()=>{
+    const next=root.dataset.theme==='light'?'dark':'light';
+    root.dataset.theme=next;
+    localStorage.setItem('esim-theme',next);
+  });
 
   loadRemote();
 })();
