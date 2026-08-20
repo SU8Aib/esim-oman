@@ -580,6 +580,76 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="phase2-roles-security">
+.role-chip{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid var(--line);background:var(--surface2);color:var(--muted);
+  padding:4px 9px;border-radius:999px;font-size:.68rem;font-weight:700;
+}
+.role-chip.super_admin{color:var(--gold);border-color:rgba(255,191,71,.28);background:rgba(255,191,71,.08)}
+.role-chip.admin{color:var(--accent);border-color:rgba(40,213,189,.28);background:rgba(40,213,189,.08)}
+.role-chip.sales{color:var(--blue);border-color:rgba(110,168,255,.28);background:rgba(110,168,255,.08)}
+.role-chip.viewer{color:var(--muted)}
+.permissions-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+.users-list{display:grid;gap:10px}
+.user-card{
+  border:1px solid var(--line);background:var(--surface2);border-radius:16px;padding:14px;
+  display:grid;grid-template-columns:minmax(220px,1.4fr) minmax(150px,.7fr) auto auto;
+  gap:10px;align-items:center;
+}
+.user-main{min-width:0;display:flex;align-items:center;gap:11px}
+.user-avatar{
+  width:40px;height:40px;border-radius:12px;background:rgba(40,213,189,.10);
+  color:var(--accent);display:grid;place-items:center;font-weight:800;flex:0 0 auto
+}
+.user-copy{min-width:0;display:grid}
+.user-copy b,.user-copy span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-copy b{font-size:.85rem}.user-copy span{color:var(--muted);font-size:.7rem}
+.user-card select{padding:9px 10px}
+.user-active{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:.75rem;font-weight:700}
+.user-active input{width:auto}
+.user-save{white-space:nowrap}
+.read-only-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);background:var(--surface2);color:var(--muted);
+  padding:7px 10px;border-radius:10px;font-size:.68rem;font-weight:700
+}
+.security-note{
+  border:1px solid rgba(110,168,255,.20);background:rgba(110,168,255,.06);
+  border-radius:15px;padding:13px;color:var(--muted);font-size:.78rem;margin-bottom:13px
+}
+.security-note b{color:var(--text)}
+.audit-list{display:grid;gap:8px;max-height:520px;overflow:auto;padding-left:3px}
+.audit-item{
+  border:1px solid var(--line);background:var(--surface2);border-radius:13px;padding:11px;
+  display:grid;gap:3px
+}
+.audit-item-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.audit-item b{font-size:.78rem}.audit-item span,.audit-item small{color:var(--muted);font-size:.66rem}
+.audit-action{font-family:'JetBrains Mono';font-size:.62rem;color:var(--accent)}
+.role-legend{display:grid;gap:8px}
+.role-legend div{display:flex;align-items:flex-start;gap:9px}
+.role-legend p{color:var(--muted);font-size:.72rem}
+.mobile-logout-btn{display:none}
+@media(max-width:860px){
+  body.super-admin .side-nav{grid-template-columns:repeat(4,1fr)!important}
+  .nav-item[hidden]{display:none!important}
+  .permissions-grid{grid-template-columns:1fr}
+  .user-card{grid-template-columns:1fr 1fr;gap:9px}
+  .user-main{grid-column:1/-1}
+  .user-save{width:100%}
+  .mobile-logout-btn{
+    display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);
+    border-radius:11px;background:var(--surface2);cursor:pointer
+  }
+}
+@media(max-width:520px){
+  .user-card{grid-template-columns:1fr}
+  .user-main{grid-column:auto}
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -613,9 +683,14 @@ textarea{resize:vertical}
         <div class="login-card">
           <span class="admin-kicker">ADMIN PORTAL</span>
           <h2>دخول الإدارة</h2>
-          <p>أدخل كلمة مرور حساب الإدارة في Supabase.</p>
+          <p>سجّل الدخول بحسابك المصرّح له في Supabase.</p>
 
           <form id="loginForm">
+            <label>
+              <span>البريد الإلكتروني</span>
+              <input id="email" type="email" autocomplete="username" required placeholder="name@example.com">
+            </label>
+
             <label>
               <span>كلمة المرور</span>
               <div class="password-wrap">
@@ -655,7 +730,7 @@ textarea{resize:vertical}
       <div class="admin-profile">
         <div class="avatar">A</div>
         <div>
-          <b>مدير الموقع</b>
+          <b id="adminRoleTitle">—</b>
           <span id="adminEmailText">—</span>
         </div>
       </div>
@@ -668,8 +743,11 @@ textarea{resize:vertical}
           <span class="nav-icon">▦</span><span>إدارة الباقات</span>
           <small id="sidebarPackageCount">0</small>
         </button>
-        <button class="nav-item" data-view="settings">
+        <button class="nav-item" id="settingsNav" data-view="settings">
           <span class="nav-icon">⚙</span><span>الإعدادات</span>
+        </button>
+        <button class="nav-item" id="usersNav" data-view="users" hidden>
+          <span class="nav-icon">♙</span><span>المستخدمون</span>
         </button>
       </nav>
 
@@ -695,6 +773,7 @@ textarea{resize:vertical}
         </div>
 
         <div class="topbar-actions">
+          <button class="mobile-logout-btn" id="mobileLogoutBtn" type="button" title="تسجيل الخروج">↪</button>
           <button class="icon-btn" id="refreshBtn" type="button" title="تحديث البيانات">↻</button>
           <button class="icon-btn" id="themeBtn" type="button" title="تبديل المظهر">☾</button>
           <a class="secondary-btn compact" href="index.html" target="_blank" rel="noopener">عرض الموقع ↗</a>
@@ -869,9 +948,68 @@ textarea{resize:vertical}
 
               <div class="system-row"><span>قاعدة البيانات</span><b class="ok">● متصلة</b></div>
               <div class="system-row"><span>الحماية RLS</span><b class="ok">● مفعّلة</b></div>
-              <div class="system-row"><span>حساب الإدارة</span><b id="systemAdminEmail">—</b></div>
+              <div class="system-row"><span>الحساب الحالي</span><b id="systemAdminEmail">—</b></div>
+              <div class="system-row"><span>الصلاحية</span><b id="systemRoleText">—</b></div>
               <div class="system-row"><span>المصدر</span><b>Supabase</b></div>
             </article>
+          </div>
+        </section>
+
+        <!-- USERS & PERMISSIONS — Super Admin only -->
+        <section class="view" data-view-panel="users">
+          <div class="section-title-row">
+            <div>
+              <span class="top-eyebrow">Access Control</span>
+              <h2>المستخدمون والصلاحيات</h2>
+              <p>إدارة الأدوار وحالة الحسابات. هذه الصفحة تظهر للمدير الرئيسي فقط.</p>
+            </div>
+          </div>
+
+          <div class="security-note">
+            <b>إضافة مستخدم جديد:</b>
+            أنشئ المستخدم أولاً من Supabase → Authentication → Users. سيظهر هنا تلقائياً بدور
+            <b>مشاهدة فقط</b>، وبعدها تقدر تغيّر صلاحياته من هذه الصفحة.
+            لا نستخدم Service Role داخل المتصفح حفاظاً على أمان المشروع.
+          </div>
+
+          <div class="permissions-grid">
+            <article class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="top-eyebrow">Team</span>
+                  <h3>حسابات الإدارة</h3>
+                </div>
+                <span class="role-chip super_admin" id="usersCount">0 مستخدم</span>
+              </div>
+              <div class="users-list" id="usersList"></div>
+            </article>
+
+            <div style="display:grid;gap:14px;align-content:start">
+              <article class="panel">
+                <div class="panel-head">
+                  <div>
+                    <span class="top-eyebrow">Roles</span>
+                    <h3>مستويات الصلاحية</h3>
+                  </div>
+                </div>
+                <div class="role-legend">
+                  <div><span class="role-chip super_admin">Super Admin</span><p>كل الصلاحيات، المستخدمون، وسجل النشاط.</p></div>
+                  <div><span class="role-chip admin">Admin</span><p>إضافة وتعديل الباقات وإعدادات الموقع.</p></div>
+                  <div><span class="role-chip sales">Sales</span><p>مشاهدة الباقات والبيانات بدون تعديل.</p></div>
+                  <div><span class="role-chip viewer">Viewer</span><p>قراءة فقط بدون أي صلاحية تعديل.</p></div>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-head">
+                  <div>
+                    <span class="top-eyebrow">Audit Log</span>
+                    <h3>آخر نشاطات الإدارة</h3>
+                  </div>
+                </div>
+                <div class="audit-list" id="auditList"></div>
+              </article>
+            </div>
           </div>
         </section>
       </div>
@@ -991,7 +1129,6 @@ textarea{resize:vertical}
   const CFG = {
     url: "https://zdwnjwndowkjcxidqpld.supabase.co",
     key: "sb_publishable_56Izv8jz4ddcRwaV35NasQ_6CdOJXJo",
-    email: "suhiap2016@gmail.com",
     whatsapp: "96876746977"
   };
 
@@ -999,6 +1136,11 @@ textarea{resize:vertical}
   let packages = [];
   let whatsapp = CFG.whatsapp;
   let transferNumber = '91772654';
+  let currentUser = null;
+  let currentProfile = null;
+  let users = [];
+  let auditLogs = [];
+  let lastActivityAt = Date.now();
 
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
@@ -1120,11 +1262,154 @@ textarea{resize:vertical}
     return data;
   }
 
+
+  const ROLE_LABELS = {
+    super_admin:'مدير رئيسي',
+    admin:'مدير',
+    sales:'مبيعات',
+    viewer:'مشاهدة فقط'
+  };
+
+  function roleLabel(role){ return ROLE_LABELS[role] || role || '—'; }
+  function isSuperAdmin(){ return currentProfile?.role === 'super_admin'; }
+  function canEdit(){ return ['super_admin','admin'].includes(currentProfile?.role); }
+
+  async function getAuthUser(){
+    const s = await ensureSession();
+    const res = await fetch(`${CFG.url}/auth/v1/user`,{
+      headers:{
+        'apikey':CFG.key,
+        'Authorization':`Bearer ${s.access_token}`,
+        'Accept':'application/json'
+      },
+      cache:'no-store'
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(data?.message || 'تعذر قراءة المستخدم الحالي.');
+    return data;
+  }
+
+  async function loadCurrentProfile(){
+    currentUser = await getAuthUser();
+    const rows = await db(`profiles?select=*&user_id=eq.${encodeURIComponent(currentUser.id)}&limit=1`);
+    currentProfile = Array.isArray(rows) ? rows[0] : null;
+
+    if(!currentProfile) throw new Error('PROFILE_NOT_FOUND');
+    if(currentProfile.active === false) throw new Error('ACCOUNT_DISABLED');
+    return currentProfile;
+  }
+
+  function applyRoleUI(){
+    const role = currentProfile?.role || 'viewer';
+    const edit = canEdit();
+    const superAdmin = isSuperAdmin();
+
+    document.body.classList.toggle('super-admin',superAdmin);
+
+    $('#usersNav').hidden = !superAdmin;
+    $('#settingsNav').hidden = !edit;
+
+    ['#topAddPackageBtn','#heroAddPackageBtn','#newPackageBtn','#quickAddBtn'].forEach(sel=>{
+      const el=$(sel); if(el) el.hidden=!edit;
+    });
+
+    const settingsJump = document.querySelector('[data-jump-view="settings"]');
+    if(settingsJump) settingsJump.hidden=!edit;
+
+    $$('#settingsForm input,#settingsForm button').forEach(el=>el.disabled=!edit);
+
+    $('#adminEmailText').textContent = currentUser?.email || currentProfile?.email || '—';
+    $('#systemAdminEmail').textContent = currentUser?.email || currentProfile?.email || '—';
+    $('#adminRoleTitle').textContent = roleLabel(role);
+    $('#systemRoleText').textContent = roleLabel(role);
+
+    const activeView = $('.nav-item.active')?.dataset.view;
+    if((activeView==='users' && !superAdmin) || (activeView==='settings' && !edit)){
+      switchView('overview');
+    }
+  }
+
+  async function loadUsersAndAudit(){
+    if(!isSuperAdmin()){
+      users=[]; auditLogs=[]; return;
+    }
+
+    const [u,a] = await Promise.all([
+      db('profiles?select=*&order=created_at.asc'),
+      db('audit_logs?select=*&order=created_at.desc&limit=40')
+    ]);
+
+    users = Array.isArray(u) ? u : [];
+    auditLogs = Array.isArray(a) ? a : [];
+  }
+
+  function renderUsers(){
+    if(!isSuperAdmin()) return;
+
+    $('#usersCount').textContent = `${users.length} مستخدم`;
+    const me = currentUser?.id;
+
+    $('#usersList').innerHTML = users.length ? users.map(u=>{
+      const self = u.user_id === me;
+      const initials = (u.full_name || u.email || '?').trim().slice(0,1).toUpperCase();
+      return `<article class="user-card" data-user-id="${esc(u.user_id)}">
+        <div class="user-main">
+          <div class="user-avatar">${esc(initials)}</div>
+          <div class="user-copy">
+            <b>${esc(u.full_name || roleLabel(u.role))}${self?' • أنت':''}</b>
+            <span>${esc(u.email)}</span>
+          </div>
+        </div>
+        <select data-user-role ${self?'disabled':''} aria-label="الصلاحية">
+          <option value="super_admin" ${u.role==='super_admin'?'selected':''}>Super Admin</option>
+          <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
+          <option value="sales" ${u.role==='sales'?'selected':''}>Sales</option>
+          <option value="viewer" ${u.role==='viewer'?'selected':''}>Viewer</option>
+        </select>
+        <label class="user-active">
+          <input type="checkbox" data-user-active ${u.active?'checked':''} ${self?'disabled':''}>
+          <span>${u.active?'نشط':'موقوف'}</span>
+        </label>
+        ${self
+          ? '<span class="read-only-badge">الحساب الحالي محمي</span>'
+          : '<button class="secondary-btn compact user-save" type="button" data-save-user>حفظ</button>'
+        }
+      </article>`;
+    }).join('') : '<div class="empty-state"><b>لا يوجد مستخدمون</b></div>';
+
+    $('#auditList').innerHTML = auditLogs.length ? auditLogs.map(x=>{
+      const dt = x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
+      const action = ({insert:'إضافة',update:'تعديل',delete:'حذف'})[x.action] || x.action;
+      return `<article class="audit-item">
+        <div class="audit-item-top">
+          <b>${esc(x.user_email || 'system')}</b>
+          <span class="audit-action">${esc(action)} • ${esc(x.table_name)}</span>
+        </div>
+        <span>${x.record_id ? `السجل: ${esc(x.record_id)}` : 'تغيير على النظام'}</span>
+        <small>${esc(dt)}</small>
+      </article>`;
+    }).join('') : '<div class="empty-state"><b>لا توجد نشاطات بعد</b><span>ستظهر التغييرات هنا تلقائياً.</span></div>';
+  }
+
+  function startInactivityProtection(){
+    const touch=()=>{ lastActivityAt=Date.now(); };
+    ['pointerdown','keydown','touchstart'].forEach(ev=>{
+      window.addEventListener(ev,touch,{passive:true});
+    });
+    setInterval(()=>{
+      if(!dashboardView.hidden && Date.now()-lastActivityAt > 30*60*1000){
+        clearSession();
+        alert('تم تسجيل الخروج تلقائياً بعد 30 دقيقة من عدم النشاط.');
+        location.reload();
+      }
+    },60000);
+  }
+
   async function showDashboard(){
+    await loadCurrentProfile();
     loginView.hidden = true;
     dashboardView.hidden = false;
-    $('#adminEmailText').textContent = CFG.email;
-    $('#systemAdminEmail').textContent = CFG.email;
+    applyRoleUI();
     await loadAll();
   }
 
@@ -1132,8 +1417,10 @@ textarea{resize:vertical}
     try{
       await ensureSession();
       await showDashboard();
-    }catch{
+    }catch(e){
       clearSession();
+      loginView.hidden = false;
+      dashboardView.hidden = true;
     }
   }
 
@@ -1150,20 +1437,30 @@ textarea{resize:vertical}
 
     try{
       const s = await authFetch('token?grant_type=password',{
-        email:CFG.email,
+        email:$('#email').value.trim(),
         password:$('#password').value
       });
       saveSession(s);
-      msg($('#loginMessage'),'تم تسجيل الدخول.','success');
       await showDashboard();
+      msg($('#loginMessage'),'تم تسجيل الدخول.','success');
     }catch(e){
-      msg($('#loginMessage'),'كلمة المرور غير صحيحة أو الحساب غير مكتمل.','error');
+      clearSession();
+      const text = e.message==='ACCOUNT_DISABLED'
+        ? 'هذا الحساب موقوف. تواصل مع المدير الرئيسي.'
+        : e.message==='PROFILE_NOT_FOUND'
+          ? 'الحساب موجود لكن لا يملك ملف صلاحيات.'
+          : 'بيانات الدخول غير صحيحة أو الحساب غير مصرح له.';
+      msg($('#loginMessage'),text,'error');
     }finally{
       setBusy(btn,false);
     }
   });
 
   $('#logoutBtn')?.addEventListener('click',async()=>{
+    clearSession();
+    location.reload();
+  });
+  $('#mobileLogoutBtn')?.addEventListener('click',()=>{
     clearSession();
     location.reload();
   });
@@ -1186,7 +1483,7 @@ textarea{resize:vertical}
 
   async function loadAll(){
     try{
-      await Promise.all([loadPackages(),loadSettings()]);
+      await Promise.all([loadPackages(),loadSettings(),loadUsersAndAudit()]);
       renderEverything();
     }catch(e){
       toast(`تعذر تحميل البيانات: ${e.message}`,'error');
@@ -1197,6 +1494,7 @@ textarea{resize:vertical}
     renderStats();
     renderFeatured();
     renderPackages();
+    renderUsers();
   }
 
   function renderStats(){
@@ -1242,6 +1540,7 @@ textarea{resize:vertical}
 
   function renderPackages(){
     const list=filtered();
+    const edit=canEdit();
     $('#resultsCount').textContent=`${list.length} باقة`;
     $('#adminPackageList').innerHTML=list.length?list.map(p=>`
       <article class="package-row-admin" data-id="${esc(p.id)}">
@@ -1250,18 +1549,25 @@ textarea{resize:vertical}
           <div class="pkg-info"><b>${esc(p.label)} ${p.best_value?'⭐':''}</b><span>${esc(p.duration)}${p.tagline?` • ${esc(p.tagline)}`:''}</span></div>
         </div>
         <div class="pkg-price">${money(p.price)} ر.ع</div>
-        <div><button class="status-pill ${p.active?'active':'inactive'}" data-action="toggle-active" data-id="${p.id}">${p.active?'● نشطة':'○ مخفية'}</button></div>
-        <div>${p.best_value
-          ? `<button class="feature-pill best" data-action="unset-best" data-id="${p.id}">★ الأفضل قيمة</button>`
-          : p.featured
-            ? `<button class="feature-pill featured" data-action="toggle-featured" data-id="${p.id}">★ الأكثر طلباً</button>`
-            : `<button class="feature-pill" data-action="toggle-featured" data-id="${p.id}">＋ تمييز</button>`
+        <div>${edit
+          ? `<button class="status-pill ${p.active?'active':'inactive'}" data-action="toggle-active" data-id="${p.id}">${p.active?'● نشطة':'○ مخفية'}</button>`
+          : `<span class="status-pill ${p.active?'active':'inactive'}">${p.active?'● نشطة':'○ مخفية'}</span>`
+        }</div>
+        <div>${edit
+          ? (p.best_value
+            ? `<button class="feature-pill best" data-action="unset-best" data-id="${p.id}">★ الأفضل قيمة</button>`
+            : p.featured
+              ? `<button class="feature-pill featured" data-action="toggle-featured" data-id="${p.id}">★ الأكثر طلباً</button>`
+              : `<button class="feature-pill" data-action="toggle-featured" data-id="${p.id}">＋ تمييز</button>`)
+          : `<span class="feature-pill ${p.best_value?'best':p.featured?'featured':''}">${p.best_value?'★ الأفضل قيمة':p.featured?'★ الأكثر طلباً':'—'}</span>`
         }</div>
         <div class="row-actions">
-          ${!p.best_value?`<button class="mini-action" data-action="set-best" data-id="${p.id}">أفضل قيمة</button>`:''}
-          <button class="mini-action" data-action="duplicate" data-id="${p.id}">نسخ</button>
-          <button class="mini-action" data-action="edit" data-id="${p.id}">تعديل</button>
-          <button class="mini-action danger" data-action="delete" data-id="${p.id}">حذف</button>
+          ${edit ? `
+            ${!p.best_value?`<button class="mini-action" data-action="set-best" data-id="${p.id}">أفضل قيمة</button>`:''}
+            <button class="mini-action" data-action="duplicate" data-id="${p.id}">نسخ</button>
+            <button class="mini-action" data-action="edit" data-id="${p.id}">تعديل</button>
+            <button class="mini-action danger" data-action="delete" data-id="${p.id}">حذف</button>
+          ` : '<span class="read-only-badge">قراءة فقط</span>'}
         </div>
       </article>`).join(''):
       '<div class="empty-state"><b>لا توجد نتائج</b><span>غيّر البحث أو الفلاتر.</span></div>';
@@ -1275,7 +1581,7 @@ textarea{resize:vertical}
   function switchView(view){
     $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
     $$('.view').forEach(v=>v.classList.toggle('active',v.dataset.viewPanel===view));
-    const meta={overview:['Dashboard','نظرة عامة'],packages:['Packages','إدارة الباقات'],settings:['Settings','الإعدادات']};
+    const meta={overview:['Dashboard','نظرة عامة'],packages:['Packages','إدارة الباقات'],settings:['Settings','الإعدادات'],users:['Access Control','المستخدمون والصلاحيات']};
     $('#pageEyebrow').textContent=meta[view]?.[0]||'Dashboard';
     $('#pageTitle').textContent=meta[view]?.[1]||'نظرة عامة';
   }
@@ -1381,6 +1687,7 @@ textarea{resize:vertical}
   }
 
   $('#adminPackageList')?.addEventListener('click',async e=>{
+    if(!canEdit()) return;
     const btn=e.target.closest('[data-action]');
     if(!btn) return;
     const p=packages.find(x=>x.id===btn.dataset.id);
@@ -1443,6 +1750,7 @@ textarea{resize:vertical}
 
   $('#packageForm')?.addEventListener('submit',async e=>{
     e.preventDefault();
+    if(!canEdit()) return toast('هذا الحساب للقراءة فقط.','error');
     const id=$('#pkgId').value;
     const payload={
       type:$('#pkgType').value,
@@ -1491,6 +1799,7 @@ textarea{resize:vertical}
 
   $('#settingsForm')?.addEventListener('submit',async e=>{
     e.preventDefault();
+    if(!canEdit()) return toast('ليس لديك صلاحية تعديل الإعدادات.','error');
 
     const whatsappValue = $('#whatsappSetting').value.replace(/\D/g,'');
     const transferValue = $('#transferNumberSetting').value.replace(/\D/g,'');
@@ -1522,6 +1831,42 @@ textarea{resize:vertical}
     }
   });
 
+
+  $('#usersList')?.addEventListener('click',async e=>{
+    const btn=e.target.closest('[data-save-user]');
+    if(!btn || !isSuperAdmin()) return;
+
+    const card=btn.closest('[data-user-id]');
+    const userId=card?.dataset.userId;
+    if(!userId || userId===currentUser?.id) return;
+
+    const role=card.querySelector('[data-user-role]')?.value;
+    const active=Boolean(card.querySelector('[data-user-active]')?.checked);
+
+    setBusy(btn,true,'حفظ...');
+    try{
+      await db(`profiles?user_id=eq.${encodeURIComponent(userId)}`,{
+        method:'PATCH',
+        body:{role,active},
+        prefer:'return=representation'
+      });
+      await loadUsersAndAudit();
+      renderUsers();
+      toast('تم تحديث صلاحيات المستخدم.');
+    }catch(err){
+      toast(err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  $('#usersList')?.addEventListener('change',e=>{
+    if(e.target.matches('[data-user-active]')){
+      const label=e.target.closest('.user-active')?.querySelector('span');
+      if(label) label.textContent=e.target.checked?'نشط':'موقوف';
+    }
+  });
+
   $('#exportBtn')?.addEventListener('click',()=>{
     const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,bank_transfer_number:transferNumber,packages};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
@@ -1549,6 +1894,7 @@ textarea{resize:vertical}
   $('#loginThemeBtn')?.addEventListener('click',toggleTheme);
   updateThemeButtons();
 
+  startInactivityProtection();
   checkSession();
 })();
 
