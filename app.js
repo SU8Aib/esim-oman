@@ -67,26 +67,38 @@ ${details}
 
   function netflixCard(p){
     const features = Array.isArray(p.features) ? p.features : [];
-    const meta = [p.subscription_type,p.screens,p.quality].filter(Boolean);
 
-    return `<article class="netflix-product-card ${p.featured ? 'featured' : ''}">
-      <div class="netflix-card-top">
+    const compactFeatures = [
+      p.subscription_type,
+      ...features
+    ].filter(Boolean).slice(0,2);
+
+    return `<article class="netflix-product-card">
+      <div class="netflix-card-head">
         <span class="netflix-logo">N</span>
-        ${p.featured ? '<span class="digital-featured-badge">مميز</span>' : ''}
-      </div>
-      <div class="netflix-copy">
-        <span class="digital-service-label">Netflix</span>
-        <h3>${escapeHtml(p.name)}</h3>
-        ${p.description ? `<p>${escapeHtml(p.description)}</p>` : ''}
-      </div>
-      ${meta.length ? `<div class="digital-meta">${meta.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>` : ''}
-      ${features.length ? `<ul class="digital-features">${features.map(x=>`<li>✓ ${escapeHtml(x)}</li>`).join('')}</ul>` : ''}
-      <div class="digital-product-footer">
-        <div>
-          <small>${escapeHtml(p.duration)}</small>
-          <strong>${money(p.price)} ر.ع</strong>
+
+        <div class="netflix-title-wrap">
+          <h3>${escapeHtml(p.name)}</h3>
+          ${p.quality ? `<span class="netflix-quality">${escapeHtml(p.quality)}</span>` : ''}
         </div>
-        <a href="${waLink(netflixMessage(p))}" target="_blank" rel="noopener">اطلب الاشتراك</a>
+      </div>
+
+      ${compactFeatures.length ? `
+        <ul class="netflix-compact-features">
+          ${compactFeatures.map(x=>`<li><span>✓</span>${escapeHtml(x)}</li>`).join('')}
+        </ul>
+      ` : ''}
+
+      <div class="netflix-card-bottom">
+        <div class="netflix-price-wrap">
+          <small>${escapeHtml(p.duration)}</small>
+          <strong>${money(p.price)} <span>ر.ع</span></strong>
+        </div>
+
+        <a class="netflix-order-btn"
+           href="${waLink(netflixMessage(p))}"
+           target="_blank"
+           rel="noopener">اطلب</a>
       </div>
     </article>`;
   }
