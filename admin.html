@@ -958,6 +958,150 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="audit-v2-design">
+.audit-view{max-width:1280px;margin-inline:auto}
+.audit-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-bottom:16px;padding:2px 2px 0;
+}
+.audit-hero h2{margin:.2rem 0 .35rem;font-size:clamp(1.55rem,2vw,2.05rem)}
+.audit-hero p{margin:0;color:var(--muted);max-width:700px}
+.audit-hero-badge{
+  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  padding:9px 12px;border:1px solid rgba(40,213,189,.24);
+  background:rgba(40,213,189,.08);border-radius:999px;color:var(--accent)
+}
+.audit-hero-badge span{font-size:.65rem}
+
+.audit-summary-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;margin-bottom:14px
+}
+.audit-summary-card{
+  border:1px solid var(--line);background:linear-gradient(180deg,var(--surface2),var(--surface));
+  border-radius:16px;padding:15px 16px;min-width:0
+}
+.audit-summary-card span{display:block;color:var(--muted);font-size:.72rem;font-weight:800}
+.audit-summary-card b{
+  display:block;margin-top:7px;font-size:1.65rem;line-height:1;color:var(--text)
+}
+.audit-summary-card small{display:block;margin-top:7px;color:var(--muted);font-size:.64rem}
+
+.audit-v2-panel{padding:16px!important}
+.audit-toolbar{
+  display:grid;grid-template-columns:minmax(280px,1fr) 190px 190px;
+  gap:10px;align-items:center;margin-bottom:12px
+}
+.audit-search-wrap{position:relative;min-width:0}
+.audit-search-wrap > span{
+  position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:1rem;pointer-events:none
+}
+.audit-search-wrap input{width:100%;padding-right:38px!important}
+.audit-toolbar select{width:100%}
+
+.audit-result-line{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:2px 1px 12px;color:var(--muted);font-size:.72rem
+}
+
+.audit-timeline{
+  display:grid!important;grid-template-columns:1fr!important;
+  gap:10px!important;max-height:none!important;overflow:visible!important;padding:0!important
+}
+
+.audit-event{
+  position:relative;display:grid;
+  grid-template-columns:46px minmax(0,1fr) auto;
+  gap:12px;align-items:start;
+  border:1px solid var(--line);background:var(--surface2);
+  border-radius:16px;padding:14px;min-width:0;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease
+}
+.audit-event:hover{
+  transform:translateY(-1px);border-color:rgba(40,213,189,.26);
+  background:linear-gradient(90deg,rgba(40,213,189,.035),var(--surface2))
+}
+.audit-event-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(40,213,189,.09);
+  border:1px solid rgba(40,213,189,.18);
+  color:var(--accent);font-size:1rem;font-weight:900
+}
+.audit-event-main{min-width:0}
+.audit-event-top{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px
+}
+.audit-actor{font-weight:900;color:var(--text)}
+.audit-action-chip{
+  display:inline-flex;align-items:center;border-radius:999px;
+  padding:4px 8px;background:var(--surface3);
+  border:1px solid var(--line);font-size:.62rem;color:var(--muted)
+}
+.audit-event-detail{
+  color:var(--text);font-weight:700;font-size:.82rem;line-height:1.7;
+  overflow-wrap:anywhere
+}
+.audit-change-values{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:8px
+}
+.audit-value{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 9px;border-radius:9px;font-size:.68rem;
+  border:1px solid var(--line);background:var(--surface3);color:var(--muted)
+}
+.audit-value strong{color:var(--text)}
+.audit-value.after{
+  border-color:rgba(40,213,189,.22);
+  background:rgba(40,213,189,.065)
+}
+.audit-arrow{color:var(--accent);font-weight:900}
+
+.audit-event-side{
+  display:grid;justify-items:end;gap:7px;min-width:120px
+}
+.audit-event-time{font-size:.65rem;color:var(--muted);white-space:nowrap}
+.audit-category{
+  display:inline-flex;padding:5px 8px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface3);
+  color:var(--muted);font-size:.61rem;white-space:nowrap
+}
+.audit-event-id{
+  color:var(--muted);font-family:'JetBrains Mono',monospace;
+  font-size:.56rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.audit-empty{
+  padding:34px 16px;text-align:center;border:1px dashed var(--line);
+  border-radius:14px;color:var(--muted)
+}
+.audit-empty b{display:block;color:var(--text);margin-bottom:5px}
+
+@media(max-width:900px){
+  .audit-toolbar{grid-template-columns:1fr 1fr}
+  .audit-search-wrap{grid-column:1/-1}
+  .audit-summary-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:650px){
+  .audit-hero{align-items:flex-start;flex-direction:column}
+  .audit-summary-grid{grid-template-columns:1fr 1fr}
+  .audit-summary-card:last-child{grid-column:1/-1}
+  .audit-toolbar{grid-template-columns:1fr}
+  .audit-search-wrap{grid-column:auto}
+  .audit-event{
+    grid-template-columns:40px minmax(0,1fr);
+    padding:12px;gap:10px
+  }
+  .audit-event-icon{width:38px;height:38px}
+  .audit-event-side{
+    grid-column:2;justify-items:start;grid-template-columns:auto auto;
+    align-items:center;min-width:0
+  }
+  .audit-event-id{display:none}
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1368,24 +1512,63 @@ textarea{resize:vertical}
         </section>
 
         <!-- AUDIT LOG -->
-        <section class="view" data-view-panel="audit">
-          <div class="section-heading">
+        <section class="view audit-view" data-view-panel="audit">
+          <div class="audit-hero">
             <div>
               <span class="eyebrow">Audit Log</span>
               <h2>سجل نشاطات الإدارة</h2>
-              <p>يعرض من قام بالتغيير، ونوع التعديل بالتفصيل، ووقت حدوثه.</p>
+              <p>يعرض التغييرات الفعلية فقط: من قام بها، ماذا غيّر، والقيمة قبل وبعد.</p>
             </div>
-            <span class="role-chip super_admin" id="auditCount">0 نشاط</span>
+            <div class="audit-hero-badge">
+              <span>●</span>
+              <b>تتبع مباشر</b>
+            </div>
           </div>
 
-          <article class="panel audit-page-panel">
-            <div class="panel-head">
-              <div>
-                <span class="top-eyebrow">Activity History</span>
-                <h3>سجل التغييرات</h3>
+          <div class="audit-summary-grid">
+            <article class="audit-summary-card">
+              <span>إجمالي التغييرات</span>
+              <b id="auditCount">0</b>
+              <small>تغيير فعلي</small>
+            </article>
+            <article class="audit-summary-card">
+              <span>تغييرات اليوم</span>
+              <b id="auditToday">0</b>
+              <small>منذ بداية اليوم</small>
+            </article>
+            <article class="audit-summary-card">
+              <span>المستخدمون النشطون</span>
+              <b id="auditPeople">0</b>
+              <small>ظهروا في السجل</small>
+            </article>
+          </div>
+
+          <article class="panel audit-page-panel audit-v2-panel">
+            <div class="audit-toolbar">
+              <div class="audit-search-wrap">
+                <span>⌕</span>
+                <input id="auditSearch" type="search" placeholder="ابحث باسم المستخدم أو نوع التعديل...">
               </div>
+
+              <select id="auditActorFilter" aria-label="فلترة حسب المستخدم">
+                <option value="">كل المستخدمين</option>
+              </select>
+
+              <select id="auditTableFilter" aria-label="فلترة حسب القسم">
+                <option value="">كل الأقسام</option>
+                <option value="site_settings">إعدادات الموقع</option>
+                <option value="packages">الباقات</option>
+                <option value="profiles">المستخدمون</option>
+                <option value="auth.users">الحسابات</option>
+              </select>
             </div>
-            <div class="audit-list audit-page-list" id="auditList"></div>
+
+            <div class="audit-result-line">
+              <span id="auditResultText">آخر التغييرات</span>
+              <button class="secondary-btn compact" id="auditClearFilters" type="button">مسح الفلاتر</button>
+            </div>
+
+            <div class="audit-timeline" id="auditList"></div>
           </article>
         </section>
       </div>
@@ -1977,18 +2160,159 @@ textarea{resize:vertical}
     return `${x.action || 'نشاط'} في ${auditTableLabel(table)}`;
   }
 
+  function auditComparable(obj){
+    const data={...(obj || {})};
+    delete data.updated_at;
+    delete data.created_at;
+    return data;
+  }
+
+  function auditHasMeaningfulChange(x){
+    const action=String(x.action || '').toLowerCase();
+    if(action!=='update') return true;
+
+    const oldData=auditJson(x.old_data);
+    const newData=auditJson(x.new_data);
+    const table=String(x.table_name || '');
+
+    if(table==='site_settings'){
+      return String(oldData.value ?? '') !== String(newData.value ?? '');
+    }
+
+    if(table==='profiles'){
+      const fields=['username','role','active','full_name'];
+      return fields.some(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
+    }
+
+    if(table==='packages'){
+      const fields=['label','duration','price','tagline','active','featured','best_value','sort_order','type','perks'];
+      return fields.some(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
+    }
+
+    return JSON.stringify(auditComparable(oldData)) !== JSON.stringify(auditComparable(newData));
+  }
+
+  function auditCategoryIcon(table,action){
+    if(action==='create_user') return '＋';
+    if(action==='update_credentials') return '⌁';
+    if(table==='site_settings') return '⚙';
+    if(table==='packages') return '▦';
+    if(table==='profiles' || table==='auth.users') return '♙';
+    return '↺';
+  }
+
+  function auditChangeValues(x){
+    const oldData=auditJson(x.old_data);
+    const newData=auditJson(x.new_data);
+    const action=String(x.action || '').toLowerCase();
+    const table=String(x.table_name || '');
+
+    if(action!=='update') return null;
+
+    if(table==='site_settings'){
+      if(String(oldData.value ?? '') === String(newData.value ?? '')) return null;
+      return {
+        before:auditValue('value',oldData.value),
+        after:auditValue('value',newData.value)
+      };
+    }
+
+    if(table==='profiles'){
+      const fields=['username','role','active','full_name'];
+      const changed=fields.filter(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
+      if(changed.length!==1) return null;
+      const field=changed[0];
+      return {
+        before:auditValue(field,oldData[field]),
+        after:auditValue(field,newData[field])
+      };
+    }
+
+    if(table==='packages'){
+      const fields=['label','duration','price','tagline','active','featured','best_value','sort_order','type'];
+      const changed=fields.filter(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
+      if(changed.length!==1) return null;
+      const field=changed[0];
+      return {
+        before:auditValue(field,oldData[field]),
+        after:auditValue(field,newData[field])
+      };
+    }
+
+    return null;
+  }
+
+  function meaningfulAuditLogs(){
+    return auditLogs.filter(auditHasMeaningfulChange);
+  }
+
+  function refreshAuditActorOptions(logs){
+    const select=$('#auditActorFilter');
+    if(!select) return;
+
+    const current=select.value;
+    const actors=[...new Set(logs.map(x=>String(x.user_email || 'system')).filter(Boolean))]
+      .sort((a,b)=>a.localeCompare(b));
+
+    select.innerHTML='<option value="">كل المستخدمين</option>' +
+      actors.map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join('');
+
+    if(actors.includes(current)) select.value=current;
+  }
+
   function renderAudit(){
     if(!isSuperAdmin()) return;
 
-    const count=$('#auditCount');
-    if(count) count.textContent=`${auditLogs.length} نشاط`;
+    const all=meaningfulAuditLogs();
+    refreshAuditActorOptions(all);
+
+    const search=($('#auditSearch')?.value || '').trim().toLowerCase();
+    const actor=$('#auditActorFilter')?.value || '';
+    const table=$('#auditTableFilter')?.value || '';
+
+    const filtered=all.filter(x=>{
+      if(actor && String(x.user_email || 'system')!==actor) return false;
+      if(table && String(x.table_name || '')!==table) return false;
+
+      if(search){
+        const haystack=[
+          x.user_email,
+          x.action,
+          x.table_name,
+          x.record_id,
+          auditChangeDescription(x),
+          auditTableLabel(x.table_name)
+        ].join(' ').toLowerCase();
+
+        if(!haystack.includes(search)) return false;
+      }
+      return true;
+    });
+
+    const now=new Date();
+    const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    const todayCount=all.filter(x=>{
+      const t=x.created_at ? new Date(x.created_at).getTime() : 0;
+      return t>=todayStart;
+    }).length;
+    const peopleCount=new Set(all.map(x=>String(x.user_email || 'system'))).size;
+
+    if($('#auditCount')) $('#auditCount').textContent=all.length;
+    if($('#auditToday')) $('#auditToday').textContent=todayCount;
+    if($('#auditPeople')) $('#auditPeople').textContent=peopleCount;
+    if($('#auditResultText')){
+      $('#auditResultText').textContent =
+        filtered.length===all.length
+          ? `عرض ${all.length} تغيير فعلي`
+          : `عرض ${filtered.length} من أصل ${all.length} تغيير`;
+    }
 
     const list=$('#auditList');
     if(!list) return;
 
-    list.innerHTML = auditLogs.length ? auditLogs.map(x=>{
-      const dt = x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
-      const action = ({
+    list.innerHTML = filtered.length ? filtered.map(x=>{
+      const dt=x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
+      const action=({
         insert:'إضافة',
         update:'تعديل',
         delete:'حذف',
@@ -1999,21 +2323,50 @@ textarea{resize:vertical}
 
       const detail=auditChangeDescription(x);
       const tableLabel=auditTableLabel(x.table_name);
+      const values=auditChangeValues(x);
+      const icon=auditCategoryIcon(String(x.table_name || ''),String(x.action || ''));
 
-      return `<article class="audit-item">
-        <div class="audit-item-top">
-          <b>${esc(x.user_email || 'system')}</b>
-          <span class="audit-action">${esc(action)}</span>
+      const valuesHtml=values ? `
+        <div class="audit-change-values">
+          <span class="audit-value"><span>قبل</span><strong>${esc(values.before)}</strong></span>
+          <span class="audit-arrow">←</span>
+          <span class="audit-value after"><span>بعد</span><strong>${esc(values.after)}</strong></span>
+        </div>` : '';
+
+      return `<article class="audit-event">
+        <div class="audit-event-icon">${esc(icon)}</div>
+
+        <div class="audit-event-main">
+          <div class="audit-event-top">
+            <span class="audit-actor">${esc(x.user_email || 'system')}</span>
+            <span class="audit-action-chip">${esc(action)}</span>
+          </div>
+          <div class="audit-event-detail">${esc(detail)}</div>
+          ${valuesHtml}
         </div>
-        <div class="audit-detail">${esc(detail)}</div>
-        <div class="audit-meta">
-          <span class="audit-table-chip">${esc(tableLabel)}</span>
-          <small>${esc(dt)}</small>
+
+        <div class="audit-event-side">
+          <span class="audit-category">${esc(tableLabel)}</span>
+          <span class="audit-event-time">${esc(dt)}</span>
+          ${x.record_id ? `<span class="audit-event-id" title="${esc(x.record_id)}">${esc(x.record_id)}</span>` : ''}
         </div>
-        ${x.record_id ? `<span class="audit-target">ID: ${esc(x.record_id)}</span>` : ''}
       </article>`;
-    }).join('') : '<div class="empty-state"><b>لا توجد نشاطات بعد</b><span>ستظهر التغييرات هنا تلقائياً.</span></div>';
+    }).join('') : `
+      <div class="audit-empty">
+        <b>لا توجد نتائج</b>
+        <span>لا توجد تغييرات فعلية تطابق الفلاتر الحالية.</span>
+      </div>`;
   }
+
+  $('#auditSearch')?.addEventListener('input',renderAudit);
+  $('#auditActorFilter')?.addEventListener('change',renderAudit);
+  $('#auditTableFilter')?.addEventListener('change',renderAudit);
+  $('#auditClearFilters')?.addEventListener('click',()=>{
+    if($('#auditSearch')) $('#auditSearch').value='';
+    if($('#auditActorFilter')) $('#auditActorFilter').value='';
+    if($('#auditTableFilter')) $('#auditTableFilter').value='';
+    renderAudit();
+  });
 
   function startInactivityProtection(){
     const touch=()=>{ lastActivityAt=Date.now(); };
@@ -2440,23 +2793,49 @@ textarea{resize:vertical}
     if(!whatsappValue) return msg($('#settingsMessage'),'أدخل رقم واتساب.','error');
     if(!transferValue) return msg($('#settingsMessage'),'أدخل رقم التحويل.','error');
 
+    const changes=[];
+    if(whatsappValue !== String(whatsapp || '').replace(/\D/g,'')){
+      changes.push({
+        key:'whatsapp_number',
+        value:whatsappValue,
+        label:'رقم واتساب'
+      });
+    }
+    if(transferValue !== String(transferNumber || '').replace(/\D/g,'')){
+      changes.push({
+        key:'bank_transfer_number',
+        value:transferValue,
+        label:'رقم التحويل البنكي'
+      });
+    }
+
+    if(!changes.length){
+      return msg($('#settingsMessage'),'لا توجد تغييرات جديدة للحفظ.','success');
+    }
+
     const btn=e.submitter;
     setBusy(btn,true);
 
     try{
-      await db('site_settings?on_conflict=key',{
-        method:'POST',
-        body:[
-          {key:'whatsapp_number',value:whatsappValue},
-          {key:'bank_transfer_number',value:transferValue}
-        ],
-        prefer:'resolution=merge-duplicates,return=representation'
-      });
+      for(const change of changes){
+        await db(`site_settings?key=eq.${encodeURIComponent(change.key)}`,{
+          method:'PATCH',
+          body:{value:change.value},
+          prefer:'return=representation'
+        });
+      }
 
       whatsapp=whatsappValue;
       transferNumber=transferValue;
-      msg($('#settingsMessage'),'تم حفظ إعدادات واتساب والتحويل بنجاح.','success');
-      toast('تم تحديث إعدادات الطلب والتحويل.');
+
+      const changedLabels=changes.map(x=>x.label).join(' و ');
+      msg($('#settingsMessage'),`تم حفظ ${changedLabels} فقط.`, 'success');
+      toast(`تم تحديث ${changedLabels}.`);
+
+      if(isSuperAdmin()){
+        await loadUsersAndAudit();
+        renderAudit();
+      }
     }catch(err){
       msg($('#settingsMessage'),err.message,'error');
     }finally{
