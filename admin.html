@@ -1372,6 +1372,27 @@ textarea{resize:vertical}
     }
   }
 
+  async function callPublicFunction(name,payload){
+    const res = await fetch(`${CFG.url}/functions/v1/${encodeURIComponent(name)}`,{
+      method:'POST',
+      headers:{
+        'apikey':CFG.key,
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify(payload || {}),
+      cache:'no-store'
+    });
+
+    const text = await res.text();
+    const data = text ? (()=>{try{return JSON.parse(text)}catch{return {message:text}}})() : {};
+
+    if(!res.ok){
+      throw new Error(data?.error || data?.message || `HTTP ${res.status}`);
+    }
+    return data;
+  }
+
   async function callFunction(name,payload){
     const s = await ensureSession();
     const res = await fetch(`${CFG.url}/functions/v1/${encodeURIComponent(name)}`,{
@@ -1621,7 +1642,7 @@ textarea{resize:vertical}
     msg($('#loginMessage'));
 
     try{
-      const result = await callFunction('admin-login',{
+      const result = await callPublicFunction('admin-login',{
         username:$('#username').value.trim(),
         password:$('#password').value
       });
