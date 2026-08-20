@@ -826,6 +826,69 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="audit-fullwidth-fix">
+/* Users page: keep accounts, roles and history full-width and readable. */
+[data-view-panel="users"] .permissions-grid{
+  grid-template-columns:minmax(0,1fr)!important;
+}
+
+[data-view-panel="users"] .permissions-grid > div{
+  width:100%!important;
+  min-width:0!important;
+}
+
+[data-view-panel="users"] .role-legend{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px!important;
+}
+
+[data-view-panel="users"] .role-legend > div{
+  border:1px solid var(--line);
+  background:var(--surface2);
+  border-radius:13px;
+  padding:10px;
+  min-width:0;
+}
+
+[data-view-panel="users"] .audit-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding-left:0!important;
+}
+
+[data-view-panel="users"] .audit-item{
+  min-width:0!important;
+}
+
+[data-view-panel="users"] .audit-item-top{
+  flex-wrap:wrap;
+}
+
+[data-view-panel="users"] .audit-item span,
+[data-view-panel="users"] .audit-item small{
+  overflow-wrap:anywhere;
+}
+
+@media(max-width:1000px){
+  [data-view-panel="users"] .role-legend{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  [data-view-panel="users"] .audit-list{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:560px){
+  [data-view-panel="users"] .role-legend{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1675,7 +1738,14 @@ textarea{resize:vertical}
 
     $('#auditList').innerHTML = auditLogs.length ? auditLogs.map(x=>{
       const dt = x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
-      const action = ({insert:'إضافة',update:'تعديل',delete:'حذف'})[x.action] || x.action;
+      const action = ({
+        insert:'إضافة',
+        update:'تعديل',
+        delete:'حذف',
+        create_user:'إنشاء مستخدم',
+        update_user:'تحديث مستخدم',
+        update_credentials:'تغيير بيانات الدخول'
+      })[x.action] || x.action;
       return `<article class="audit-item">
         <div class="audit-item-top">
           <b>${esc(x.user_email || 'system')}</b>
