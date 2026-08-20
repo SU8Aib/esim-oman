@@ -736,6 +736,96 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="users-mobile-width-fix">
+/* Mobile-only fix for Users / Roles page. Desktop remains unchanged. */
+@media (max-width:860px){
+  [data-view-panel="users"],
+  [data-view-panel="users"] .permissions-grid,
+  [data-view-panel="users"] .permissions-grid > *,
+  [data-view-panel="users"] .permissions-grid > div,
+  [data-view-panel="users"] .panel{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  [data-view-panel="users"] .permissions-grid{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;
+    overflow:hidden!important;
+  }
+
+  [data-view-panel="users"] .role-legend{
+    width:100%!important;
+    min-width:0!important;
+    gap:10px!important;
+  }
+
+  [data-view-panel="users"] .role-legend > div{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr)!important;
+    align-items:start!important;
+    gap:9px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  [data-view-panel="users"] .role-legend p{
+    min-width:0!important;
+    width:100%!important;
+    margin:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    line-height:1.65!important;
+  }
+
+  [data-view-panel="users"] .role-chip{
+    flex:0 0 auto!important;
+    white-space:nowrap!important;
+  }
+
+  [data-view-panel="users"] .panel-head{
+    min-width:0!important;
+    width:100%!important;
+  }
+
+  [data-view-panel="users"] .panel-head > div{
+    min-width:0!important;
+  }
+
+  [data-view-panel="users"] .panel-head h3{
+    overflow-wrap:anywhere!important;
+  }
+
+  [data-view-panel="users"] .audit-list,
+  [data-view-panel="users"] .audit-item{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+}
+
+@media (max-width:420px){
+  [data-view-panel="users"] .panel{
+    padding:12px!important;
+  }
+
+  [data-view-panel="users"] .role-legend > div{
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+  }
+
+  [data-view-panel="users"] .role-chip{
+    width:max-content!important;
+    max-width:100%!important;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
