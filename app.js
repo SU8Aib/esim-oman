@@ -16,6 +16,7 @@
   let whatsapp = String(cfg.DEFAULT_WHATSAPP_NUMBER || '96876746977').replace(/\D/g,'');
   let transferNumber = '91772654';
   let packages = FALLBACK;
+  let digitalProducts = [];
   let supabaseClient = null;
 
   function configured(){
@@ -41,6 +42,69 @@
 📱 رقم التحويل: ${transferNumber}
 
 يرجى تأكيد الطلب وإرسال خطوات التفعيل. شكرًا لكم.`;
+  }
+
+  function netflixMessage(p){
+    const details = [
+      `🎬 ${p.name}`,
+      p.duration ? `⏳ المدة: ${p.duration}` : '',
+      `💰 السعر: ${money(p.price)} ر.ع`,
+      p.subscription_type ? `📦 نوع الاشتراك: ${p.subscription_type}` : '',
+      p.screens ? `🖥 الأجهزة/الشاشات: ${p.screens}` : '',
+      p.quality ? `✨ الجودة: ${p.quality}` : '',
+      p.delivery_method ? `🚚 التسليم: ${p.delivery_method}` : ''
+    ].filter(Boolean).join('\n');
+
+    return `مرحبًا 👋
+أرغب في طلب اشتراك Netflix:
+${details}
+
+💳 التحويل عبر بنك مسقط
+📱 رقم التحويل: ${transferNumber}
+
+يرجى تأكيد الطلب وإرسال تفاصيل الاستلام. شكرًا لكم.`;
+  }
+
+  function netflixCard(p){
+    const features = Array.isArray(p.features) ? p.features : [];
+    const meta = [p.subscription_type,p.screens,p.quality].filter(Boolean);
+
+    return `<article class="netflix-product-card ${p.featured ? 'featured' : ''}">
+      <div class="netflix-card-top">
+        <span class="netflix-logo">N</span>
+        ${p.featured ? '<span class="digital-featured-badge">مميز</span>' : ''}
+      </div>
+      <div class="netflix-copy">
+        <span class="digital-service-label">Netflix</span>
+        <h3>${escapeHtml(p.name)}</h3>
+        ${p.description ? `<p>${escapeHtml(p.description)}</p>` : ''}
+      </div>
+      ${meta.length ? `<div class="digital-meta">${meta.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}</div>` : ''}
+      ${features.length ? `<ul class="digital-features">${features.map(x=>`<li>✓ ${escapeHtml(x)}</li>`).join('')}</ul>` : ''}
+      <div class="digital-product-footer">
+        <div>
+          <small>${escapeHtml(p.duration)}</small>
+          <strong>${money(p.price)} ر.ع</strong>
+        </div>
+        <a href="${waLink(netflixMessage(p))}" target="_blank" rel="noopener">اطلب الاشتراك</a>
+      </div>
+    </article>`;
+  }
+
+  function renderNetflix(){
+    const grid = document.getElementById('netflixGrid');
+    if(!grid) return;
+
+    const list = digitalProducts.filter(p=>p.service_slug==='netflix');
+    grid.innerHTML = list.length
+      ? list.map(netflixCard).join('')
+      : `<div class="digital-empty">
+          <span class="netflix-logo">N</span>
+          <div>
+            <b>اشتراكات Netflix ستظهر هنا</b>
+            <p>أضف أول اشتراك من لوحة الإدارة ليظهر مباشرة في الموقع.</p>
+          </div>
+        </div>`;
   }
 
   function setWhatsAppLinks(){
@@ -108,6 +172,7 @@
       unlimitedGrid.innerHTML = active.filter(p=>p.type==='unlimited').map(row).join('');
     }
 
+    renderNetflix();
     setWhatsAppLinks();
   }
 
@@ -118,13 +183,18 @@
     }
 
     try{
-      const [{data:p,error:pe},{data:s,error:se}] = await Promise.all([
+      const [{data:p,error:pe},{data:s,error:se},{data:d,error:de}] = await Promise.all([
         supabaseClient.from('packages').select('*').order('sort_order',{ascending:true}),
-        supabaseClient.from('site_settings').select('*')
+        supabaseClient.from('site_settings').select('*'),
+        supabaseClient.from('digital_products').select('*').eq('service_slug','netflix').order('created_at',{ascending:true})
       ]);
 
       if(!pe && Array.isArray(p) && p.length){
         packages = p;
+      }
+
+      if(!de && Array.isArray(d)){
+        digitalProducts = d;
       }
 
       if(!se && Array.isArray(s)){
