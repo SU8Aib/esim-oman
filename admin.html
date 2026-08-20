@@ -650,6 +650,37 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="phase3-create-user">
+.create-user-panel{margin-bottom:14px}
+.create-user-grid{
+  display:grid;grid-template-columns:1.1fr 1.25fr 1fr .8fr auto;
+  gap:10px;align-items:end
+}
+.create-user-grid label{min-width:0}
+.password-create-wrap{position:relative}
+.password-create-wrap input{padding-left:46px}
+.generate-pass-btn{
+  position:absolute;left:6px;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border:0;border-radius:9px;cursor:pointer;
+  background:var(--surface3);color:var(--accent);font-weight:800
+}
+.generate-pass-btn:hover{filter:brightness(1.08)}
+.create-user-help{
+  display:flex;align-items:flex-start;gap:8px;margin-top:10px;
+  color:var(--muted);font-size:.7rem
+}
+.create-user-help b{color:var(--text)}
+@media(max-width:1180px){
+  .create-user-grid{grid-template-columns:1fr 1fr}
+  .create-user-grid .create-user-submit{grid-column:1/-1;width:100%}
+}
+@media(max-width:650px){
+  .create-user-grid{grid-template-columns:1fr}
+  .create-user-grid .create-user-submit{grid-column:auto}
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -687,8 +718,10 @@ textarea{resize:vertical}
 
           <form id="loginForm">
             <label>
-              <span>البريد الإلكتروني</span>
-              <input id="email" type="email" autocomplete="username" required placeholder="name@example.com">
+              <span>اسم المستخدم</span>
+              <input id="username" type="text" autocomplete="username" required
+                     minlength="3" maxlength="30"
+                     placeholder="مثال: admin">
             </label>
 
             <label>
@@ -966,11 +999,62 @@ textarea{resize:vertical}
           </div>
 
           <div class="security-note">
-            <b>إضافة مستخدم جديد:</b>
-            أنشئ المستخدم أولاً من Supabase → Authentication → Users. سيظهر هنا تلقائياً بدور
-            <b>مشاهدة فقط</b>، وبعدها تقدر تغيّر صلاحياته من هذه الصفحة.
-            لا نستخدم Service Role داخل المتصفح حفاظاً على أمان المشروع.
+            <b>إنشاء المستخدم آمن:</b>
+            يتم إنشاء الحساب باسم مستخدم وكلمة مرور من خلال Supabase Edge Function محمية، ولا يتم وضع مفتاح
+            Service Role داخل المتصفح أو GitHub.
           </div>
+
+          <article class="panel create-user-panel">
+            <div class="panel-head">
+              <div>
+                <span class="top-eyebrow">Create User</span>
+                <h3>إنشاء حساب إدارة جديد</h3>
+              </div>
+              <span class="role-chip super_admin">Super Admin فقط</span>
+            </div>
+
+            <form id="createUserForm">
+              <div class="create-user-grid" style="grid-template-columns:1.2fr 1.2fr .9fr auto">
+                <label>
+                  <span>اسم المستخدم</span>
+                  <input id="newUsername" type="text" autocomplete="off"
+                         minlength="3" maxlength="30"
+                         placeholder="مثال: ahmed" required>
+                  <small>حروف إنجليزية وأرقام و . _ - فقط</small>
+                </label>
+
+                <label>
+                  <span>كلمة المرور</span>
+                  <div class="password-create-wrap">
+                    <input id="newUserPassword" type="text" minlength="8"
+                           autocomplete="new-password"
+                           placeholder="8 أحرف أو أكثر" required>
+                    <button class="generate-pass-btn" id="generatePasswordBtn"
+                            type="button" title="إنشاء كلمة مرور">↻</button>
+                  </div>
+                </label>
+
+                <label>
+                  <span>الصلاحية</span>
+                  <select id="newUserRole">
+                    <option value="viewer">Viewer</option>
+                    <option value="sales">Sales</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_admin">Super Admin</option>
+                  </select>
+                </label>
+
+                <button class="primary-btn create-user-submit"
+                        id="createUserBtn" type="submit">＋ إنشاء الحساب</button>
+              </div>
+
+              <div class="create-user-help">
+                <span>🔐</span>
+                <span>تسجيل الدخول سيكون باسم المستخدم وكلمة المرور فقط. البريد الداخلي الذي يحتاجه Supabase يتم إنشاؤه تلقائياً ولا يظهر للمستخدم.</span>
+              </div>
+              <div class="form-message" id="createUserMessage"></div>
+            </form>
+          </article>
 
           <div class="permissions-grid">
             <article class="panel">
@@ -1233,6 +1317,34 @@ textarea{resize:vertical}
     }
   }
 
+  async function callFunction(name,payload){
+    const s = await ensureSession();
+    const res = await fetch(`${CFG.url}/functions/v1/${encodeURIComponent(name)}`,{
+      method:'POST',
+      headers:{
+        'apikey':CFG.key,
+        'Authorization':`Bearer ${s.access_token}`,
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify(payload || {}),
+      cache:'no-store'
+    });
+
+    const text = await res.text();
+    const data = text ? (()=>{try{return JSON.parse(text)}catch{return {message:text}}})() : {};
+
+    if(res.status===401){
+      clearSession();
+      location.reload();
+      throw new Error('انتهت جلسة الدخول.');
+    }
+    if(!res.ok){
+      throw new Error(data?.error || data?.message || `HTTP ${res.status}`);
+    }
+    return data;
+  }
+
   async function db(path,{method='GET',body=null,prefer=''}={}){
     const s = await ensureSession();
     const headers = {
@@ -1318,8 +1430,8 @@ textarea{resize:vertical}
 
     $$('#settingsForm input,#settingsForm button').forEach(el=>el.disabled=!edit);
 
-    $('#adminEmailText').textContent = currentUser?.email || currentProfile?.email || '—';
-    $('#systemAdminEmail').textContent = currentUser?.email || currentProfile?.email || '—';
+    $('#adminEmailText').textContent = currentProfile?.username ? '@'+currentProfile.username : '—';
+    $('#systemAdminEmail').textContent = currentProfile?.username ? '@'+currentProfile.username : '—';
     $('#adminRoleTitle').textContent = roleLabel(role);
     $('#systemRoleText').textContent = roleLabel(role);
 
@@ -1351,13 +1463,13 @@ textarea{resize:vertical}
 
     $('#usersList').innerHTML = users.length ? users.map(u=>{
       const self = u.user_id === me;
-      const initials = (u.full_name || u.email || '?').trim().slice(0,1).toUpperCase();
+      const initials = (u.username || '?').trim().slice(0,1).toUpperCase();
       return `<article class="user-card" data-user-id="${esc(u.user_id)}">
         <div class="user-main">
           <div class="user-avatar">${esc(initials)}</div>
           <div class="user-copy">
-            <b>${esc(u.full_name || roleLabel(u.role))}${self?' • أنت':''}</b>
-            <span>${esc(u.email)}</span>
+            <b>@${esc(u.username || 'بدون-اسم')}${self?' • أنت':''}</b>
+            <span>${esc(roleLabel(u.role))}</span>
           </div>
         </div>
         <select data-user-role ${self?'disabled':''} aria-label="الصلاحية">
@@ -1436,10 +1548,12 @@ textarea{resize:vertical}
     msg($('#loginMessage'));
 
     try{
-      const s = await authFetch('token?grant_type=password',{
-        email:$('#email').value.trim(),
+      const result = await callFunction('admin-login',{
+        username:$('#username').value.trim(),
         password:$('#password').value
       });
+      const s = result?.session;
+      if(!s?.access_token || !s?.refresh_token) throw new Error('LOGIN_FAILED');
       saveSession(s);
       await showDashboard();
       msg($('#loginMessage'),'تم تسجيل الدخول.','success');
@@ -1831,6 +1945,81 @@ textarea{resize:vertical}
     }
   });
 
+
+  function generateTemporaryPassword(){
+    const upper='ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const lower='abcdefghijkmnopqrstuvwxyz';
+    const nums='23456789';
+    const symbols='!@#$%&*?';
+    const all=upper+lower+nums+symbols;
+    const pick=s=>{
+      const a=new Uint32Array(1);
+      crypto.getRandomValues(a);
+      return s[a[0] % s.length];
+    };
+    let out=pick(upper)+pick(lower)+pick(nums)+pick(symbols);
+    while(out.length<14) out+=pick(all);
+    const chars=[...out];
+    for(let i=chars.length-1;i>0;i--){
+      const a=new Uint32Array(1); crypto.getRandomValues(a);
+      const j=a[0]%(i+1);
+      [chars[i],chars[j]]=[chars[j],chars[i]];
+    }
+    return chars.join('');
+  }
+
+  $('#generatePasswordBtn')?.addEventListener('click',()=>{
+    const field=$('#newUserPassword');
+    if(field){
+      field.value=generateTemporaryPassword();
+      field.focus();
+      field.select();
+    }
+  });
+
+  $('#createUserForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!isSuperAdmin()) return;
+
+    const username=$('#newUsername').value.trim().toLowerCase();
+    const password=$('#newUserPassword').value;
+    const role=$('#newUserRole').value;
+    const btn=$('#createUserBtn');
+
+    msg($('#createUserMessage'));
+
+    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
+      return msg($('#createUserMessage'),'اسم المستخدم: 3–30 خانة، حروف إنجليزية وأرقام و . _ - فقط.','error');
+    }
+    if(password.length<8){
+      return msg($('#createUserMessage'),'كلمة المرور يجب أن تكون 8 أحرف على الأقل.','error');
+    }
+    if(!['super_admin','admin','sales','viewer'].includes(role)){
+      return msg($('#createUserMessage'),'الصلاحية غير صحيحة.','error');
+    }
+
+    setBusy(btn,true,'جاري إنشاء الحساب...');
+    try{
+      const result=await callFunction('create-admin-user',{
+        username,
+        password,
+        role
+      });
+
+      $('#createUserForm').reset();
+      $('#newUserRole').value='viewer';
+      msg($('#createUserMessage'),`تم إنشاء الحساب @${result?.user?.username || username} بنجاح.`,'success');
+
+      await loadUsersAndAudit();
+      renderUsers();
+      toast('تم إنشاء المستخدم وإضافته إلى فريق الإدارة.');
+    }catch(err){
+      msg($('#createUserMessage'),err.message,'error');
+      toast(err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
 
   $('#usersList')?.addEventListener('click',async e=>{
     const btn=e.target.closest('[data-save-user]');
