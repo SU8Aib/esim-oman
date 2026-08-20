@@ -1,5 +1,6 @@
 (() => {
   const cfg = window.ESIM_CONFIG || {};
+
   const FALLBACK = [
     {id:'d1', type:'data', label:'1GB', duration:'3 أيام', price:0.200, tagline:'', perks:['تفعيل سريع','دعم طوال المدة'], featured:false, best_value:false, sort_order:10, active:true},
     {id:'d2', type:'data', label:'3GB', duration:'شهر كامل', price:0.900, tagline:'', perks:['تفعيل سريع','دعم طوال المدة'], featured:false, best_value:false, sort_order:20, active:true},
@@ -17,12 +18,17 @@
   let packages = FALLBACK;
   let supabaseClient = null;
 
-  function configured(){ return Boolean(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase); }
-  if(configured()) supabaseClient = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  function configured(){
+    return Boolean(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase);
+  }
+
+  if(configured()){
+    supabaseClient = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  }
 
   function money(v){ return Number(v).toFixed(3); }
 
-  function waLink(text='مرحبًا 👋، أبغى أعرف أكثر عن باقات eSIM.OM.'){
+  function waLink(text='مرحبًا 👋، أبغى أعرف أكثر عن خدمات eSIM.OM.'){
     return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
   }
 
@@ -43,26 +49,38 @@
 
   function card(p){
     const perks = Array.isArray(p.perks) ? p.perks : [];
+    const badge = p.best_value ? '<span class="best-badge">★ الأكثر طلباً</span>' : '';
+    const label = p.best_value ? 'أفضل قيمة' : (p.tagline || (p.type==='unlimited' ? 'بلا حدود' : 'باقة مختارة'));
+
     return `<article class="package-card ${p.best_value ? 'best-value' : ''}">
-      ${p.best_value ? '<span class="best-badge">الأفضل قيمة</span>' : ''}
-      <div class="package-label">${escapeHtml(p.tagline || (p.type==='unlimited' ? 'بلا حدود' : 'باقة مختارة'))}</div>
-      <h3>${escapeHtml(p.label)}</h3><p>${escapeHtml(p.duration)}</p>
+      ${badge}
+      <div class="package-label">${escapeHtml(label)}</div>
+      <h3>${escapeHtml(p.label)}</h3>
+      <p>${escapeHtml(p.duration)}</p>
       <div class="price"><b>${money(p.price)}</b><span>ر.ع</span></div>
       <ul>${perks.map(x=>`<li>✓ ${escapeHtml(x)}</li>`).join('')}</ul>
-      <a class="btn ${p.best_value?'btn-primary':'btn-secondary'} btn-block" href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب الباقة</a>
+      <a class="btn btn-block" href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب الباقة</a>
     </article>`;
   }
 
   function row(p){
-    return `<article class="package-row"><div><b>${escapeHtml(p.label)}</b><span>${escapeHtml(p.duration)}</span></div><div><strong>${money(p.price)} ر.ع</strong><a href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب</a></div></article>`;
+    return `<article class="package-row">
+      <div><b>${escapeHtml(p.label)}</b><span>${escapeHtml(p.duration)}</span></div>
+      <div><strong>${money(p.price)} ر.ع</strong><a href="${waLink(pkgMessage(p))}" target="_blank" rel="noopener">اطلب</a></div>
+    </article>`;
   }
 
   function escapeHtml(v){
-    return String(v ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    return String(v ?? '').replace(/[&<>'"]/g, c=>({
+      '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'
+    }[c]));
   }
 
   function render(){
-    const active = packages.filter(p=>p.active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+    const active = packages
+      .filter(p=>p.active!==false)
+      .sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+
     const featured = active.filter(p=>p.featured).slice(0,3);
     const best = featured.find(p=>p.best_value) || active.find(p=>p.best_value && p.featured);
 
@@ -72,17 +90,32 @@
       ordered = [ordered[0], best, ordered[1]].filter(Boolean);
     }
 
-    document.getElementById('featuredGrid').innerHTML = ordered.length
-      ? ordered.map(card).join('')
-      : '<div class="micro-note">لا توجد باقات مميزة حالياً.</div>';
+    const featuredGrid = document.getElementById('featuredGrid');
+    const dataGrid = document.getElementById('dataGrid');
+    const unlimitedGrid = document.getElementById('unlimitedGrid');
 
-    document.getElementById('dataGrid').innerHTML = active.filter(p=>p.type==='data').map(row).join('');
-    document.getElementById('unlimitedGrid').innerHTML = active.filter(p=>p.type==='unlimited').map(row).join('');
+    if(featuredGrid){
+      featuredGrid.innerHTML = ordered.length
+        ? ordered.map(card).join('')
+        : '<div class="micro-note">لا توجد باقات مميزة حالياً.</div>';
+    }
+
+    if(dataGrid){
+      dataGrid.innerHTML = active.filter(p=>p.type==='data').map(row).join('');
+    }
+
+    if(unlimitedGrid){
+      unlimitedGrid.innerHTML = active.filter(p=>p.type==='unlimited').map(row).join('');
+    }
+
     setWhatsAppLinks();
   }
 
   async function loadRemote(){
-    if(!supabaseClient){ render(); return; }
+    if(!supabaseClient){
+      render();
+      return;
+    }
 
     try{
       const [{data:p,error:pe},{data:s,error:se}] = await Promise.all([
@@ -90,7 +123,9 @@
         supabaseClient.from('site_settings').select('*')
       ]);
 
-      if(!pe && Array.isArray(p) && p.length) packages = p;
+      if(!pe && Array.isArray(p) && p.length){
+        packages = p;
+      }
 
       if(!se && Array.isArray(s)){
         const wa = s.find(x=>x.key==='whatsapp_number');
@@ -111,8 +146,18 @@
       b.classList.toggle('active',b===btn);
       b.setAttribute('aria-selected',b===btn?'true':'false');
     });
+
     document.querySelectorAll('.package-list').forEach(p=>{
       p.classList.toggle('active',p.dataset.panel===btn.dataset.tab);
+    });
+  }));
+
+  document.querySelectorAll('.service-filter').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.service-filter').forEach(b=>b.classList.toggle('active',b===btn));
+    const filter = btn.dataset.serviceFilter;
+
+    document.querySelectorAll('[data-service]').forEach(card=>{
+      card.style.display = (filter==='all' || card.dataset.service===filter) ? 'flex' : 'none';
     });
   }));
 
@@ -120,7 +165,7 @@
   const mobileNav = document.getElementById('mobileNav');
 
   menuToggle?.addEventListener('click',()=>{
-    const open=mobileNav.classList.toggle('open');
+    const open = mobileNav.classList.toggle('open');
     menuToggle.setAttribute('aria-expanded',open?'true':'false');
   });
 
@@ -131,11 +176,14 @@
 
   const root = document.documentElement;
   const savedTheme = localStorage.getItem('esim-theme');
-  if(savedTheme==='light' || savedTheme==='dark') root.dataset.theme=savedTheme;
+
+  if(savedTheme==='light' || savedTheme==='dark'){
+    root.dataset.theme = savedTheme;
+  }
 
   document.getElementById('themeToggle')?.addEventListener('click',()=>{
-    const next=root.dataset.theme==='light'?'dark':'light';
-    root.dataset.theme=next;
+    const next = root.dataset.theme==='light' ? 'dark' : 'light';
+    root.dataset.theme = next;
     localStorage.setItem('esim-theme',next);
   });
 
