@@ -1,46 +1,39 @@
-# eSIM.OM — النسخة المطورة
+eSIM.OM — Netflix Upgrade
 
-## ما تم إصلاحه
-- روابط واتساب أصبحت موجودة مباشرة في HTML كـ fallback، وليست معتمدة بالكامل على JavaScript.
-- الباقات الافتراضية موجودة مباشرة في الصفحة، لذلك حتى لو عارض الملفات في الجوال منع JavaScript ستبقى الباقات ظاهرة.
-- إضافة وضعين: داكن + أبيض، مع حفظ اختيار المستخدم.
-- تصميم Mobile-first وتحسين المسافات والأزرار والبطاقات.
-- “الأفضل قيمة” تظهر في منتصف الثلاث باقات المميزة تلقائياً.
-- صفحة إدارة مستقلة `admin.html` لا يظهر رابطها في الموقع العام.
+IMPORTANT ORDER
 
-## اسم طريقة النشر المجانية
-**GitHub Pages** — يستضيف ملفات HTML/CSS/JavaScript مباشرة من مستودع GitHub.
+1) Supabase:
+   Run esim-netflix-digital-products.sql once in SQL Editor.
 
-## لماذا نحتاج Supabase أيضاً؟
-GitHub Pages موقع static، لذلك لا يمكنه وحده حفظ تغييرات لوحة الإدارة في قاعدة بيانات. لهذا المشروع يستخدم:
-- GitHub Pages = استضافة الموقع مجاناً.
-- Supabase = تسجيل دخول الإدارة + قاعدة بيانات الباقات والإعدادات.
+2) GitHub repository root:
+   Replace:
+   - index.html
+   - styles.css
+   - app.js
+   - admin.html
 
-## تشغيل الموقع بدون لوحة الإدارة
-1. ارفع كل الملفات إلى GitHub.
-2. من Settings > Pages اختر Deploy from a branch.
-3. اختر branch `main` والمجلد `/root` ثم Save.
-4. سيظهر رابط الموقع بعد النشر.
+3) Do NOT replace:
+   - config.js
+   - Edge Functions (admin-login / create-admin-user)
+   - existing Phase 1/2 SQL files
 
-الموقع العام سيعمل بالقيم الافتراضية حتى قبل ربط Supabase.
+Netflix fields implemented:
+- Product name
+- Subscription duration
+- Price
+- Subscription type
+- Devices / screens
+- Quality
+- Short description
+- Features (one per line)
+- Featured
+- Delivery method
+- Automatic WhatsApp message with Bank Muscat transfer number
 
-## تفعيل لوحة الإدارة الحقيقية
-1. أنشئ مشروع Supabase.
-2. افتح `supabase-setup.sql` وبدّل كل `admin@example.com` إلى بريدك الإداري.
-3. نفّذ SQL في Supabase > SQL Editor.
-4. من Authentication > Users أنشئ مستخدم بالبريد الإداري وكلمة مرور قوية.
-5. افتح Supabase > Project Settings/API وانسخ Project URL وAnon/Publishable key.
-6. ضع القيم في `config.js`، وحدّث `ADMIN_EMAIL` إلى البريد نفسه.
-7. ارفع التعديلات إلى GitHub.
-8. افتح `https://YOUR-SITE/admin.html`، وأدخل كلمة المرور فقط.
+NOT included, as requested:
+- Availability / active status
+- Most-popular option
+- Manual sort order
 
-## ماذا تستطيع من لوحة الإدارة؟
-- إضافة باقة محددة أو غير محدودة.
-- تعديل الاسم/الحجم، المدة، السعر، الوصف والمزايا.
-- إظهار أو إخفاء الباقة.
-- تحديد حتى 3 باقات “الأكثر طلباً”.
-- تحديد باقة واحدة “الأفضل قيمة”، وتظهر في المنتصف تلقائياً.
-- تغيير رقم واتساب بدون تعديل كود الموقع.
-
-## ملاحظة أمنية
-لا تضع Supabase service_role key داخل هذه الملفات. استخدم فقط الـ anon/publishable key مع RLS كما في ملف SQL.
+The database structure uses service_slug so the same table can be reused later
+for ChatGPT and other digital products without creating a new product table.
