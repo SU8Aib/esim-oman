@@ -889,6 +889,75 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="audit-separate-page-v1">
+.audit-page-panel{width:100%;min-width:0}
+.audit-page-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+.audit-page-list .audit-item{
+  padding:14px!important;
+  gap:8px!important;
+  min-width:0!important;
+}
+.audit-detail{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:10px 11px;
+  border:1px solid rgba(40,213,189,.16);
+  background:rgba(40,213,189,.055);
+  border-radius:11px;
+  color:var(--text)!important;
+  font-size:.75rem!important;
+  line-height:1.65;
+}
+.audit-detail::before{
+  content:'↳';
+  color:var(--accent);
+  font-weight:900;
+  flex:0 0 auto;
+}
+.audit-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.audit-target{
+  color:var(--muted)!important;
+  font-size:.66rem!important;
+  font-family:'JetBrains Mono';
+}
+.audit-table-chip{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  border:1px solid var(--line);
+  background:var(--surface3);
+  border-radius:999px;
+  padding:4px 8px;
+  color:var(--muted)!important;
+  font-size:.62rem!important;
+}
+@media(max-width:980px){
+  .audit-page-list{grid-template-columns:1fr!important}
+}
+@media(max-width:860px){
+  body.super-admin .side-nav{grid-template-columns:repeat(5,1fr)!important}
+}
+@media(max-width:520px){
+  .audit-page-list .audit-item{padding:11px!important}
+  .audit-detail{font-size:.7rem!important}
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -989,6 +1058,9 @@ textarea{resize:vertical}
         </button>
         <button class="nav-item" id="usersNav" data-view="users" hidden>
           <span class="nav-icon">♙</span><span>المستخدمون</span>
+        </button>
+        <button class="nav-item" id="auditNav" data-view="audit" hidden>
+          <span class="nav-icon">↺</span><span>سجل النشاطات</span>
         </button>
       </nav>
 
@@ -1291,18 +1363,30 @@ textarea{resize:vertical}
                   <div><span class="role-chip viewer">Viewer</span><p>قراءة فقط بدون أي صلاحية تعديل.</p></div>
                 </div>
               </article>
-
-              <article class="panel">
-                <div class="panel-head">
-                  <div>
-                    <span class="top-eyebrow">Audit Log</span>
-                    <h3>آخر نشاطات الإدارة</h3>
-                  </div>
-                </div>
-                <div class="audit-list" id="auditList"></div>
-              </article>
             </div>
           </div>
+        </section>
+
+        <!-- AUDIT LOG -->
+        <section class="view" data-view-panel="audit">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">Audit Log</span>
+              <h2>سجل نشاطات الإدارة</h2>
+              <p>يعرض من قام بالتغيير، ونوع التعديل بالتفصيل، ووقت حدوثه.</p>
+            </div>
+            <span class="role-chip super_admin" id="auditCount">0 نشاط</span>
+          </div>
+
+          <article class="panel audit-page-panel">
+            <div class="panel-head">
+              <div>
+                <span class="top-eyebrow">Activity History</span>
+                <h3>سجل التغييرات</h3>
+              </div>
+            </div>
+            <div class="audit-list audit-page-list" id="auditList"></div>
+          </article>
         </section>
       </div>
     </section>
@@ -1648,6 +1732,7 @@ textarea{resize:vertical}
     document.body.classList.toggle('super-admin',superAdmin);
 
     $('#usersNav').hidden = !superAdmin;
+    $('#auditNav').hidden = !superAdmin;
     $('#settingsNav').hidden = !edit;
 
     ['#topAddPackageBtn','#heroAddPackageBtn','#newPackageBtn','#quickAddBtn'].forEach(sel=>{
@@ -1665,7 +1750,7 @@ textarea{resize:vertical}
     $('#systemRoleText').textContent = roleLabel(role);
 
     const activeView = $('.nav-item.active')?.dataset.view;
-    if((activeView==='users' && !superAdmin) || (activeView==='settings' && !edit)){
+    if(((activeView==='users' || activeView==='audit') && !superAdmin) || (activeView==='settings' && !edit)){
       switchView('overview');
     }
   }
@@ -1736,7 +1821,172 @@ textarea{resize:vertical}
       </article>`;
     }).join('') : '<div class="empty-state"><b>لا يوجد مستخدمون</b></div>';
 
-    $('#auditList').innerHTML = auditLogs.length ? auditLogs.map(x=>{
+  }
+
+  function auditJson(value){
+    if(!value) return {};
+    if(typeof value==='object') return value;
+    try{return JSON.parse(value)}catch{return {}}
+  }
+
+  function auditRoleLabel(role){
+    return ({
+      super_admin:'Super Admin',
+      admin:'Admin',
+      sales:'Sales',
+      viewer:'Viewer'
+    })[role] || role || '—';
+  }
+
+  function auditBoolLabel(value){
+    return value ? 'مفعّل' : 'موقوف';
+  }
+
+  function auditTableLabel(table){
+    return ({
+      site_settings:'إعدادات الموقع',
+      packages:'الباقات',
+      profiles:'المستخدمون',
+      'auth.users':'الحسابات'
+    })[table] || table || 'النظام';
+  }
+
+  function auditSettingLabel(key){
+    return ({
+      whatsapp_number:'رقم واتساب',
+      bank_transfer_number:'رقم التحويل البنكي'
+    })[key] || key || 'إعداد الموقع';
+  }
+
+  function auditPackageFieldLabel(key){
+    return ({
+      label:'اسم الباقة',
+      duration:'المدة',
+      price:'السعر',
+      tagline:'الوصف',
+      active:'حالة الباقة',
+      featured:'الأكثر طلباً',
+      best_value:'أفضل قيمة',
+      sort_order:'الترتيب',
+      type:'نوع الباقة',
+      perks:'المميزات'
+    })[key] || key;
+  }
+
+  function auditValue(field,value){
+    if(value===null || value===undefined || value==='') return 'فارغ';
+    if(field==='active' || field==='featured' || field==='best_value') return auditBoolLabel(Boolean(value));
+    if(field==='role') return auditRoleLabel(value);
+    if(field==='price'){
+      const n=Number(value);
+      return Number.isFinite(n) ? `${n.toFixed(3)} ر.ع` : String(value);
+    }
+    if(Array.isArray(value)) return value.join('، ');
+    if(typeof value==='object') return JSON.stringify(value);
+    return String(value);
+  }
+
+  function auditChangeDescription(x){
+    const oldData=auditJson(x.old_data);
+    const newData=auditJson(x.new_data);
+    const action=String(x.action || '').toLowerCase();
+    const table=String(x.table_name || '');
+
+    if(action==='create_user'){
+      const username=newData.username || 'مستخدم جديد';
+      return `أنشأ حساب المستخدم ${username} بصلاحية ${auditRoleLabel(newData.role)}`;
+    }
+
+    if(action==='update_credentials'){
+      const bits=[];
+      if(newData.username) bits.push(`حدّث بيانات دخول المستخدم ${newData.username}`);
+      if(newData.password_changed) bits.push('غيّر كلمة المرور');
+      return bits.length ? bits.join(' • ') : 'غيّر بيانات دخول مستخدم';
+    }
+
+    if(action==='update_user'){
+      return `حدّث بيانات المستخدم ${newData.username || x.record_id || ''}`.trim();
+    }
+
+    if(table==='site_settings'){
+      const key=newData.key || oldData.key || x.record_id;
+      const label=auditSettingLabel(key);
+      if(action==='update'){
+        return `غيّر ${label} من ${auditValue('value',oldData.value)} إلى ${auditValue('value',newData.value)}`;
+      }
+      if(action==='insert'){
+        return `أضاف ${label}: ${auditValue('value',newData.value)}`;
+      }
+      if(action==='delete'){
+        return `حذف ${label} وكانت قيمته ${auditValue('value',oldData.value)}`;
+      }
+    }
+
+    if(table==='profiles'){
+      if(action==='insert'){
+        return `أضاف مستخدم ${newData.username || newData.email || x.record_id || ''} بصلاحية ${auditRoleLabel(newData.role)}`;
+      }
+      if(action==='delete'){
+        return `حذف المستخدم ${oldData.username || oldData.email || x.record_id || ''}`;
+      }
+
+      const changes=[];
+      if(oldData.username !== newData.username && (oldData.username!==undefined || newData.username!==undefined)){
+        changes.push(`غيّر اسم المستخدم من ${auditValue('username',oldData.username)} إلى ${auditValue('username',newData.username)}`);
+      }
+      if(oldData.role !== newData.role && (oldData.role!==undefined || newData.role!==undefined)){
+        changes.push(`غيّر الصلاحية من ${auditRoleLabel(oldData.role)} إلى ${auditRoleLabel(newData.role)}`);
+      }
+      if(oldData.active !== newData.active && (oldData.active!==undefined || newData.active!==undefined)){
+        changes.push(newData.active ? 'فعّل حساب المستخدم' : 'أوقف حساب المستخدم');
+      }
+      if(oldData.full_name !== newData.full_name && (oldData.full_name!==undefined || newData.full_name!==undefined)){
+        changes.push(`غيّر الاسم من ${auditValue('full_name',oldData.full_name)} إلى ${auditValue('full_name',newData.full_name)}`);
+      }
+      return changes.length ? changes.join(' • ') : 'حدّث بيانات المستخدم';
+    }
+
+    if(table==='packages'){
+      const pkgName=newData.label || oldData.label || 'الباقة';
+      if(action==='insert') return `أضاف باقة ${pkgName}`;
+      if(action==='delete') return `حذف باقة ${pkgName}`;
+
+      const fields=['label','duration','price','tagline','active','featured','best_value','sort_order','type','perks'];
+      const changes=[];
+      for(const field of fields){
+        const before=oldData[field];
+        const after=newData[field];
+        if(JSON.stringify(before)===JSON.stringify(after)) continue;
+
+        if(field==='active'){
+          changes.push(after ? `فعّل باقة ${pkgName}` : `أوقف باقة ${pkgName}`);
+        }else if(field==='featured'){
+          changes.push(after ? `أضاف ${pkgName} إلى الأكثر طلباً` : `أزال ${pkgName} من الأكثر طلباً`);
+        }else if(field==='best_value'){
+          changes.push(after ? `حدد ${pkgName} كأفضل قيمة` : `ألغى أفضل قيمة عن ${pkgName}`);
+        }else{
+          changes.push(`غيّر ${auditPackageFieldLabel(field)} من ${auditValue(field,before)} إلى ${auditValue(field,after)}`);
+        }
+      }
+      return changes.length ? changes.join(' • ') : `عدّل باقة ${pkgName}`;
+    }
+
+    if(action==='insert') return `أضاف سجلاً جديداً في ${auditTableLabel(table)}`;
+    if(action==='delete') return `حذف سجلاً من ${auditTableLabel(table)}`;
+    if(action==='update') return `عدّل بيانات في ${auditTableLabel(table)}`;
+    return `${x.action || 'نشاط'} في ${auditTableLabel(table)}`;
+  }
+
+  function renderAudit(){
+    if(!isSuperAdmin()) return;
+
+    const count=$('#auditCount');
+    if(count) count.textContent=`${auditLogs.length} نشاط`;
+
+    const list=$('#auditList');
+    if(!list) return;
+
+    list.innerHTML = auditLogs.length ? auditLogs.map(x=>{
       const dt = x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
       const action = ({
         insert:'إضافة',
@@ -1746,13 +1996,21 @@ textarea{resize:vertical}
         update_user:'تحديث مستخدم',
         update_credentials:'تغيير بيانات الدخول'
       })[x.action] || x.action;
+
+      const detail=auditChangeDescription(x);
+      const tableLabel=auditTableLabel(x.table_name);
+
       return `<article class="audit-item">
         <div class="audit-item-top">
           <b>${esc(x.user_email || 'system')}</b>
-          <span class="audit-action">${esc(action)} • ${esc(x.table_name)}</span>
+          <span class="audit-action">${esc(action)}</span>
         </div>
-        <span>${x.record_id ? `السجل: ${esc(x.record_id)}` : 'تغيير على النظام'}</span>
-        <small>${esc(dt)}</small>
+        <div class="audit-detail">${esc(detail)}</div>
+        <div class="audit-meta">
+          <span class="audit-table-chip">${esc(tableLabel)}</span>
+          <small>${esc(dt)}</small>
+        </div>
+        ${x.record_id ? `<span class="audit-target">ID: ${esc(x.record_id)}</span>` : ''}
       </article>`;
     }).join('') : '<div class="empty-state"><b>لا توجد نشاطات بعد</b><span>ستظهر التغييرات هنا تلقائياً.</span></div>';
   }
@@ -1863,6 +2121,7 @@ textarea{resize:vertical}
     renderFeatured();
     renderPackages();
     renderUsers();
+    renderAudit();
   }
 
   function renderStats(){
@@ -1949,7 +2208,13 @@ textarea{resize:vertical}
   function switchView(view){
     $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
     $$('.view').forEach(v=>v.classList.toggle('active',v.dataset.viewPanel===view));
-    const meta={overview:['Dashboard','نظرة عامة'],packages:['Packages','إدارة الباقات'],settings:['Settings','الإعدادات'],users:['Access Control','المستخدمون والصلاحيات']};
+    const meta={
+      overview:['Dashboard','نظرة عامة'],
+      packages:['Packages','إدارة الباقات'],
+      settings:['Settings','الإعدادات'],
+      users:['Access Control','المستخدمون والصلاحيات'],
+      audit:['Audit Log','سجل نشاطات الإدارة']
+    };
     $('#pageEyebrow').textContent=meta[view]?.[0]||'Dashboard';
     $('#pageTitle').textContent=meta[view]?.[1]||'نظرة عامة';
   }
@@ -2266,6 +2531,7 @@ textarea{resize:vertical}
 
       await loadUsersAndAudit();
       renderUsers();
+      renderAudit();
       toast('تم إنشاء المستخدم وإضافته إلى فريق الإدارة.');
     }catch(err){
       msg($('#createUserMessage'),err.message,'error');
@@ -2328,6 +2594,7 @@ textarea{resize:vertical}
 
       await loadUsersAndAudit();
       renderUsers();
+      renderAudit();
       toast(password ? 'تم تغيير اسم المستخدم وكلمة المرور.' : 'تم تحديث المستخدم.');
     }catch(err){
       toast(err.message || 'تعذر حفظ التغيير.','error');
