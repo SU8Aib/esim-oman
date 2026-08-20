@@ -704,6 +704,38 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="credential-edit-v2">
+.user-card{
+  grid-template-columns:minmax(155px,1.05fr) minmax(145px,.85fr) minmax(165px,.95fr)
+                       minmax(130px,.7fr) auto auto;
+  align-items:end;
+}
+.user-field{min-width:0}
+.user-field span{
+  display:block;color:var(--muted);font-size:.62rem;font-weight:700;margin-bottom:5px
+}
+.user-field input{
+  width:100%;padding:9px 10px!important;font-size:.78rem!important;
+}
+.user-password-wrap{position:relative}
+.user-password-wrap input{padding-left:43px!important}
+.user-password-toggle{
+  position:absolute;left:5px;top:50%;transform:translateY(-50%);
+  width:32px;height:32px;border:0;border-radius:8px;
+  cursor:pointer;background:var(--surface3);color:var(--muted)
+}
+.user-password-toggle:hover{color:var(--accent)}
+@media(max-width:1180px){
+  .user-card{grid-template-columns:1fr 1fr}
+  .user-main{grid-column:1/-1}
+}
+@media(max-width:620px){
+  .user-card{grid-template-columns:1fr}
+  .user-main{grid-column:auto}
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1495,14 +1527,27 @@ textarea{resize:vertical}
             <span>${esc(roleLabel(u.role))}</span>
           </div>
         </div>
-        <label class="user-username-edit">
+        <label class="user-field">
           <span>اسم المستخدم</span>
-          <input class="user-username-input" data-user-username
+          <input data-user-username
                  value="${esc(u.username || '')}"
                  minlength="3" maxlength="30"
                  autocomplete="off" spellcheck="false"
                  placeholder="username">
         </label>
+
+        <label class="user-field">
+          <span>كلمة مرور جديدة</span>
+          <div class="user-password-wrap">
+            <input data-user-password type="password"
+                   minlength="8" maxlength="128"
+                   autocomplete="new-password"
+                   placeholder="اتركها فارغة بدون تغيير">
+            <button class="user-password-toggle" type="button"
+                    data-toggle-user-password title="إظهار/إخفاء">◉</button>
+          </div>
+        </label>
+
         <select data-user-role ${self?'disabled':''} aria-label="الصلاحية">
           <option value="super_admin" ${u.role==='super_admin'?'selected':''}>Super Admin</option>
           <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
@@ -2050,6 +2095,16 @@ textarea{resize:vertical}
   });
 
   $('#usersList')?.addEventListener('click',async e=>{
+    const toggle=e.target.closest('[data-toggle-user-password]');
+    if(toggle){
+      const input=toggle.closest('.user-password-wrap')?.querySelector('[data-user-password]');
+      if(input){
+        input.type=input.type==='password'?'text':'password';
+        toggle.textContent=input.type==='password'?'◉':'◌';
+      }
+      return;
+    }
+
     const btn=e.target.closest('[data-save-user]');
     if(!btn || !isSuperAdmin()) return;
 
@@ -2058,6 +2113,7 @@ textarea{resize:vertical}
     if(!userId) return;
 
     const username=(card.querySelector('[data-user-username]')?.value || '').trim().toLowerCase();
+    const password=card.querySelector('[data-user-password]')?.value || '';
 
     if(!/^[a-z0-9._-]{3,30}$/.test(username)){
       toast('اسم المستخدم يجب أن يكون 3–30 خانة: حروف إنجليزية وأرقام و . _ - فقط.','error');
@@ -2065,18 +2121,23 @@ textarea{resize:vertical}
       return;
     }
 
+    if(password && password.length<8){
+      toast('كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل.','error');
+      card.querySelector('[data-user-password]')?.focus();
+      return;
+    }
+
     const self=userId===currentUser?.id;
     const role=card.querySelector('[data-user-role]')?.value;
     const active=Boolean(card.querySelector('[data-user-active]')?.checked);
 
-    const body=self ? {username} : {username,role,active};
-
     setBusy(btn,true,'حفظ...');
     try{
-      await db(`profiles?user_id=eq.${encodeURIComponent(userId)}`,{
-        method:'PATCH',
-        body,
-        prefer:'return=representation'
+      await callFunction('update-admin-user',{
+        user_id:userId,
+        username,
+        password:password || null,
+        ...(self ? {} : {role,active})
       });
 
       if(self){
@@ -2086,14 +2147,9 @@ textarea{resize:vertical}
 
       await loadUsersAndAudit();
       renderUsers();
-      toast(self ? 'تم تغيير اسم المستخدم.' : 'تم تحديث المستخدم والصلاحيات.');
+      toast(password ? 'تم تغيير اسم المستخدم وكلمة المرور.' : 'تم تحديث المستخدم.');
     }catch(err){
-      const message=String(err?.message || '');
-      if(message.includes('profiles_username_lower_uidx') || message.includes('duplicate')){
-        toast('اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.','error');
-      }else{
-        toast(message || 'تعذر حفظ التغيير.','error');
-      }
+      toast(err.message || 'تعذر حفظ التغيير.','error');
     }finally{
       setBusy(btn,false);
     }
