@@ -959,146 +959,64 @@ textarea{resize:vertical}
 </style>
 
 
-<style id="audit-v2-design">
-.audit-view{max-width:1280px;margin-inline:auto}
-.audit-hero{
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
-  margin-bottom:16px;padding:2px 2px 0;
+<style id="netflix-admin-style">
+.netflix-toolbar{
+  display:flex;align-items:center;gap:10px;margin-bottom:15px;
 }
-.audit-hero h2{margin:.2rem 0 .35rem;font-size:clamp(1.55rem,2vw,2.05rem)}
-.audit-hero p{margin:0;color:var(--muted);max-width:700px}
-.audit-hero-badge{
-  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
-  padding:9px 12px;border:1px solid rgba(40,213,189,.24);
-  background:rgba(40,213,189,.08);border-radius:999px;color:var(--accent)
+.netflix-toolbar .search-box{flex:1}
+.digital-admin-list{display:grid;gap:10px}
+.digital-admin-card{
+  display:grid;
+  grid-template-columns:minmax(220px,1.45fr) .55fr .9fr .45fr auto;
+  align-items:center;
+  gap:12px;
+  border:1px solid var(--line);
+  background:var(--surface2);
+  padding:13px 14px;
+  border-radius:16px;
 }
-.audit-hero-badge span{font-size:.65rem}
-
-.audit-summary-grid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;margin-bottom:14px
+.digital-admin-main{display:flex;align-items:center;gap:11px;min-width:0}
+.digital-admin-logo{
+  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:rgba(255,70,82,.10);color:#ff6672;font-weight:700;flex:0 0 auto;
 }
-.audit-summary-card{
-  border:1px solid var(--line);background:linear-gradient(180deg,var(--surface2),var(--surface));
-  border-radius:16px;padding:15px 16px;min-width:0
+.digital-admin-copy{display:grid;min-width:0}
+.digital-admin-copy b{font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.digital-admin-copy span{font-size:.66rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.digital-admin-price{font-family:'JetBrains Mono';font-size:.82rem;color:var(--accent)}
+.digital-admin-meta{display:flex;flex-wrap:wrap;gap:5px}
+.digital-admin-meta span{
+  border:1px solid var(--line);background:var(--bg2);padding:4px 7px;
+  border-radius:8px;font-size:.6rem;color:var(--muted)
 }
-.audit-summary-card span{display:block;color:var(--muted);font-size:.72rem;font-weight:800}
-.audit-summary-card b{
-  display:block;margin-top:7px;font-size:1.65rem;line-height:1;color:var(--text)
+.digital-feature-chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);background:var(--bg2);
+  padding:6px 9px;border-radius:999px;font-size:.64rem;color:var(--muted)
 }
-.audit-summary-card small{display:block;margin-top:7px;color:var(--muted);font-size:.64rem}
-
-.audit-v2-panel{padding:16px!important}
-.audit-toolbar{
-  display:grid;grid-template-columns:minmax(280px,1fr) 190px 190px;
-  gap:10px;align-items:center;margin-bottom:12px
+.digital-feature-chip.on{border-color:rgba(255,102,114,.25);color:#ff7a84;background:rgba(255,102,114,.07)}
+.digital-row-actions{display:flex;gap:6px;justify-content:flex-end}
+.netflix-dialog-layout{display:block;max-height:88vh}
+.netflix-dialog-form{max-height:88vh;overflow:auto}
+#netflixForm{padding:20px}
+.netflix-switch-grid{display:grid;grid-template-columns:1fr;margin-top:4px}
+.netflix-form-note{
+  margin:14px 0 0;padding:11px 12px;border:1px solid var(--line);
+  background:var(--surface2);border-radius:12px;color:var(--muted);font-size:.72rem
 }
-.audit-search-wrap{position:relative;min-width:0}
-.audit-search-wrap > span{
-  position:absolute;right:13px;top:50%;transform:translateY(-50%);
-  color:var(--muted);font-size:1rem;pointer-events:none
-}
-.audit-search-wrap input{width:100%;padding-right:38px!important}
-.audit-toolbar select{width:100%}
-
-.audit-result-line{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:2px 1px 12px;color:var(--muted);font-size:.72rem
-}
-
-.audit-timeline{
-  display:grid!important;grid-template-columns:1fr!important;
-  gap:10px!important;max-height:none!important;overflow:visible!important;padding:0!important
-}
-
-.audit-event{
-  position:relative;display:grid;
-  grid-template-columns:46px minmax(0,1fr) auto;
-  gap:12px;align-items:start;
-  border:1px solid var(--line);background:var(--surface2);
-  border-radius:16px;padding:14px;min-width:0;
-  transition:transform .18s ease,border-color .18s ease,background .18s ease
-}
-.audit-event:hover{
-  transform:translateY(-1px);border-color:rgba(40,213,189,.26);
-  background:linear-gradient(90deg,rgba(40,213,189,.035),var(--surface2))
-}
-.audit-event-icon{
-  width:42px;height:42px;border-radius:12px;
-  display:grid;place-items:center;
-  background:rgba(40,213,189,.09);
-  border:1px solid rgba(40,213,189,.18);
-  color:var(--accent);font-size:1rem;font-weight:900
-}
-.audit-event-main{min-width:0}
-.audit-event-top{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px
-}
-.audit-actor{font-weight:900;color:var(--text)}
-.audit-action-chip{
-  display:inline-flex;align-items:center;border-radius:999px;
-  padding:4px 8px;background:var(--surface3);
-  border:1px solid var(--line);font-size:.62rem;color:var(--muted)
-}
-.audit-event-detail{
-  color:var(--text);font-weight:700;font-size:.82rem;line-height:1.7;
-  overflow-wrap:anywhere
-}
-.audit-change-values{
-  display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:8px
-}
-.audit-value{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 9px;border-radius:9px;font-size:.68rem;
-  border:1px solid var(--line);background:var(--surface3);color:var(--muted)
-}
-.audit-value strong{color:var(--text)}
-.audit-value.after{
-  border-color:rgba(40,213,189,.22);
-  background:rgba(40,213,189,.065)
-}
-.audit-arrow{color:var(--accent);font-weight:900}
-
-.audit-event-side{
-  display:grid;justify-items:end;gap:7px;min-width:120px
-}
-.audit-event-time{font-size:.65rem;color:var(--muted);white-space:nowrap}
-.audit-category{
-  display:inline-flex;padding:5px 8px;border-radius:999px;
-  border:1px solid var(--line);background:var(--surface3);
-  color:var(--muted);font-size:.61rem;white-space:nowrap
-}
-.audit-event-id{
-  color:var(--muted);font-family:'JetBrains Mono',monospace;
-  font-size:.56rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
-}
-.audit-empty{
-  padding:34px 16px;text-align:center;border:1px dashed var(--line);
-  border-radius:14px;color:var(--muted)
-}
-.audit-empty b{display:block;color:var(--text);margin-bottom:5px}
-
+.netflix-form-note b{color:var(--accent)}
 @media(max-width:900px){
-  .audit-toolbar{grid-template-columns:1fr 1fr}
-  .audit-search-wrap{grid-column:1/-1}
-  .audit-summary-grid{grid-template-columns:repeat(3,1fr)}
+  .digital-admin-card{grid-template-columns:1fr .55fr .75fr auto}
+  .digital-admin-meta{grid-column:1/-1}
 }
-@media(max-width:650px){
-  .audit-hero{align-items:flex-start;flex-direction:column}
-  .audit-summary-grid{grid-template-columns:1fr 1fr}
-  .audit-summary-card:last-child{grid-column:1/-1}
-  .audit-toolbar{grid-template-columns:1fr}
-  .audit-search-wrap{grid-column:auto}
-  .audit-event{
-    grid-template-columns:40px minmax(0,1fr);
-    padding:12px;gap:10px
-  }
-  .audit-event-icon{width:38px;height:38px}
-  .audit-event-side{
-    grid-column:2;justify-items:start;grid-template-columns:auto auto;
-    align-items:center;min-width:0
-  }
-  .audit-event-id{display:none}
+@media(max-width:620px){
+  .netflix-toolbar{display:block}.netflix-toolbar .search-box{width:100%}
+  .digital-admin-card{grid-template-columns:1fr auto;align-items:start}
+  .digital-admin-price,.digital-admin-meta,.digital-feature-chip{grid-column:1/-1}
+  .digital-row-actions{grid-column:1/-1;justify-content:stretch}
+  .digital-row-actions .mini-action{flex:1}
+  #netflixForm{padding:13px 14px calc(18px + env(safe-area-inset-bottom))}
+  #netflixForm input,#netflixForm textarea{font-size:16px}
 }
 </style>
 
@@ -1196,6 +1114,10 @@ textarea{resize:vertical}
         <button class="nav-item" data-view="packages">
           <span class="nav-icon">▦</span><span>إدارة الباقات</span>
           <small id="sidebarPackageCount">0</small>
+        </button>
+        <button class="nav-item" data-view="netflix">
+          <span class="nav-icon">N</span><span>اشتراكات Netflix</span>
+          <small id="sidebarNetflixCount">0</small>
         </button>
         <button class="nav-item" id="settingsNav" data-view="settings">
           <span class="nav-icon">⚙</span><span>الإعدادات</span>
@@ -1299,7 +1221,7 @@ textarea{resize:vertical}
               </button>
               <button class="quick-action" id="exportBtn">
                 <span>⇩</span>
-                <div><b>نسخة احتياطية</b><small>تحميل جميع الباقات بصيغة JSON</small></div>
+                <div><b>نسخة احتياطية</b><small>تحميل الباقات والاشتراكات بصيغة JSON</small></div>
               </button>
             </article>
           </div>
@@ -1358,6 +1280,41 @@ textarea{resize:vertical}
             <span id="resultsCount">0 باقة</span>
             <small>يمكن اختيار 3 باقات فقط كـ “الأكثر طلباً”، وباقة واحدة فقط كـ “الأفضل قيمة”.</small>
           </div>
+        </section>
+
+        <!-- NETFLIX -->
+        <section class="view" data-view-panel="netflix">
+          <div class="section-title-row">
+            <div>
+              <span class="top-eyebrow">Netflix</span>
+              <h2>اشتراكات Netflix</h2>
+              <p>إدارة منتجات Netflix التي تظهر أسفل قسم “كل الباقات” في الموقع.</p>
+            </div>
+            <button class="primary-btn" id="newNetflixBtn" type="button">＋ إضافة اشتراك</button>
+          </div>
+
+          <div class="security-note">
+            لكل اشتراك يمكنك تحديد: <b>اسم المنتج، المدة، السعر، نوع الاشتراك، عدد الأجهزة/الشاشات، الجودة، الوصف، المميزات، مميز، وطريقة التسليم.</b>
+            رسالة واتساب تُنشأ تلقائياً حسب بيانات المنتج ورقم التحويل الحالي.
+          </div>
+
+          <div class="netflix-toolbar">
+            <label class="search-box">
+              <span>⌕</span>
+              <input id="netflixSearch" type="search" placeholder="ابحث باسم الاشتراك أو المدة أو النوع...">
+            </label>
+          </div>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="top-eyebrow">Products</span>
+                <h3>منتجات Netflix</h3>
+              </div>
+              <span class="role-chip admin" id="netflixCount">0 اشتراك</span>
+            </div>
+            <div class="digital-admin-list" id="netflixAdminList"></div>
+          </article>
         </section>
 
         <!-- SETTINGS -->
@@ -1512,63 +1469,24 @@ textarea{resize:vertical}
         </section>
 
         <!-- AUDIT LOG -->
-        <section class="view audit-view" data-view-panel="audit">
-          <div class="audit-hero">
+        <section class="view" data-view-panel="audit">
+          <div class="section-heading">
             <div>
               <span class="eyebrow">Audit Log</span>
               <h2>سجل نشاطات الإدارة</h2>
-              <p>يعرض التغييرات الفعلية فقط: من قام بها، ماذا غيّر، والقيمة قبل وبعد.</p>
+              <p>يعرض من قام بالتغيير، ونوع التعديل بالتفصيل، ووقت حدوثه.</p>
             </div>
-            <div class="audit-hero-badge">
-              <span>●</span>
-              <b>تتبع مباشر</b>
-            </div>
+            <span class="role-chip super_admin" id="auditCount">0 نشاط</span>
           </div>
 
-          <div class="audit-summary-grid">
-            <article class="audit-summary-card">
-              <span>إجمالي التغييرات</span>
-              <b id="auditCount">0</b>
-              <small>تغيير فعلي</small>
-            </article>
-            <article class="audit-summary-card">
-              <span>تغييرات اليوم</span>
-              <b id="auditToday">0</b>
-              <small>منذ بداية اليوم</small>
-            </article>
-            <article class="audit-summary-card">
-              <span>المستخدمون النشطون</span>
-              <b id="auditPeople">0</b>
-              <small>ظهروا في السجل</small>
-            </article>
-          </div>
-
-          <article class="panel audit-page-panel audit-v2-panel">
-            <div class="audit-toolbar">
-              <div class="audit-search-wrap">
-                <span>⌕</span>
-                <input id="auditSearch" type="search" placeholder="ابحث باسم المستخدم أو نوع التعديل...">
+          <article class="panel audit-page-panel">
+            <div class="panel-head">
+              <div>
+                <span class="top-eyebrow">Activity History</span>
+                <h3>سجل التغييرات</h3>
               </div>
-
-              <select id="auditActorFilter" aria-label="فلترة حسب المستخدم">
-                <option value="">كل المستخدمين</option>
-              </select>
-
-              <select id="auditTableFilter" aria-label="فلترة حسب القسم">
-                <option value="">كل الأقسام</option>
-                <option value="site_settings">إعدادات الموقع</option>
-                <option value="packages">الباقات</option>
-                <option value="profiles">المستخدمون</option>
-                <option value="auth.users">الحسابات</option>
-              </select>
             </div>
-
-            <div class="audit-result-line">
-              <span id="auditResultText">آخر التغييرات</span>
-              <button class="secondary-btn compact" id="auditClearFilters" type="button">مسح الفلاتر</button>
-            </div>
-
-            <div class="audit-timeline" id="auditList"></div>
+            <div class="audit-list audit-page-list" id="auditList"></div>
           </article>
         </section>
       </div>
@@ -1576,6 +1494,91 @@ textarea{resize:vertical}
   </main>
 
   <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- NETFLIX PRODUCT MODAL -->
+  <dialog class="package-dialog" id="netflixDialog">
+    <div class="netflix-dialog-layout">
+      <section class="netflix-dialog-form">
+        <div class="dialog-head">
+          <div>
+            <span class="admin-kicker">NETFLIX PRODUCT</span>
+            <h3 id="netflixDialogTitle">إضافة اشتراك Netflix</h3>
+          </div>
+          <button class="dialog-close" id="netflixDialogClose" type="button" aria-label="إغلاق">×</button>
+        </div>
+
+        <form id="netflixForm">
+          <input id="netflixId" type="hidden">
+
+          <div class="form-grid">
+            <label>
+              <span>اسم المنتج / الاشتراك</span>
+              <input id="netflixName" required maxlength="100" placeholder="مثال: Netflix Premium">
+            </label>
+
+            <label>
+              <span>مدة الاشتراك</span>
+              <input id="netflixDuration" required maxlength="80" placeholder="مثال: شهر واحد">
+            </label>
+
+            <label>
+              <span>السعر (ر.ع)</span>
+              <input id="netflixPrice" type="number" step="0.001" min="0" required placeholder="2.500">
+            </label>
+
+            <label>
+              <span>نوع الاشتراك</span>
+              <input id="netflixType" maxlength="100" placeholder="مثال: حساب كامل / بروفايل خاص">
+            </label>
+
+            <label>
+              <span>عدد الأجهزة / الشاشات</span>
+              <input id="netflixScreens" maxlength="100" placeholder="مثال: شاشة واحدة / 4 أجهزة">
+            </label>
+
+            <label>
+              <span>الجودة</span>
+              <input id="netflixQuality" maxlength="100" placeholder="مثال: Full HD / 4K">
+            </label>
+
+            <label class="span-2">
+              <span>وصف قصير</span>
+              <input id="netflixDescription" maxlength="180" placeholder="مثال: مناسب للمشاهدة الشخصية">
+            </label>
+
+            <label class="span-2">
+              <span>المميزات — كل ميزة في سطر</span>
+              <textarea id="netflixFeatures" rows="4" placeholder="تفعيل سريع&#10;دعم بعد الشراء&#10;تعليمات واضحة"></textarea>
+            </label>
+
+            <label class="span-2">
+              <span>طريقة التسليم</span>
+              <input id="netflixDelivery" maxlength="120" value="واتساب" placeholder="مثال: عبر واتساب">
+            </label>
+          </div>
+
+          <div class="netflix-switch-grid">
+            <label class="switch-card">
+              <input id="netflixFeatured" type="checkbox">
+              <span class="switch-ui"></span>
+              <div><b>منتج مميز</b><small>يظهر بعلامة “مميز” داخل قسم Netflix.</small></div>
+            </label>
+          </div>
+
+          <div class="netflix-form-note">
+            <b>رسالة واتساب تلقائية:</b> سيتم إدراج اسم المنتج، المدة، السعر، النوع، الأجهزة، الجودة، طريقة التسليم ورقم التحويل تلقائياً.
+          </div>
+
+          <div class="dialog-actions">
+            <button class="secondary-btn" type="button" id="cancelNetflixDialog">إلغاء</button>
+            <button class="primary-btn" type="submit" id="saveNetflixBtn">حفظ الاشتراك</button>
+          </div>
+
+          <div class="form-message" id="netflixMessage"></div>
+        </form>
+      </section>
+    </div>
+  </dialog>
 
   <!-- PACKAGE MODAL -->
   <dialog class="package-dialog" id="packageDialog">
@@ -1693,6 +1696,7 @@ textarea{resize:vertical}
 
   const SESSION_KEY = "esim_admin_session_rest_v1";
   let packages = [];
+  let digitalProducts = [];
   let whatsapp = CFG.whatsapp;
   let transferNumber = '91772654';
   let currentUser = null;
@@ -1706,6 +1710,7 @@ textarea{resize:vertical}
   const loginView = $('#loginView');
   const dashboardView = $('#dashboardView');
   const dialog = $('#packageDialog');
+  const netflixDialog = $('#netflixDialog');
   const setup = $('#setupWarning');
 
   if (setup) setup.hidden = true;
@@ -1918,9 +1923,11 @@ textarea{resize:vertical}
     $('#auditNav').hidden = !superAdmin;
     $('#settingsNav').hidden = !edit;
 
-    ['#topAddPackageBtn','#heroAddPackageBtn','#newPackageBtn','#quickAddBtn'].forEach(sel=>{
+    ['#topAddPackageBtn','#heroAddPackageBtn','#newPackageBtn','#quickAddBtn','#newNetflixBtn'].forEach(sel=>{
       const el=$(sel); if(el) el.hidden=!edit;
     });
+
+    $$('#netflixForm input,#netflixForm textarea,#netflixForm button').forEach(el=>el.disabled=!edit);
 
     const settingsJump = document.querySelector('[data-jump-view="settings"]');
     if(settingsJump) settingsJump.hidden=!edit;
@@ -2030,7 +2037,8 @@ textarea{resize:vertical}
       site_settings:'إعدادات الموقع',
       packages:'الباقات',
       profiles:'المستخدمون',
-      'auth.users':'الحسابات'
+      'auth.users':'الحسابات',
+      digital_products:'الخدمات الرقمية'
     })[table] || table || 'النظام';
   }
 
@@ -2053,6 +2061,22 @@ textarea{resize:vertical}
       sort_order:'الترتيب',
       type:'نوع الباقة',
       perks:'المميزات'
+    })[key] || key;
+  }
+
+  function auditDigitalFieldLabel(key){
+    return ({
+      name:'اسم المنتج',
+      duration:'المدة',
+      price:'السعر',
+      subscription_type:'نوع الاشتراك',
+      screens:'الأجهزة/الشاشات',
+      quality:'الجودة',
+      description:'الوصف',
+      features:'المميزات',
+      featured:'مميز',
+      delivery_method:'طريقة التسليم',
+      service_slug:'الخدمة'
     })[key] || key;
   }
 
@@ -2154,165 +2178,48 @@ textarea{resize:vertical}
       return changes.length ? changes.join(' • ') : `عدّل باقة ${pkgName}`;
     }
 
+    if(table==='digital_products'){
+      const productName=newData.name || oldData.name || 'اشتراك Netflix';
+
+      if(action==='insert') return `أضاف اشتراك Netflix: ${productName}`;
+      if(action==='delete') return `حذف اشتراك Netflix: ${productName}`;
+
+      const fields=['name','duration','price','subscription_type','screens','quality','description','features','featured','delivery_method'];
+      const changes=[];
+
+      for(const field of fields){
+        const before=oldData[field];
+        const after=newData[field];
+        if(JSON.stringify(before)===JSON.stringify(after)) continue;
+
+        if(field==='featured'){
+          changes.push(after ? `حدد ${productName} كمنتج مميز` : `ألغى تمييز ${productName}`);
+        }else{
+          changes.push(`غيّر ${auditDigitalFieldLabel(field)} من ${auditValue(field,before)} إلى ${auditValue(field,after)}`);
+        }
+      }
+
+      return changes.length ? changes.join(' • ') : `عدّل اشتراك Netflix: ${productName}`;
+    }
+
     if(action==='insert') return `أضاف سجلاً جديداً في ${auditTableLabel(table)}`;
     if(action==='delete') return `حذف سجلاً من ${auditTableLabel(table)}`;
     if(action==='update') return `عدّل بيانات في ${auditTableLabel(table)}`;
     return `${x.action || 'نشاط'} في ${auditTableLabel(table)}`;
   }
 
-  function auditComparable(obj){
-    const data={...(obj || {})};
-    delete data.updated_at;
-    delete data.created_at;
-    return data;
-  }
-
-  function auditHasMeaningfulChange(x){
-    const action=String(x.action || '').toLowerCase();
-    if(action!=='update') return true;
-
-    const oldData=auditJson(x.old_data);
-    const newData=auditJson(x.new_data);
-    const table=String(x.table_name || '');
-
-    if(table==='site_settings'){
-      return String(oldData.value ?? '') !== String(newData.value ?? '');
-    }
-
-    if(table==='profiles'){
-      const fields=['username','role','active','full_name'];
-      return fields.some(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
-    }
-
-    if(table==='packages'){
-      const fields=['label','duration','price','tagline','active','featured','best_value','sort_order','type','perks'];
-      return fields.some(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
-    }
-
-    return JSON.stringify(auditComparable(oldData)) !== JSON.stringify(auditComparable(newData));
-  }
-
-  function auditCategoryIcon(table,action){
-    if(action==='create_user') return '＋';
-    if(action==='update_credentials') return '⌁';
-    if(table==='site_settings') return '⚙';
-    if(table==='packages') return '▦';
-    if(table==='profiles' || table==='auth.users') return '♙';
-    return '↺';
-  }
-
-  function auditChangeValues(x){
-    const oldData=auditJson(x.old_data);
-    const newData=auditJson(x.new_data);
-    const action=String(x.action || '').toLowerCase();
-    const table=String(x.table_name || '');
-
-    if(action!=='update') return null;
-
-    if(table==='site_settings'){
-      if(String(oldData.value ?? '') === String(newData.value ?? '')) return null;
-      return {
-        before:auditValue('value',oldData.value),
-        after:auditValue('value',newData.value)
-      };
-    }
-
-    if(table==='profiles'){
-      const fields=['username','role','active','full_name'];
-      const changed=fields.filter(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
-      if(changed.length!==1) return null;
-      const field=changed[0];
-      return {
-        before:auditValue(field,oldData[field]),
-        after:auditValue(field,newData[field])
-      };
-    }
-
-    if(table==='packages'){
-      const fields=['label','duration','price','tagline','active','featured','best_value','sort_order','type'];
-      const changed=fields.filter(k=>JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
-      if(changed.length!==1) return null;
-      const field=changed[0];
-      return {
-        before:auditValue(field,oldData[field]),
-        after:auditValue(field,newData[field])
-      };
-    }
-
-    return null;
-  }
-
-  function meaningfulAuditLogs(){
-    return auditLogs.filter(auditHasMeaningfulChange);
-  }
-
-  function refreshAuditActorOptions(logs){
-    const select=$('#auditActorFilter');
-    if(!select) return;
-
-    const current=select.value;
-    const actors=[...new Set(logs.map(x=>String(x.user_email || 'system')).filter(Boolean))]
-      .sort((a,b)=>a.localeCompare(b));
-
-    select.innerHTML='<option value="">كل المستخدمين</option>' +
-      actors.map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join('');
-
-    if(actors.includes(current)) select.value=current;
-  }
-
   function renderAudit(){
     if(!isSuperAdmin()) return;
 
-    const all=meaningfulAuditLogs();
-    refreshAuditActorOptions(all);
-
-    const search=($('#auditSearch')?.value || '').trim().toLowerCase();
-    const actor=$('#auditActorFilter')?.value || '';
-    const table=$('#auditTableFilter')?.value || '';
-
-    const filtered=all.filter(x=>{
-      if(actor && String(x.user_email || 'system')!==actor) return false;
-      if(table && String(x.table_name || '')!==table) return false;
-
-      if(search){
-        const haystack=[
-          x.user_email,
-          x.action,
-          x.table_name,
-          x.record_id,
-          auditChangeDescription(x),
-          auditTableLabel(x.table_name)
-        ].join(' ').toLowerCase();
-
-        if(!haystack.includes(search)) return false;
-      }
-      return true;
-    });
-
-    const now=new Date();
-    const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
-    const todayCount=all.filter(x=>{
-      const t=x.created_at ? new Date(x.created_at).getTime() : 0;
-      return t>=todayStart;
-    }).length;
-    const peopleCount=new Set(all.map(x=>String(x.user_email || 'system'))).size;
-
-    if($('#auditCount')) $('#auditCount').textContent=all.length;
-    if($('#auditToday')) $('#auditToday').textContent=todayCount;
-    if($('#auditPeople')) $('#auditPeople').textContent=peopleCount;
-    if($('#auditResultText')){
-      $('#auditResultText').textContent =
-        filtered.length===all.length
-          ? `عرض ${all.length} تغيير فعلي`
-          : `عرض ${filtered.length} من أصل ${all.length} تغيير`;
-    }
+    const count=$('#auditCount');
+    if(count) count.textContent=`${auditLogs.length} نشاط`;
 
     const list=$('#auditList');
     if(!list) return;
 
-    list.innerHTML = filtered.length ? filtered.map(x=>{
-      const dt=x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
-      const action=({
+    list.innerHTML = auditLogs.length ? auditLogs.map(x=>{
+      const dt = x.created_at ? new Date(x.created_at).toLocaleString('ar-OM') : '—';
+      const action = ({
         insert:'إضافة',
         update:'تعديل',
         delete:'حذف',
@@ -2323,50 +2230,21 @@ textarea{resize:vertical}
 
       const detail=auditChangeDescription(x);
       const tableLabel=auditTableLabel(x.table_name);
-      const values=auditChangeValues(x);
-      const icon=auditCategoryIcon(String(x.table_name || ''),String(x.action || ''));
 
-      const valuesHtml=values ? `
-        <div class="audit-change-values">
-          <span class="audit-value"><span>قبل</span><strong>${esc(values.before)}</strong></span>
-          <span class="audit-arrow">←</span>
-          <span class="audit-value after"><span>بعد</span><strong>${esc(values.after)}</strong></span>
-        </div>` : '';
-
-      return `<article class="audit-event">
-        <div class="audit-event-icon">${esc(icon)}</div>
-
-        <div class="audit-event-main">
-          <div class="audit-event-top">
-            <span class="audit-actor">${esc(x.user_email || 'system')}</span>
-            <span class="audit-action-chip">${esc(action)}</span>
-          </div>
-          <div class="audit-event-detail">${esc(detail)}</div>
-          ${valuesHtml}
+      return `<article class="audit-item">
+        <div class="audit-item-top">
+          <b>${esc(x.user_email || 'system')}</b>
+          <span class="audit-action">${esc(action)}</span>
         </div>
-
-        <div class="audit-event-side">
-          <span class="audit-category">${esc(tableLabel)}</span>
-          <span class="audit-event-time">${esc(dt)}</span>
-          ${x.record_id ? `<span class="audit-event-id" title="${esc(x.record_id)}">${esc(x.record_id)}</span>` : ''}
+        <div class="audit-detail">${esc(detail)}</div>
+        <div class="audit-meta">
+          <span class="audit-table-chip">${esc(tableLabel)}</span>
+          <small>${esc(dt)}</small>
         </div>
+        ${x.record_id ? `<span class="audit-target">ID: ${esc(x.record_id)}</span>` : ''}
       </article>`;
-    }).join('') : `
-      <div class="audit-empty">
-        <b>لا توجد نتائج</b>
-        <span>لا توجد تغييرات فعلية تطابق الفلاتر الحالية.</span>
-      </div>`;
+    }).join('') : '<div class="empty-state"><b>لا توجد نشاطات بعد</b><span>ستظهر التغييرات هنا تلقائياً.</span></div>';
   }
-
-  $('#auditSearch')?.addEventListener('input',renderAudit);
-  $('#auditActorFilter')?.addEventListener('change',renderAudit);
-  $('#auditTableFilter')?.addEventListener('change',renderAudit);
-  $('#auditClearFilters')?.addEventListener('click',()=>{
-    if($('#auditSearch')) $('#auditSearch').value='';
-    if($('#auditActorFilter')) $('#auditActorFilter').value='';
-    if($('#auditTableFilter')) $('#auditTableFilter').value='';
-    renderAudit();
-  });
 
   function startInactivityProtection(){
     const touch=()=>{ lastActivityAt=Date.now(); };
@@ -2449,6 +2327,11 @@ textarea{resize:vertical}
     packages = Array.isArray(data) ? data : [];
   }
 
+  async function loadDigitalProducts(){
+    const data = await db('digital_products?select=*&service_slug=eq.netflix&order=created_at.asc');
+    digitalProducts = Array.isArray(data) ? data : [];
+  }
+
   async function loadSettings(){
     const data = await db('site_settings?select=*');
     const rows = Array.isArray(data) ? data : [];
@@ -2462,7 +2345,7 @@ textarea{resize:vertical}
 
   async function loadAll(){
     try{
-      await Promise.all([loadPackages(),loadSettings(),loadUsersAndAudit()]);
+      await Promise.all([loadPackages(),loadDigitalProducts(),loadSettings(),loadUsersAndAudit()]);
       renderEverything();
     }catch(e){
       toast(`تعذر تحميل البيانات: ${e.message}`,'error');
@@ -2473,6 +2356,7 @@ textarea{resize:vertical}
     renderStats();
     renderFeatured();
     renderPackages();
+    renderNetflixAdmin();
     renderUsers();
     renderAudit();
   }
@@ -2483,6 +2367,7 @@ textarea{resize:vertical}
     $('#countFeatured').textContent=packages.filter(x=>x.featured).length;
     $('#countUnlimited').textContent=packages.filter(x=>x.type==='unlimited').length;
     $('#sidebarPackageCount').textContent=packages.length;
+    if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=digitalProducts.length;
   }
 
   function renderFeatured(){
@@ -2553,6 +2438,53 @@ textarea{resize:vertical}
       '<div class="empty-state"><b>لا توجد نتائج</b><span>غيّر البحث أو الفلاتر.</span></div>';
   }
 
+
+  function filteredNetflix(){
+    const q=($('#netflixSearch')?.value||'').trim().toLowerCase();
+    let list=[...digitalProducts];
+    if(q){
+      list=list.filter(p=>[
+        p.name,p.duration,p.subscription_type,p.screens,p.quality,p.description,p.delivery_method,
+        ...(Array.isArray(p.features)?p.features:[])
+      ].join(' ').toLowerCase().includes(q));
+    }
+    return list;
+  }
+
+  function renderNetflixAdmin(){
+    const list=filteredNetflix();
+    const edit=canEdit();
+    if($('#netflixCount')) $('#netflixCount').textContent=`${list.length} اشتراك`;
+    if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=digitalProducts.length;
+
+    const target=$('#netflixAdminList');
+    if(!target) return;
+
+    target.innerHTML=list.length ? list.map(p=>{
+      const meta=[p.subscription_type,p.screens,p.quality,p.delivery_method].filter(Boolean);
+      return `<article class="digital-admin-card" data-id="${esc(p.id)}">
+        <div class="digital-admin-main">
+          <div class="digital-admin-logo">N</div>
+          <div class="digital-admin-copy">
+            <b>${esc(p.name)}</b>
+            <span>${esc(p.duration)}${p.description?` • ${esc(p.description)}`:''}</span>
+          </div>
+        </div>
+        <div class="digital-admin-price">${money(p.price)} ر.ع</div>
+        <div class="digital-admin-meta">${meta.length?meta.map(x=>`<span>${esc(x)}</span>`).join(''):'<span>بدون تفاصيل إضافية</span>'}</div>
+        <div><span class="digital-feature-chip ${p.featured?'on':''}">${p.featured?'★ مميز':'عادي'}</span></div>
+        <div class="digital-row-actions">
+          ${edit?`
+            <button class="mini-action" data-netflix-action="edit" data-id="${p.id}">تعديل</button>
+            <button class="mini-action danger" data-netflix-action="delete" data-id="${p.id}">حذف</button>
+          `:'<span class="read-only-badge">قراءة فقط</span>'}
+        </div>
+      </article>`;
+    }).join('') : '<div class="empty-state"><b>لا توجد اشتراكات Netflix</b><span>أضف أول منتج ليظهر مباشرة في الموقع.</span></div>';
+  }
+
+  $('#netflixSearch')?.addEventListener('input',renderNetflixAdmin);
+
   ['#packageSearch','#typeFilter','#statusFilter','#sortFilter'].forEach(sel=>{
     const el=$(sel);
     if(el) el.addEventListener(sel==='#packageSearch'?'input':'change',renderPackages);
@@ -2564,6 +2496,7 @@ textarea{resize:vertical}
     const meta={
       overview:['Dashboard','نظرة عامة'],
       packages:['Packages','إدارة الباقات'],
+      netflix:['Netflix','اشتراكات Netflix'],
       settings:['Settings','الإعدادات'],
       users:['Access Control','المستخدمون والصلاحيات'],
       audit:['Audit Log','سجل نشاطات الإدارة']
@@ -2655,6 +2588,123 @@ textarea{resize:vertical}
     $('#previewBadge').hidden=!best;
     $('#previewPerks').innerHTML=(perks.length?perks:['تفعيل سريع']).slice(0,4).map(x=>`<li>✓ ${esc(x)}</li>`).join('');
   }
+
+
+  function openNetflixDialog(p=null){
+    $('#netflixDialogTitle').textContent=p?'تعديل اشتراك Netflix':'إضافة اشتراك Netflix';
+    $('#netflixId').value=p?.id||'';
+    $('#netflixName').value=p?.name||'';
+    $('#netflixDuration').value=p?.duration||'';
+    $('#netflixPrice').value=p?money(p.price):'';
+    $('#netflixType').value=p?.subscription_type||'';
+    $('#netflixScreens').value=p?.screens||'';
+    $('#netflixQuality').value=p?.quality||'';
+    $('#netflixDescription').value=p?.description||'';
+    $('#netflixFeatures').value=Array.isArray(p?.features)?p.features.join('\n'):'';
+    $('#netflixDelivery').value=p?.delivery_method||'واتساب';
+    $('#netflixFeatured').checked=Boolean(p?.featured);
+    msg($('#netflixMessage'));
+
+    if(typeof netflixDialog?.showModal==='function') netflixDialog.showModal();
+    else if(netflixDialog){
+      netflixDialog.setAttribute('open','');
+      netflixDialog.style.display='block';
+    }
+  }
+
+  function closeNetflixDialog(){
+    if(typeof netflixDialog?.close==='function' && netflixDialog.open) netflixDialog.close();
+    else if(netflixDialog){
+      netflixDialog.removeAttribute('open');
+      netflixDialog.style.display='none';
+    }
+  }
+
+  async function patchNetflix(id,payload){
+    return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{
+      method:'PATCH',body:payload,prefer:'return=representation'
+    });
+  }
+
+  async function insertNetflix(payload){
+    return db('digital_products',{
+      method:'POST',body:payload,prefer:'return=representation'
+    });
+  }
+
+  async function deleteNetflix(id){
+    return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
+  }
+
+  $('#newNetflixBtn')?.addEventListener('click',()=>openNetflixDialog());
+  $('#netflixDialogClose')?.addEventListener('click',closeNetflixDialog);
+  $('#cancelNetflixDialog')?.addEventListener('click',closeNetflixDialog);
+
+  $('#netflixAdminList')?.addEventListener('click',async e=>{
+    if(!canEdit()) return;
+    const btn=e.target.closest('[data-netflix-action]');
+    if(!btn) return;
+    const p=digitalProducts.find(x=>x.id===btn.dataset.id);
+    if(!p) return;
+
+    if(btn.dataset.netflixAction==='edit'){
+      openNetflixDialog(p);
+      return;
+    }
+
+    if(btn.dataset.netflixAction==='delete'){
+      if(!confirm(`حذف اشتراك "${p.name}" نهائياً؟`)) return;
+      try{
+        await deleteNetflix(p.id);
+        await loadAll();
+        toast('تم حذف اشتراك Netflix.');
+      }catch(err){
+        toast(err.message,'error');
+      }
+    }
+  });
+
+  $('#netflixForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!canEdit()) return toast('هذا الحساب للقراءة فقط.','error');
+
+    const id=$('#netflixId').value;
+    const payload={
+      service_slug:'netflix',
+      name:$('#netflixName').value.trim(),
+      duration:$('#netflixDuration').value.trim(),
+      price:Number($('#netflixPrice').value),
+      subscription_type:$('#netflixType').value.trim(),
+      screens:$('#netflixScreens').value.trim(),
+      quality:$('#netflixQuality').value.trim(),
+      description:$('#netflixDescription').value.trim(),
+      features:$('#netflixFeatures').value.split('\n').map(x=>x.trim()).filter(Boolean),
+      featured:$('#netflixFeatured').checked,
+      delivery_method:$('#netflixDelivery').value.trim()||'واتساب'
+    };
+
+    if(!payload.name) return msg($('#netflixMessage'),'أدخل اسم المنتج.','error');
+    if(!payload.duration) return msg($('#netflixMessage'),'أدخل مدة الاشتراك.','error');
+    if(!Number.isFinite(payload.price) || payload.price<0) return msg($('#netflixMessage'),'أدخل سعراً صحيحاً.','error');
+
+    const btn=$('#saveNetflixBtn');
+    setBusy(btn,true);
+    msg($('#netflixMessage'));
+
+    try{
+      if(id) await patchNetflix(id,payload);
+      else await insertNetflix(payload);
+
+      await loadAll();
+      msg($('#netflixMessage'),id?'تم تحديث الاشتراك.':'تمت إضافة الاشتراك.','success');
+      toast(id?'تم تحديث اشتراك Netflix.':'تمت إضافة اشتراك Netflix.');
+      setTimeout(closeNetflixDialog,300);
+    }catch(err){
+      msg($('#netflixMessage'),err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
 
   async function patchPackage(id,payload){
     return db(`packages?id=eq.${encodeURIComponent(id)}`,{
@@ -2793,49 +2843,23 @@ textarea{resize:vertical}
     if(!whatsappValue) return msg($('#settingsMessage'),'أدخل رقم واتساب.','error');
     if(!transferValue) return msg($('#settingsMessage'),'أدخل رقم التحويل.','error');
 
-    const changes=[];
-    if(whatsappValue !== String(whatsapp || '').replace(/\D/g,'')){
-      changes.push({
-        key:'whatsapp_number',
-        value:whatsappValue,
-        label:'رقم واتساب'
-      });
-    }
-    if(transferValue !== String(transferNumber || '').replace(/\D/g,'')){
-      changes.push({
-        key:'bank_transfer_number',
-        value:transferValue,
-        label:'رقم التحويل البنكي'
-      });
-    }
-
-    if(!changes.length){
-      return msg($('#settingsMessage'),'لا توجد تغييرات جديدة للحفظ.','success');
-    }
-
     const btn=e.submitter;
     setBusy(btn,true);
 
     try{
-      for(const change of changes){
-        await db(`site_settings?key=eq.${encodeURIComponent(change.key)}`,{
-          method:'PATCH',
-          body:{value:change.value},
-          prefer:'return=representation'
-        });
-      }
+      await db('site_settings?on_conflict=key',{
+        method:'POST',
+        body:[
+          {key:'whatsapp_number',value:whatsappValue},
+          {key:'bank_transfer_number',value:transferValue}
+        ],
+        prefer:'resolution=merge-duplicates,return=representation'
+      });
 
       whatsapp=whatsappValue;
       transferNumber=transferValue;
-
-      const changedLabels=changes.map(x=>x.label).join(' و ');
-      msg($('#settingsMessage'),`تم حفظ ${changedLabels} فقط.`, 'success');
-      toast(`تم تحديث ${changedLabels}.`);
-
-      if(isSuperAdmin()){
-        await loadUsersAndAudit();
-        renderAudit();
-      }
+      msg($('#settingsMessage'),'تم حفظ إعدادات واتساب والتحويل بنجاح.','success');
+      toast('تم تحديث إعدادات الطلب والتحويل.');
     }catch(err){
       msg($('#settingsMessage'),err.message,'error');
     }finally{
@@ -3001,7 +3025,7 @@ textarea{resize:vertical}
   });
 
   $('#exportBtn')?.addEventListener('click',()=>{
-    const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,bank_transfer_number:transferNumber,packages};
+    const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,bank_transfer_number:transferNumber,packages,digital_products:digitalProducts};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
