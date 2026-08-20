@@ -132,6 +132,176 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
 .package-row a{background:var(--accent);color:var(--accent-text);padding:8px 13px;border-radius:999px;font-size:.76rem;font-weight:700}
 .micro-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:22px}
 
+
+/* Netflix products */
+.netflix-section{
+  padding-top:58px;
+}
+.netflix-section-head em{
+  color:#ff4652!important;
+}
+.netflix-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.netflix-product-card{
+  position:relative;
+  min-height:390px;
+  display:flex;
+  flex-direction:column;
+  background:
+    radial-gradient(circle at 88% 6%,rgba(229,9,20,.08),transparent 28%),
+    var(--surface);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:20px;
+  box-shadow:var(--shadow-soft);
+}
+.netflix-product-card.featured{
+  border-color:rgba(229,9,20,.34);
+  box-shadow:0 20px 50px rgba(229,9,20,.08);
+}
+.netflix-card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:20px;
+}
+.netflix-logo{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:rgba(229,9,20,.10);
+  color:#ff4652;
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  font-size:1.3rem;
+  font-weight:700;
+  flex:0 0 auto;
+}
+.digital-featured-badge{
+  border:1px solid rgba(229,9,20,.20);
+  background:rgba(229,9,20,.08);
+  color:#ff6b73;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:.67rem;
+  font-weight:700;
+}
+.digital-service-label{
+  color:#ff5a63;
+  font-size:.68rem;
+  font-weight:700;
+}
+.netflix-copy h3{
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  font-size:1.35rem;
+  margin:4px 0 6px;
+}
+.netflix-copy p{
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.7;
+}
+.digital-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:17px 0;
+}
+.digital-meta span{
+  border:1px solid var(--line);
+  background:var(--surface-2);
+  color:var(--muted);
+  padding:6px 9px;
+  border-radius:10px;
+  font-size:.66rem;
+}
+.digital-features{
+  display:grid;
+  gap:8px;
+  color:var(--muted);
+  font-size:.75rem;
+  list-style:none;
+  margin-bottom:20px;
+}
+.digital-features li::first-letter{
+  color:var(--accent-2);
+}
+.digital-product-footer{
+  margin-top:auto;
+  padding-top:17px;
+  border-top:1px solid var(--line-soft);
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+}
+.digital-product-footer>div{
+  display:grid;
+}
+.digital-product-footer small{
+  color:var(--muted);
+  font-size:.68rem;
+}
+.digital-product-footer strong{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.05rem;
+  margin-top:2px;
+}
+.digital-product-footer a{
+  min-height:42px;
+  padding:0 14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#55E6D0;
+  color:#06141B;
+  border-radius:16px;
+  font-weight:700;
+  font-size:.74rem;
+  transition:.2s ease;
+}
+.digital-product-footer a:hover{
+  background:#63E9D5;
+  transform:translateY(-2px);
+}
+.digital-empty{
+  grid-column:1/-1;
+  min-height:130px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  text-align:right;
+  background:var(--surface);
+  border:1px dashed var(--line);
+  border-radius:22px;
+  padding:24px;
+}
+.digital-empty b{
+  display:block;
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  margin-bottom:3px;
+}
+.digital-empty p{
+  color:var(--muted);
+  font-size:.76rem;
+}
+
+@media(max-width:900px){
+  .netflix-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  .netflix-grid{grid-template-columns:1fr}
+  .netflix-product-card{min-height:340px}
+  .digital-product-footer{align-items:stretch;flex-direction:column}
+  .digital-product-footer a{width:100%}
+}
+
 /* Compact why */
 .why-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center}
 .why-copy h2{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:clamp(2rem,3.8vw,3.4rem);line-height:1.15;margin:12px 0}.why-copy p{color:var(--muted);max-width:540px}
