@@ -681,6 +681,29 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="username-edit-v1">
+.user-card{
+  grid-template-columns:minmax(170px,1.15fr) minmax(150px,.9fr) minmax(135px,.65fr) auto auto;
+}
+.user-username-edit{min-width:0}
+.user-username-edit span{
+  display:block;color:var(--muted);font-size:.62rem;font-weight:700;margin-bottom:5px
+}
+.user-username-input{
+  width:100%;padding:9px 10px!important;font-size:.78rem!important;
+}
+@media(max-width:1050px){
+  .user-card{grid-template-columns:1fr 1fr}
+  .user-main{grid-column:1/-1}
+  .user-username-edit{grid-column:1/-1}
+}
+@media(max-width:520px){
+  .user-card{grid-template-columns:1fr}
+  .user-main,.user-username-edit{grid-column:auto}
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1430,8 +1453,8 @@ textarea{resize:vertical}
 
     $$('#settingsForm input,#settingsForm button').forEach(el=>el.disabled=!edit);
 
-    $('#adminEmailText').textContent = currentProfile?.username ? '@'+currentProfile.username : '—';
-    $('#systemAdminEmail').textContent = currentProfile?.username ? '@'+currentProfile.username : '—';
+    $('#adminEmailText').textContent = currentProfile?.username || '—';
+    $('#systemAdminEmail').textContent = currentProfile?.username || '—';
     $('#adminRoleTitle').textContent = roleLabel(role);
     $('#systemRoleText').textContent = roleLabel(role);
 
@@ -1468,10 +1491,18 @@ textarea{resize:vertical}
         <div class="user-main">
           <div class="user-avatar">${esc(initials)}</div>
           <div class="user-copy">
-            <b>@${esc(u.username || 'بدون-اسم')}${self?' • أنت':''}</b>
+            <b>${esc(u.username || 'بدون-اسم')}${self?' • أنت':''}</b>
             <span>${esc(roleLabel(u.role))}</span>
           </div>
         </div>
+        <label class="user-username-edit">
+          <span>اسم المستخدم</span>
+          <input class="user-username-input" data-user-username
+                 value="${esc(u.username || '')}"
+                 minlength="3" maxlength="30"
+                 autocomplete="off" spellcheck="false"
+                 placeholder="username">
+        </label>
         <select data-user-role ${self?'disabled':''} aria-label="الصلاحية">
           <option value="super_admin" ${u.role==='super_admin'?'selected':''}>Super Admin</option>
           <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
@@ -1482,10 +1513,7 @@ textarea{resize:vertical}
           <input type="checkbox" data-user-active ${u.active?'checked':''} ${self?'disabled':''}>
           <span>${u.active?'نشط':'موقوف'}</span>
         </label>
-        ${self
-          ? '<span class="read-only-badge">الحساب الحالي محمي</span>'
-          : '<button class="secondary-btn compact user-save" type="button" data-save-user>حفظ</button>'
-        }
+        <button class="secondary-btn compact user-save" type="button" data-save-user>حفظ</button>
       </article>`;
     }).join('') : '<div class="empty-state"><b>لا يوجد مستخدمون</b></div>';
 
@@ -2008,7 +2036,7 @@ textarea{resize:vertical}
 
       $('#createUserForm').reset();
       $('#newUserRole').value='viewer';
-      msg($('#createUserMessage'),`تم إنشاء الحساب @${result?.user?.username || username} بنجاح.`,'success');
+      msg($('#createUserMessage'),`تم إنشاء الحساب ${result?.user?.username || username} بنجاح.`,'success');
 
       await loadUsersAndAudit();
       renderUsers();
@@ -2027,25 +2055,58 @@ textarea{resize:vertical}
 
     const card=btn.closest('[data-user-id]');
     const userId=card?.dataset.userId;
-    if(!userId || userId===currentUser?.id) return;
+    if(!userId) return;
 
+    const username=(card.querySelector('[data-user-username]')?.value || '').trim().toLowerCase();
+
+    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
+      toast('اسم المستخدم يجب أن يكون 3–30 خانة: حروف إنجليزية وأرقام و . _ - فقط.','error');
+      card.querySelector('[data-user-username]')?.focus();
+      return;
+    }
+
+    const self=userId===currentUser?.id;
     const role=card.querySelector('[data-user-role]')?.value;
     const active=Boolean(card.querySelector('[data-user-active]')?.checked);
+
+    const body=self ? {username} : {username,role,active};
 
     setBusy(btn,true,'حفظ...');
     try{
       await db(`profiles?user_id=eq.${encodeURIComponent(userId)}`,{
         method:'PATCH',
-        body:{role,active},
+        body,
         prefer:'return=representation'
       });
+
+      if(self){
+        await loadCurrentProfile();
+        applyRoleUI();
+      }
+
       await loadUsersAndAudit();
       renderUsers();
-      toast('تم تحديث صلاحيات المستخدم.');
+      toast(self ? 'تم تغيير اسم المستخدم.' : 'تم تحديث المستخدم والصلاحيات.');
     }catch(err){
-      toast(err.message,'error');
+      const message=String(err?.message || '');
+      if(message.includes('profiles_username_lower_uidx') || message.includes('duplicate')){
+        toast('اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.','error');
+      }else{
+        toast(message || 'تعذر حفظ التغيير.','error');
+      }
     }finally{
       setBusy(btn,false);
+    }
+  });
+
+  $('#usersList')?.addEventListener('input',e=>{
+    if(e.target.matches('[data-user-username]')){
+      const clean=e.target.value
+        .toLowerCase()
+        .replace(/@/g,'')
+        .replace(/[^a-z0-9._-]/g,'')
+        .slice(0,30);
+      if(e.target.value!==clean) e.target.value=clean;
     }
   });
 
