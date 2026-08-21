@@ -437,3 +437,12 @@ html[data-theme="light"] #featuredGrid .package-card:not(.best-value) .btn-block
 html[data-theme="light"] #featuredGrid .package-card:not(.best-value) .btn-block:hover{
   background:#D5DAD6 !important;
 }
+
+
+/* Best Value badge color only */
+#featuredGrid .best-badge,
+#featuredGrid .package-card.best-value .best-badge{
+  background:#F4B942 !important;
+  color:#111111 !important;
+  box-shadow:0 10px 24px rgba(244,185,66,.22) !important;
+}
