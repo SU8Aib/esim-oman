@@ -271,3 +271,140 @@ ${details}
       const status=heroNetflix.querySelector('.service-status');
       if(status){
         status.className=`service-status ${netflixAvailable?'live':'soon'}`;
+        status.innerHTML=netflixAvailable?'<i></i> متوفر':'قريباً';
+      }
+    }
+
+    const availableNetflix=document.querySelector('[data-service="netflix"]');
+    if(availableNetflix){
+      availableNetflix.classList.toggle('disabled-service',!netflixAvailable);
+      const status=availableNetflix.querySelector('.service-status');
+      if(status){
+        status.className=`service-status ${netflixAvailable?'live':'soon'}`;
+        status.innerHTML=netflixAvailable?'<i></i> متوفر':'قريباً';
+      }
+    }
+  }
+
+  function render(){
+    const active=packages
+      .filter(p=>p.active!==false)
+      .sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+
+    const featuredGrid=document.getElementById('featuredGrid');
+    const dataGrid=document.getElementById('dataGrid');
+    const unlimitedGrid=document.getElementById('unlimitedGrid');
+
+    if(featuredGrid){
+      const featured=orderedFeatured();
+      featuredGrid.innerHTML=featured.length
+        ? featured.map(featuredCard).join('')
+        : '<div class="micro-note">لا توجد منتجات في الأكثر طلباً حالياً.</div>';
+    }
+
+    if(dataGrid){
+      dataGrid.innerHTML=active
+        .filter(p=>p.type==='data')
+        .map(packageRow)
+        .join('');
+    }
+
+    if(unlimitedGrid){
+      unlimitedGrid.innerHTML=active
+        .filter(p=>p.type==='unlimited')
+        .map(packageRow)
+        .join('');
+    }
+
+    renderNetflix();
+    syncServiceAvailability();
+    setWhatsAppLinks();
+  }
+
+  async function loadRemote(){
+    if(!supabaseClient){
+      render();
+      return;
+    }
+
+    try{
+      const [
+        {data:p,error:pe},
+        {data:s,error:se},
+        {data:d,error:de},
+        {data:f,error:fe}
+      ]=await Promise.all([
+        supabaseClient.from('packages').select('*').order('sort_order',{ascending:true}),
+        supabaseClient.from('site_settings').select('*'),
+        supabaseClient.from('digital_products').select('*').order('created_at',{ascending:true}),
+        supabaseClient.from('featured_selection').select('*').order('created_at',{ascending:true})
+      ]);
+
+      if(!pe && Array.isArray(p) && p.length) packages=p;
+      if(!de && Array.isArray(d)) digitalProducts=d;
+      if(!fe && Array.isArray(f)) featuredSelection=f;
+
+      if(!se && Array.isArray(s)){
+        const wa=s.find(x=>x.key==='whatsapp_number');
+        const transfer=s.find(x=>x.key==='bank_transfer_number');
+
+        if(wa?.value) whatsapp=String(wa.value).replace(/\D/g,'');
+        if(transfer?.value) transferNumber=String(transfer.value).replace(/\D/g,'');
+      }
+    }catch(e){
+      console.warn('Using local fallback data.',e);
+    }
+
+    render();
+  }
+
+  document.querySelectorAll('.segment').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.segment').forEach(b=>{
+      b.classList.toggle('active',b===btn);
+      b.setAttribute('aria-selected',b===btn?'true':'false');
+    });
+
+    document.querySelectorAll('.package-list').forEach(p=>{
+      p.classList.toggle('active',p.dataset.panel===btn.dataset.tab);
+    });
+  }));
+
+  document.querySelectorAll('.service-filter').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.service-filter')
+      .forEach(b=>b.classList.toggle('active',b===btn));
+
+    const filter=btn.dataset.serviceFilter;
+
+    document.querySelectorAll('[data-service]').forEach(card=>{
+      card.style.display=(filter==='all'||card.dataset.service===filter)?'flex':'none';
+    });
+  }));
+
+  const menuToggle=document.getElementById('menuToggle');
+  const mobileNav=document.getElementById('mobileNav');
+
+  menuToggle?.addEventListener('click',()=>{
+    const open=mobileNav.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded',open?'true':'false');
+  });
+
+  mobileNav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+    mobileNav.classList.remove('open');
+    menuToggle?.setAttribute('aria-expanded','false');
+  }));
+
+  const root=document.documentElement;
+  const savedTheme=localStorage.getItem('esim-theme');
+
+  if(savedTheme==='light'||savedTheme==='dark'){
+    root.dataset.theme=savedTheme;
+  }
+
+  document.getElementById('themeToggle')?.addEventListener('click',()=>{
+    const next=root.dataset.theme==='light'?'dark':'light';
+    root.dataset.theme=next;
+    localStorage.setItem('esim-theme',next);
+  });
+
+  loadRemote();
+})();
