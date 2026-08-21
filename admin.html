@@ -162,6 +162,10 @@ textarea{resize:vertical}
 .nav-item.active{background:rgba(40,213,189,.10);color:var(--accent)}
 .nav-icon{width:28px;height:28px;border:1px solid var(--line);border-radius:9px;display:grid;place-items:center}
 .nav-item small{margin-right:auto;background:var(--surface3);border:1px solid var(--line);padding:1px 7px;border-radius:999px;font-family:'JetBrains Mono';font-size:.62rem}
+.nav-item.nav-subitem{margin:-1px 0 6px 0;padding-right:20px;font-size:.76rem;color:var(--muted);position:relative}
+.nav-item.nav-subitem:before{content:"";position:absolute;right:9px;top:0;bottom:50%;width:9px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);border-radius:0 0 0 8px}
+.nav-item.nav-subitem .nav-icon{width:22px;height:22px;font-size:.78rem}
+.nav-item.nav-subitem.active{background:rgba(40,213,189,.08)}
 .sidebar-note{margin-top:auto;display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);background:var(--surface2);padding:12px;border-radius:14px}
 .status-pulse{width:8px;height:8px;margin-top:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(40,213,189,.10)}
 .sidebar-note div{display:grid}
@@ -259,6 +263,27 @@ textarea{resize:vertical}
 .system-row span{color:var(--muted)}
 .system-row b{font-size:.7rem;max-width:62%;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .system-row b.ok{color:var(--accent)}
+
+/* NETFLIX FIELD CONFIG */
+.field-config-list{display:grid;gap:12px;margin-bottom:16px}
+.field-config-card{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:16px}
+.field-config-card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.field-config-card-head .field-index{width:26px;height:26px;flex:none;border-radius:9px;background:var(--surface3);border:1px solid var(--line);display:grid;place-items:center;font-family:'JetBrains Mono';font-size:.68rem;color:var(--muted)}
+.field-label-input{flex:1;border:1px solid var(--line2);background:var(--bg2);color:var(--text);border-radius:11px;padding:9px 12px;font-weight:700;font-size:.86rem;outline:none}
+.field-label-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(40,213,189,.08)}
+.field-type-tag{flex:none;font-size:.64rem;color:var(--muted);border:1px solid var(--line);background:var(--surface2);padding:3px 9px;border-radius:999px}
+.field-options-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.option-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:var(--surface2);border-radius:11px;padding:5px 6px 5px 8px}
+.option-chip input{border:0;background:transparent;color:var(--text);font-size:.78rem;padding:2px 2px;outline:none;width:auto;min-width:40px}
+.option-chip .option-remove{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:.85rem;line-height:1;padding:2px 4px;border-radius:7px}
+.option-chip .option-remove:hover{color:var(--red);background:rgba(255,111,125,.1)}
+.field-config-card-foot{display:flex;align-items:center;gap:8px}
+.field-add-option{display:flex;align-items:center;gap:8px;flex:1}
+.field-add-option input{flex:1;border:1px solid var(--line);background:var(--bg2);color:var(--text);border-radius:10px;padding:8px 11px;font-size:.78rem;outline:none}
+.field-add-option input:focus{border-color:var(--accent)}
+.field-delete-btn{flex:none}
+.field-config-add .form-grid{margin-bottom:14px}
+#netflixCustomFieldsAnchor{grid-column:1/-1;height:0;margin:0;padding:0}
 
 /* DIALOG */
 .package-dialog{
@@ -1414,6 +1439,9 @@ input:focus,select:focus,textarea:focus{
           <span class="nav-icon">N</span><span>اشتراكات Netflix</span>
           <small id="sidebarNetflixCount">0</small>
         </button>
+        <button class="nav-item nav-subitem" id="netflixSettingsNav" data-view="netflix-settings">
+          <span class="nav-icon">✎</span><span>اعدادات القسم</span>
+        </button>
         <button class="nav-item" id="settingsNav" data-view="settings">
           <span class="nav-icon">⚙</span><span>الإعدادات</span>
         </button>
@@ -1637,6 +1665,50 @@ input:focus,select:focus,textarea:focus{
           </article>
         </section>
 
+        <!-- NETFLIX SECTION SETTINGS -->
+        <section class="view" data-view-panel="netflix-settings">
+          <div class="section-title-row">
+            <div>
+              <span class="top-eyebrow">Netflix · Section Settings</span>
+              <h2>اعدادات قسم Netflix</h2>
+              <p>تحكّم بأسماء الحقول والخيارات اللي تظهر داخل نموذج “إضافة اشتراك”، بدون تعديل الكود.</p>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="secondary-btn compact" id="resetFieldConfigBtn" type="button">استعادة الافتراضي</button>
+              <button class="primary-btn compact" id="saveFieldConfigBtn" type="button">حفظ التغييرات</button>
+            </div>
+          </div>
+
+          <div class="security-note">
+            كل نقطة (حقل) تحتها الخيارات اللي تظهر بقائمة الاختيار. تقدر تغيّر اسم النقطة، تعدّل أو تضيف خياراتها،
+            أو تضيف نقطة جديدة بالكامل من الأسفل. التغييرات تنعكس فوراً على نموذج “＋ إضافة اشتراك”.
+          </div>
+
+          <div class="field-config-list" id="netflixFieldsList"></div>
+
+          <article class="panel field-config-add">
+            <div class="panel-head">
+              <div>
+                <span class="top-eyebrow">New</span>
+                <h3>إضافة نقطة جديدة</h3>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label>
+                <span>اسم النقطة</span>
+                <input id="newFieldLabel" type="text" placeholder="مثال: الاسترجاع">
+              </label>
+              <label>
+                <span>الخيارات (افصل بينها بفاصلة ،)</span>
+                <input id="newFieldOptions" type="text" placeholder="مثال: متاح، غير متاح">
+              </label>
+            </div>
+            <button class="secondary-btn fit" id="addFieldBtn" type="button">＋ إضافة النقطة</button>
+          </article>
+
+          <div class="form-message" id="fieldConfigMessage"></div>
+        </section>
+
         <!-- SETTINGS -->
         <section class="view" data-view-panel="settings">
           <div class="section-title-row">
@@ -1836,7 +1908,7 @@ input:focus,select:focus,textarea:focus{
         <form id="netflixForm">
           <input id="netflixId" type="hidden">
 
-          <div class="form-grid">
+          <div class="form-grid" id="netflixFormGrid">
             <label>
               <span>اسم المنتج / الاشتراك</span>
               <select id="netflixName" required>
@@ -1897,6 +1969,8 @@ input:focus,select:focus,textarea:focus{
                 <option value="أفضل جودة وتجربة مشاهدة" selected>أفضل جودة وتجربة مشاهدة</option>
               </select>
             </label>
+
+            <div id="netflixCustomFieldsAnchor"></div>
 
             <label class="span-2">
               <span>المميزات — جاهزة وتقدر تعدل عليها</span>
@@ -3110,6 +3184,7 @@ input:focus,select:focus,textarea:focus{
       overview:['Dashboard','نظرة عامة'],
       packages:['Packages','إدارة الباقات'],
       netflix:['Netflix','اشتراكات Netflix'],
+      'netflix-settings':['Netflix · Section Settings','اعدادات قسم Netflix'],
       settings:['Settings','الإعدادات'],
       users:['Access Control','المستخدمون والصلاحيات'],
       audit:['Audit Log','سجل نشاطات الإدارة']
@@ -3298,6 +3373,237 @@ input:focus,select:focus,textarea:focus{
     $('#netflixScreens').value=preset.screens;
     $('#netflixDescription').value=preset.description;
   });
+
+  /* ================= NETFLIX SECTION FIELD CONFIG ================= */
+  const NETFLIX_FIELD_STORAGE_KEY='esim-netflix-field-config';
+
+  const NETFLIX_DEFAULT_FIELDS=[
+    {id:'netflixName',label:'اسم المنتج / الاشتراك',locked:true,options:['Netflix Basic','Netflix Standard','Netflix Premium']},
+    {id:'netflixDuration',label:'مدة الاشتراك',locked:true,options:['شهر واحد','3 أشهر','6 أشهر','12 شهر']},
+    {id:'netflixType',label:'نوع الاشتراك',locked:true,options:['حساب مشترك','بروفايل خاص','حساب كامل']},
+    {id:'netflixScreens',label:'عدد الأجهزة / الشاشات',locked:true,options:['شاشة واحدة','شاشتان','4 شاشات']},
+    {id:'netflixQuality',label:'الجودة',locked:true,options:['HD','Full HD','4K Ultra HD']},
+    {id:'netflixDescription',label:'الوصف',locked:true,options:['مناسب للمشاهدة الشخصية','خيار متوازن للاستخدام اليومي','أفضل جودة وتجربة مشاهدة']},
+    {id:'netflixDelivery',label:'طريقة التسليم',locked:true,options:['واتساب','إرسال رقمي']}
+  ];
+
+  function cloneFields(list){
+    return list.map(f=>({id:f.id,label:f.label,locked:!!f.locked,options:[...f.options]}));
+  }
+
+  function loadNetflixFieldConfig(){
+    let saved=null;
+    try{ saved=JSON.parse(localStorage.getItem(NETFLIX_FIELD_STORAGE_KEY)||'null'); }catch(err){ saved=null; }
+    if(!Array.isArray(saved)) return cloneFields(NETFLIX_DEFAULT_FIELDS);
+
+    const byId=new Map(saved.filter(f=>f&&f.id).map(f=>[f.id,f]));
+    const merged=NETFLIX_DEFAULT_FIELDS.map(def=>{
+      const found=byId.get(def.id);
+      byId.delete(def.id);
+      if(!found) return {...def,options:[...def.options]};
+      return {
+        id:def.id,
+        locked:true,
+        label:(found.label||'').trim()||def.label,
+        options:Array.isArray(found.options)&&found.options.length?found.options.filter(o=>String(o).trim()):[...def.options]
+      };
+    });
+    byId.forEach(f=>{
+      if(Array.isArray(f.options)){
+        merged.push({id:f.id,locked:false,label:(f.label||'').trim()||'حقل بدون اسم',options:f.options.filter(o=>String(o).trim())});
+      }
+    });
+    return merged;
+  }
+
+  function saveNetflixFieldConfigToStorage(){
+    localStorage.setItem(NETFLIX_FIELD_STORAGE_KEY,JSON.stringify(netflixFieldConfig));
+  }
+
+  function genFieldId(){
+    return 'nfCustom_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  }
+
+  let netflixFieldConfig=loadNetflixFieldConfig();
+
+  function renderFieldConfig(){
+    const wrap=$('#netflixFieldsList');
+    if(!wrap) return;
+
+    if(!netflixFieldConfig.length){
+      wrap.innerHTML='<div class="empty-state"><b>ما فيه نقاط بعد</b>أضف أول نقطة من الأسفل.</div>';
+      return;
+    }
+
+    wrap.innerHTML=netflixFieldConfig.map((f,i)=>`
+      <article class="field-config-card" data-field-id="${esc(f.id)}">
+        <div class="field-config-card-head">
+          <span class="field-index">${i+1}</span>
+          <input class="field-label-input" data-field-label type="text" value="${esc(f.label)}" placeholder="اسم النقطة">
+          <span class="field-type-tag">${f.locked?'حقل أساسي':'حقل مخصص'}</span>
+          ${f.locked?'':'<button class="icon-btn field-delete-btn" data-delete-field type="button" title="حذف النقطة">🗑</button>'}
+        </div>
+        <div class="field-options-wrap">
+          ${f.options.map((opt,oi)=>`
+            <span class="option-chip" data-option-index="${oi}">
+              <input type="text" data-option-input value="${esc(opt)}">
+              <button type="button" class="option-remove" data-remove-option title="حذف الخيار">×</button>
+            </span>
+          `).join('') || '<span class="form-message error" style="min-height:auto">ما فيه خيارات — أضف واحد بالأسفل.</span>'}
+        </div>
+        <div class="field-config-card-foot">
+          <div class="field-add-option">
+            <input type="text" data-new-option placeholder="أضف خيار جديد واضغط إضافة...">
+            <button class="secondary-btn compact" type="button" data-add-option>＋ إضافة خيار</button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function applyNetflixFieldConfigToForm(){
+    // 1) update options of the seven built-in selects, keeping current selection when possible
+    netflixFieldConfig.filter(f=>f.locked).forEach(f=>{
+      const select=document.getElementById(f.id);
+      if(!select) return;
+      const current=select.value;
+      select.innerHTML=f.options.map(opt=>`<option value="${esc(opt)}">${esc(opt)}</option>`).join('');
+      select.value=f.options.includes(current)?current:(f.options[0]||'');
+      // sync label text next to the field
+      const labelSpan=select.closest('label')?.querySelector('span');
+      if(labelSpan) labelSpan.textContent=f.label;
+    });
+
+    // 2) rebuild custom fields in the dialog as extra select inputs
+    const anchor=$('#netflixCustomFieldsAnchor');
+    if(!anchor) return;
+    $$('.netflix-dynamic-field').forEach(el=>el.remove());
+    const customFields=netflixFieldConfig.filter(f=>!f.locked);
+    customFields.slice().reverse().forEach(f=>{
+      const label=document.createElement('label');
+      label.className='span-2 netflix-dynamic-field';
+      label.dataset.customFieldId=f.id;
+      const optionsHtml=f.options.length
+        ? f.options.map(opt=>`<option value="${esc(opt)}">${esc(opt)}</option>`).join('')
+        : '<option value="">— بدون خيارات —</option>';
+      label.innerHTML=`<span>${esc(f.label)}</span><select>${optionsHtml}</select>`;
+      anchor.after(label);
+    });
+
+    // 3) refresh section settings screen too, if visible
+    renderFieldConfig();
+  }
+
+  $('#netflixFieldsList')?.addEventListener('input',e=>{
+    const card=e.target.closest('[data-field-id]');
+    if(!card) return;
+    const field=netflixFieldConfig.find(f=>f.id===card.dataset.fieldId);
+    if(!field) return;
+
+    if(e.target.matches('[data-field-label]')){
+      field.label=e.target.value;
+      return;
+    }
+    if(e.target.matches('[data-option-input]')){
+      const chip=e.target.closest('[data-option-index]');
+      const idx=Number(chip?.dataset.optionIndex);
+      if(!Number.isNaN(idx)) field.options[idx]=e.target.value;
+    }
+  });
+
+  $('#netflixFieldsList')?.addEventListener('click',e=>{
+    const card=e.target.closest('[data-field-id]');
+    if(!card) return;
+    const field=netflixFieldConfig.find(f=>f.id===card.dataset.fieldId);
+    if(!field) return;
+
+    if(e.target.closest('[data-remove-option]')){
+      const chip=e.target.closest('[data-option-index]');
+      const idx=Number(chip?.dataset.optionIndex);
+      if(!Number.isNaN(idx)){
+        field.options.splice(idx,1);
+        renderFieldConfig();
+      }
+      return;
+    }
+
+    if(e.target.closest('[data-add-option]')){
+      const input=card.querySelector('[data-new-option]');
+      const val=(input?.value||'').trim();
+      if(!val){ input?.focus(); return; }
+      if(field.options.includes(val)){
+        toast('هذا الخيار موجود مسبقاً.','error');
+        return;
+      }
+      field.options.push(val);
+      renderFieldConfig();
+      return;
+    }
+
+    if(e.target.closest('[data-delete-field]')){
+      if(field.locked) return;
+      netflixFieldConfig=netflixFieldConfig.filter(f=>f.id!==field.id);
+      renderFieldConfig();
+    }
+  });
+
+  $('#netflixFieldsList')?.addEventListener('keydown',e=>{
+    if(e.key==='Enter' && e.target.matches('[data-new-option]')){
+      e.preventDefault();
+      e.target.closest('[data-field-id]')?.querySelector('[data-add-option]')?.click();
+    }
+  });
+
+  $('#addFieldBtn')?.addEventListener('click',()=>{
+    const labelInput=$('#newFieldLabel');
+    const optionsInput=$('#newFieldOptions');
+    const label=(labelInput?.value||'').trim();
+    const options=(optionsInput?.value||'')
+      .split(/[,،]/)
+      .map(o=>o.trim())
+      .filter(Boolean);
+
+    if(!label){
+      msg($('#fieldConfigMessage'),'اكتب اسم النقطة أولاً.','error');
+      labelInput?.focus();
+      return;
+    }
+    if(!options.length){
+      msg($('#fieldConfigMessage'),'أضف خيار واحد على الأقل، مفصول بفاصلة.','error');
+      optionsInput?.focus();
+      return;
+    }
+
+    netflixFieldConfig.push({id:genFieldId(),label,locked:false,options});
+    labelInput.value='';
+    optionsInput.value='';
+    msg($('#fieldConfigMessage'),'','');
+    renderFieldConfig();
+    toast('تمت إضافة النقطة. لا تنسَ الضغط على "حفظ التغييرات".');
+  });
+
+  $('#saveFieldConfigBtn')?.addEventListener('click',()=>{
+    // drop empty custom fields / empty options before saving
+    netflixFieldConfig=netflixFieldConfig
+      .map(f=>({...f,label:(f.label||'').trim()||(f.locked?f.label:'حقل بدون اسم'),options:f.options.map(o=>o.trim()).filter(Boolean)}))
+      .filter(f=>f.locked || f.options.length);
+
+    saveNetflixFieldConfigToStorage();
+    applyNetflixFieldConfigToForm();
+    msg($('#fieldConfigMessage'),'تم حفظ إعدادات القسم، والنموذج تحدّث فوراً.','success');
+    toast('تم حفظ اعدادات القسم بنجاح.');
+  });
+
+  $('#resetFieldConfigBtn')?.addEventListener('click',()=>{
+    netflixFieldConfig=cloneFields(NETFLIX_DEFAULT_FIELDS);
+    saveNetflixFieldConfigToStorage();
+    applyNetflixFieldConfigToForm();
+    msg($('#fieldConfigMessage'),'تمت استعادة الإعدادات الافتراضية.','success');
+    toast('تمت استعادة الإعدادات الافتراضية.');
+  });
+
+  renderFieldConfig();
+  applyNetflixFieldConfigToForm();
 
   $('#newNetflixBtn')?.addEventListener('click',()=>openNetflixDialog());
   $('#netflixDialogClose')?.addEventListener('click',closeNetflixDialog);
