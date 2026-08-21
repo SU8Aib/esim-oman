@@ -3134,3 +3134,688 @@ input:focus,select:focus,textarea:focus{
     $('#dialogTitle').textContent=p?'تعديل الباقة':'إضافة باقة جديدة';
     $('#pkgId').value=p?.id||'';
     $('#pkgType').value=p?.type||'data';
+    $('#pkgLabel').value=p?.label||'';
+    $('#pkgDuration').value=p?.duration||'';
+    $('#pkgPrice').value=p?money(p.price):'';
+    $('#pkgTagline').value=p?.tagline||'';
+    $('#pkgPerks').value=Array.isArray(p?.perks)?p.perks.join('\n'):'';
+    $('#pkgSort').value=p?.sort_order??nextSort();
+    $('#pkgActive').checked=p?.active??true;
+    $('#pkgFeatured').checked=p?isFeaturedProduct('esim',p.id):false;
+    $('#pkgBest').checked=p?isBestProduct('esim',p.id):false;
+    msg($('#packageMessage'));
+    updatePreview();
+
+    if(typeof dialog.showModal==='function'){
+      dialog.showModal();
+    }else{
+      dialog.setAttribute('open','');
+      dialog.style.display='block';
+    }
+  }
+
+  function closeDialog(){
+    if(typeof dialog.close==='function' && dialog.open) dialog.close();
+    else{
+      dialog.removeAttribute('open');
+      dialog.style.display='none';
+    }
+  }
+
+  ['#topAddPackageBtn','#heroAddPackageBtn','#quickAddBtn','#newPackageBtn'].forEach(sel=>{
+    $(sel)?.addEventListener('click',()=>{
+      switchView('packages');
+      openDialog();
+    });
+  });
+
+  $('#dialogClose')?.addEventListener('click',closeDialog);
+  $('#cancelDialog')?.addEventListener('click',closeDialog);
+
+  $('#pkgBest')?.addEventListener('change',e=>{
+    if(e.target.checked) $('#pkgFeatured').checked=true;
+    updatePreview();
+  });
+  $('#pkgFeatured')?.addEventListener('change',e=>{
+    if(!e.target.checked) $('#pkgBest').checked=false;
+    updatePreview();
+  });
+
+  ['#pkgType','#pkgLabel','#pkgDuration','#pkgPrice','#pkgTagline','#pkgPerks'].forEach(sel=>{
+    $(sel)?.addEventListener('input',updatePreview);
+  });
+
+  function updatePreview(){
+    const type=$('#pkgType')?.value||'data';
+    const label=$('#pkgLabel')?.value.trim()||(type==='unlimited'?'غير محدود':'10GB');
+    const duration=$('#pkgDuration')?.value.trim()||'30 يوم';
+    const price=money($('#pkgPrice')?.value||0);
+    const tagline=$('#pkgTagline')?.value.trim()||(type==='unlimited'?'بلا حدود':'باقة مختارة');
+    const perks=($('#pkgPerks')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
+    const best=$('#pkgBest')?.checked;
+
+    $('#previewLabel').textContent=label;
+    $('#previewDuration').textContent=duration;
+    $('#previewPrice').textContent=price;
+    $('#previewTagline').textContent=tagline;
+    $('#previewBadge').hidden=!best;
+    $('#previewPerks').innerHTML=(perks.length?perks:['تفعيل سريع']).slice(0,4).map(x=>`<li>✓ ${esc(x)}</li>`).join('');
+  }
+
+
+  function openNetflixDialog(p=null){
+    $('#netflixDialogTitle').textContent=p?'تعديل اشتراك Netflix':'إضافة اشتراك Netflix';
+    $('#netflixId').value=p?.id||'';
+    $('#netflixName').value=p?.name||'Netflix Premium';
+    $('#netflixDuration').value=p?.duration||'شهر واحد';
+    $('#netflixPrice').value=p?money(p.price):'';
+    $('#netflixType').value=p?.subscription_type||'حساب مشترك';
+    $('#netflixScreens').value=p?.screens||'4 شاشات';
+    $('#netflixQuality').value=p?.quality||'4K Ultra HD';
+    $('#netflixDescription').value=p?.description||'أفضل جودة وتجربة مشاهدة';
+    $('#netflixFeatures').value=Array.isArray(p?.features)&&p.features.length
+      ? p.features.join('\n')
+      : 'تفعيل سريع\nدعم بعد الشراء\nتعليمات واضحة';
+    $('#netflixDelivery').value=p?.delivery_method||'واتساب';
+    $('#netflixActive').checked=p?.active??true;
+    $('#netflixFeatured').checked=p?isFeaturedProduct('digital',p.id):false;
+    $('#netflixBest').checked=p?isBestProduct('digital',p.id):false;
+    msg($('#netflixMessage'));
+
+    if(typeof netflixDialog?.showModal==='function') netflixDialog.showModal();
+    else if(netflixDialog){
+      netflixDialog.setAttribute('open','');
+      netflixDialog.style.display='block';
+    }
+  }
+
+  function closeNetflixDialog(){
+    if(typeof netflixDialog?.close==='function' && netflixDialog.open) netflixDialog.close();
+    else if(netflixDialog){
+      netflixDialog.removeAttribute('open');
+      netflixDialog.style.display='none';
+    }
+  }
+
+  async function patchNetflix(id,payload){
+    return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{
+      method:'PATCH',body:payload,prefer:'return=representation'
+    });
+  }
+
+  async function insertNetflix(payload){
+    return db('digital_products',{
+      method:'POST',body:payload,prefer:'return=representation'
+    });
+  }
+
+  async function deleteNetflix(id){
+    return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
+  }
+
+
+  $('#netflixBest')?.addEventListener('change',e=>{
+    if(e.target.checked){
+      $('#netflixFeatured').checked=true;
+      $('#netflixActive').checked=true;
+    }
+  });
+
+  $('#netflixFeatured')?.addEventListener('change',e=>{
+    if(!e.target.checked) $('#netflixBest').checked=false;
+    if(e.target.checked) $('#netflixActive').checked=true;
+  });
+
+  $('#netflixActive')?.addEventListener('change',e=>{
+    if(!e.target.checked){
+      $('#netflixFeatured').checked=false;
+      $('#netflixBest').checked=false;
+    }
+  });
+
+  const NETFLIX_PRESETS={
+    'Netflix Basic':{
+      quality:'HD',
+      screens:'شاشة واحدة',
+      description:'مناسب للمشاهدة الشخصية'
+    },
+    'Netflix Standard':{
+      quality:'Full HD',
+      screens:'شاشتان',
+      description:'خيار متوازن للاستخدام اليومي'
+    },
+    'Netflix Premium':{
+      quality:'4K Ultra HD',
+      screens:'4 شاشات',
+      description:'أفضل جودة وتجربة مشاهدة'
+    }
+  };
+
+  $('#netflixName')?.addEventListener('change',e=>{
+    const preset=NETFLIX_PRESETS[e.target.value];
+    if(!preset) return;
+    $('#netflixQuality').value=preset.quality;
+    $('#netflixScreens').value=preset.screens;
+    $('#netflixDescription').value=preset.description;
+  });
+
+  $('#newNetflixBtn')?.addEventListener('click',()=>openNetflixDialog());
+  $('#netflixDialogClose')?.addEventListener('click',closeNetflixDialog);
+  $('#cancelNetflixDialog')?.addEventListener('click',closeNetflixDialog);
+
+  $('#netflixAdminList')?.addEventListener('click',async e=>{
+    if(!canEdit()) return;
+
+    const btn=e.target.closest('[data-netflix-action]');
+    if(!btn) return;
+
+    const p=digitalProducts.find(x=>x.id===btn.dataset.id);
+    if(!p) return;
+
+    const action=btn.dataset.netflixAction;
+
+    try{
+      if(action==='edit'){
+        openNetflixDialog(p);
+        return;
+      }
+
+      if(action==='toggle-active'){
+        await patchNetflix(p.id,{active:!p.active});
+        toast(p.active?'تم تعطيل الاشتراك.':'تم تفعيل الاشتراك.');
+      }
+
+      if(action==='toggle-featured'){
+        if(isFeaturedProduct('digital',p.id)){
+          await removeFeatured('digital',p.id);
+          toast('تمت إزالة الاشتراك من الأكثر طلباً.');
+        }else{
+          if(!p.active) throw new Error('فعّل الاشتراك أولاً قبل إضافته إلى الأكثر طلباً.');
+          await setFeatured('digital',p.id,{best:false});
+          toast('تمت إضافة الاشتراك إلى الأكثر طلباً.');
+        }
+      }
+
+      if(action==='set-best'){
+        if(!p.active) throw new Error('فعّل الاشتراك أولاً قبل تحديده كأفضل قيمة.');
+        await setFeatured('digital',p.id,{best:true});
+        toast('تم تحديد الاشتراك كأفضل قيمة.');
+      }
+
+      if(action==='unset-best'){
+        const entry=featureEntry('digital',p.id);
+        if(entry){
+          await db(`featured_selection?id=eq.${encodeURIComponent(entry.id)}`,{
+            method:'PATCH',
+            body:{best_value:false},
+            prefer:'return=minimal'
+          });
+        }
+        toast('تم إلغاء أفضل قيمة.');
+      }
+
+      if(action==='delete'){
+        if(!confirm(`حذف اشتراك "${p.name}" نهائياً؟`)) return;
+        await deleteNetflix(p.id);
+        toast('تم حذف اشتراك Netflix.');
+      }
+
+      await loadAll();
+    }catch(err){
+      toast(err.message,'error');
+    }
+  });
+
+  $('#netflixForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!canEdit()) return toast('هذا الحساب للقراءة فقط.','error');
+
+    const id=$('#netflixId').value;
+    const payload={
+      service_slug:'netflix',
+      name:$('#netflixName').value.trim(),
+      duration:$('#netflixDuration').value.trim(),
+      price:Number($('#netflixPrice').value),
+      subscription_type:$('#netflixType').value.trim(),
+      screens:$('#netflixScreens').value.trim(),
+      quality:$('#netflixQuality').value.trim(),
+      description:$('#netflixDescription').value.trim(),
+      features:$('#netflixFeatures').value.split('\n').map(x=>x.trim()).filter(Boolean),
+      active:$('#netflixActive').checked,
+      delivery_method:$('#netflixDelivery').value.trim()||'واتساب'
+    };
+
+    if(!payload.name) return msg($('#netflixMessage'),'أدخل اسم المنتج.','error');
+    if(!payload.duration) return msg($('#netflixMessage'),'أدخل مدة الاشتراك.','error');
+    if(!Number.isFinite(payload.price) || payload.price<0) return msg($('#netflixMessage'),'أدخل سعراً صحيحاً.','error');
+
+    let wantsFeatured=$('#netflixFeatured').checked;
+    let wantsBest=$('#netflixBest').checked;
+    if(wantsBest) wantsFeatured=true;
+
+    if(!payload.active && (wantsFeatured || wantsBest)){
+      return msg($('#netflixMessage'),'فعّل الاشتراك أولاً قبل إضافته إلى الأكثر طلباً.','error');
+    }
+
+    if(wantsFeatured && !isFeaturedProduct('digital',id) && featuredSelection.length>=3){
+      return msg($('#netflixMessage'),'الأكثر طلباً ممتلئ: الحد الأقصى 3 منتجات من جميع الأقسام.','error');
+    }
+
+    const btn=$('#saveNetflixBtn');
+    setBusy(btn,true);
+    msg($('#netflixMessage'));
+
+    try{
+      let productId=id;
+
+      if(id){
+        await patchNetflix(id,payload);
+      }else{
+        const inserted=await insertNetflix(payload);
+        productId=Array.isArray(inserted)?inserted[0]?.id:inserted?.id;
+      }
+
+      if(!productId) throw new Error('تم حفظ المنتج لكن تعذر تحديد معرّفه.');
+
+      if(payload.active){
+        await syncFeatured('digital',productId,{
+          featured:wantsFeatured,
+          best:wantsBest
+        });
+      }else{
+        await removeFeatured('digital',productId);
+      }
+
+      await loadAll();
+      msg($('#netflixMessage'),id?'تم تحديث الاشتراك.':'تمت إضافة الاشتراك.','success');
+      toast(id?'تم تحديث اشتراك Netflix.':'تمت إضافة اشتراك Netflix.');
+      setTimeout(closeNetflixDialog,300);
+    }catch(err){
+      msg($('#netflixMessage'),err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  async function patchPackage(id,payload){
+    return db(`packages?id=eq.${encodeURIComponent(id)}`,{
+      method:'PATCH',body:payload,prefer:'return=representation'
+    });
+  }
+
+  async function insertPackage(payload){
+    return db('packages',{
+      method:'POST',body:payload,prefer:'return=representation'
+    });
+  }
+
+  async function deletePackage(id){
+    return db(`packages?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
+  }
+
+  $('#adminPackageList')?.addEventListener('click',async e=>{
+    if(!canEdit()) return;
+
+    const btn=e.target.closest('[data-action]');
+    if(!btn) return;
+
+    const p=packages.find(x=>x.id===btn.dataset.id);
+    if(!p) return;
+
+    try{
+      const action=btn.dataset.action;
+
+      if(action==='edit') return openDialog(p);
+
+      if(action==='toggle-active'){
+        await patchPackage(p.id,{active:!p.active});
+        toast(p.active?'تم إخفاء الباقة.':'تم تفعيل الباقة.');
+      }
+
+      if(action==='toggle-featured'){
+        if(isFeaturedProduct('esim',p.id)){
+          await removeFeatured('esim',p.id);
+          toast('تمت إزالة الباقة من الأكثر طلباً.');
+        }else{
+          if(!p.active) throw new Error('فعّل الباقة أولاً قبل إضافتها إلى الأكثر طلباً.');
+          await setFeatured('esim',p.id,{best:false});
+          toast('تمت إضافة الباقة إلى الأكثر طلباً.');
+        }
+      }
+
+      if(action==='set-best'){
+        if(!p.active) throw new Error('فعّل الباقة أولاً قبل تحديدها كأفضل قيمة.');
+        await setFeatured('esim',p.id,{best:true});
+        toast('تم تحديد الباقة كأفضل قيمة.');
+      }
+
+      if(action==='unset-best'){
+        const entry=featureEntry('esim',p.id);
+        if(entry){
+          await db(`featured_selection?id=eq.${encodeURIComponent(entry.id)}`,{
+            method:'PATCH',
+            body:{best_value:false},
+            prefer:'return=minimal'
+          });
+        }
+        toast('تم إلغاء أفضل قيمة.');
+      }
+
+      if(action==='duplicate'){
+        await insertPackage({
+          type:p.type,
+          label:p.label,
+          duration:p.duration,
+          price:Number(p.price),
+          tagline:p.tagline?`${p.tagline} - نسخة`:'نسخة',
+          perks:Array.isArray(p.perks)?p.perks:[],
+          featured:false,
+          best_value:false,
+          sort_order:Number(p.sort_order||100)+1,
+          active:false
+        });
+        toast('تم إنشاء نسخة مخفية من الباقة.');
+      }
+
+      if(action==='delete'){
+        if(!confirm(`حذف باقة "${p.label}" نهائياً؟`)) return;
+        await deletePackage(p.id);
+        toast('تم حذف الباقة.');
+      }
+
+      await loadAll();
+    }catch(err){
+      toast(err.message,'error');
+    }
+  });
+
+  $('#packageForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!canEdit()) return toast('هذا الحساب للقراءة فقط.','error');
+    const id=$('#pkgId').value;
+    const payload={
+      type:$('#pkgType').value,
+      label:$('#pkgLabel').value.trim(),
+      duration:$('#pkgDuration').value.trim(),
+      price:Number($('#pkgPrice').value),
+      tagline:$('#pkgTagline').value.trim(),
+      perks:$('#pkgPerks').value.split('\n').map(x=>x.trim()).filter(Boolean),
+      sort_order:Number($('#pkgSort').value||100),
+      active:$('#pkgActive').checked,
+      featured:false,
+      best_value:false
+    };
+
+    let wantsFeatured=$('#pkgFeatured').checked;
+    let wantsBest=$('#pkgBest').checked;
+    if(wantsBest) wantsFeatured=true;
+
+    if(!payload.active && (wantsFeatured || wantsBest)){
+      return msg($('#packageMessage'),'فعّل الباقة أولاً قبل إضافتها إلى الأكثر طلباً.','error');
+    }
+
+    if(wantsFeatured && !isFeaturedProduct('esim',id) && featuredSelection.length>=3){
+      return msg($('#packageMessage'),'الأكثر طلباً ممتلئ: الحد الأقصى 3 منتجات من جميع الأقسام.','error');
+    }
+
+    const btn=$('#savePackageBtn');
+    setBusy(btn,true);
+    msg($('#packageMessage'));
+
+    try{
+      let productId=id;
+
+      if(id){
+        await patchPackage(id,payload);
+      }else{
+        const inserted=await insertPackage(payload);
+        productId=Array.isArray(inserted)?inserted[0]?.id:inserted?.id;
+      }
+
+      if(!productId) throw new Error('تم حفظ الباقة لكن تعذر تحديد معرّفها.');
+
+      if(payload.active){
+        await syncFeatured('esim',productId,{
+          featured:wantsFeatured,
+          best:wantsBest
+        });
+      }else{
+        await removeFeatured('esim',productId);
+      }
+
+      await loadAll();
+      msg($('#packageMessage'),id?'تم تحديث الباقة.':'تمت إضافة الباقة.','success');
+      toast(id?'تم تحديث الباقة بنجاح.':'تمت إضافة الباقة بنجاح.');
+      setTimeout(closeDialog,350);
+    }catch(err){
+      msg($('#packageMessage'),err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  $('#settingsForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!canEdit()) return toast('ليس لديك صلاحية تعديل الإعدادات.','error');
+
+    const whatsappValue = $('#whatsappSetting').value.replace(/\D/g,'');
+    const transferValue = $('#transferNumberSetting').value.replace(/\D/g,'');
+
+    if(!whatsappValue) return msg($('#settingsMessage'),'أدخل رقم واتساب.','error');
+    if(!transferValue) return msg($('#settingsMessage'),'أدخل رقم التحويل.','error');
+
+    const btn=e.submitter;
+    setBusy(btn,true);
+
+    try{
+      await db('site_settings?on_conflict=key',{
+        method:'POST',
+        body:[
+          {key:'whatsapp_number',value:whatsappValue},
+          {key:'bank_transfer_number',value:transferValue}
+        ],
+        prefer:'resolution=merge-duplicates,return=representation'
+      });
+
+      whatsapp=whatsappValue;
+      transferNumber=transferValue;
+      msg($('#settingsMessage'),'تم حفظ إعدادات واتساب والتحويل بنجاح.','success');
+      toast('تم تحديث إعدادات الطلب والتحويل.');
+    }catch(err){
+      msg($('#settingsMessage'),err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+
+  function generateTemporaryPassword(){
+    const upper='ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const lower='abcdefghijkmnopqrstuvwxyz';
+    const nums='23456789';
+    const symbols='!@#$%&*?';
+    const all=upper+lower+nums+symbols;
+    const pick=s=>{
+      const a=new Uint32Array(1);
+      crypto.getRandomValues(a);
+      return s[a[0] % s.length];
+    };
+    let out=pick(upper)+pick(lower)+pick(nums)+pick(symbols);
+    while(out.length<14) out+=pick(all);
+    const chars=[...out];
+    for(let i=chars.length-1;i>0;i--){
+      const a=new Uint32Array(1); crypto.getRandomValues(a);
+      const j=a[0]%(i+1);
+      [chars[i],chars[j]]=[chars[j],chars[i]];
+    }
+    return chars.join('');
+  }
+
+  $('#generatePasswordBtn')?.addEventListener('click',()=>{
+    const field=$('#newUserPassword');
+    if(field){
+      field.value=generateTemporaryPassword();
+      field.focus();
+      field.select();
+    }
+  });
+
+  $('#createUserForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!isSuperAdmin()) return;
+
+    const username=$('#newUsername').value.trim().toLowerCase();
+    const password=$('#newUserPassword').value;
+    const role=$('#newUserRole').value;
+    const btn=$('#createUserBtn');
+
+    msg($('#createUserMessage'));
+
+    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
+      return msg($('#createUserMessage'),'اسم المستخدم: 3–30 خانة، حروف إنجليزية وأرقام و . _ - فقط.','error');
+    }
+    if(password.length<8){
+      return msg($('#createUserMessage'),'كلمة المرور يجب أن تكون 8 أحرف على الأقل.','error');
+    }
+    if(!['super_admin','admin','sales','viewer'].includes(role)){
+      return msg($('#createUserMessage'),'الصلاحية غير صحيحة.','error');
+    }
+
+    setBusy(btn,true,'جاري إنشاء الحساب...');
+    try{
+      const result=await callFunction('create-admin-user',{
+        username,
+        password,
+        role
+      });
+
+      $('#createUserForm').reset();
+      $('#newUserRole').value='viewer';
+      msg($('#createUserMessage'),`تم إنشاء الحساب ${result?.user?.username || username} بنجاح.`,'success');
+
+      await loadUsersAndAudit();
+      renderUsers();
+      renderAudit();
+      toast('تم إنشاء المستخدم وإضافته إلى فريق الإدارة.');
+    }catch(err){
+      msg($('#createUserMessage'),err.message,'error');
+      toast(err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  $('#usersList')?.addEventListener('click',async e=>{
+    const toggle=e.target.closest('[data-toggle-user-password]');
+    if(toggle){
+      const input=toggle.closest('.user-password-wrap')?.querySelector('[data-user-password]');
+      if(input){
+        input.type=input.type==='password'?'text':'password';
+        toggle.textContent=input.type==='password'?'◉':'◌';
+      }
+      return;
+    }
+
+    const btn=e.target.closest('[data-save-user]');
+    if(!btn || !isSuperAdmin()) return;
+
+    const card=btn.closest('[data-user-id]');
+    const userId=card?.dataset.userId;
+    if(!userId) return;
+
+    const username=(card.querySelector('[data-user-username]')?.value || '').trim().toLowerCase();
+    const password=card.querySelector('[data-user-password]')?.value || '';
+
+    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
+      toast('اسم المستخدم يجب أن يكون 3–30 خانة: حروف إنجليزية وأرقام و . _ - فقط.','error');
+      card.querySelector('[data-user-username]')?.focus();
+      return;
+    }
+
+    if(password && password.length<8){
+      toast('كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل.','error');
+      card.querySelector('[data-user-password]')?.focus();
+      return;
+    }
+
+    const self=userId===currentUser?.id;
+    const role=card.querySelector('[data-user-role]')?.value;
+    const active=Boolean(card.querySelector('[data-user-active]')?.checked);
+
+    setBusy(btn,true,'حفظ...');
+    try{
+      await callFunction('update-admin-user',{
+        user_id:userId,
+        username,
+        password:password || null,
+        ...(self ? {} : {role,active})
+      });
+
+      if(self){
+        await loadCurrentProfile();
+        applyRoleUI();
+      }
+
+      await loadUsersAndAudit();
+      renderUsers();
+      renderAudit();
+      toast(password ? 'تم تغيير اسم المستخدم وكلمة المرور.' : 'تم تحديث المستخدم.');
+    }catch(err){
+      toast(err.message || 'تعذر حفظ التغيير.','error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  $('#usersList')?.addEventListener('input',e=>{
+    if(e.target.matches('[data-user-username]')){
+      const clean=e.target.value
+        .toLowerCase()
+        .replace(/@/g,'')
+        .replace(/[^a-z0-9._-]/g,'')
+        .slice(0,30);
+      if(e.target.value!==clean) e.target.value=clean;
+    }
+  });
+
+  $('#usersList')?.addEventListener('change',e=>{
+    if(e.target.matches('[data-user-active]')){
+      const label=e.target.closest('.user-active')?.querySelector('span');
+      if(label) label.textContent=e.target.checked?'نشط':'موقوف';
+    }
+  });
+
+  $('#exportBtn')?.addEventListener('click',()=>{
+    const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,bank_transfer_number:transferNumber,packages,digital_products:digitalProducts,featured_selection:featuredSelection};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=`esim-oman-backup-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();URL.revokeObjectURL(url);
+    toast('تم تنزيل النسخة الاحتياطية.');
+  });
+
+  // Theme
+  const root=document.documentElement;
+  const savedTheme=localStorage.getItem('esim-admin-theme');
+  if(savedTheme==='light'||savedTheme==='dark') root.dataset.theme=savedTheme;
+  function updateThemeButtons(){
+    const icon=root.dataset.theme==='light'?'☀':'☾';
+    ['#themeBtn','#loginThemeBtn'].forEach(id=>{const el=$(id);if(el)el.textContent=icon});
+  }
+  function toggleTheme(){
+    root.dataset.theme=root.dataset.theme==='light'?'dark':'light';
+    localStorage.setItem('esim-admin-theme',root.dataset.theme);
+    updateThemeButtons();
+  }
+  $('#themeBtn')?.addEventListener('click',toggleTheme);
+  $('#loginThemeBtn')?.addEventListener('click',toggleTheme);
+  updateThemeButtons();
+
+  startInactivityProtection();
+  checkSession();
+})();
+
+  </script>
+</body>
+</html>
