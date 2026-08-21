@@ -1036,6 +1036,182 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="netflix-save-button-fix">
+.netflix-dialog-head{
+  gap:14px;
+}
+.netflix-head-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+}
+.netflix-top-save{
+  min-width:86px;
+  min-height:38px;
+  padding:8px 16px!important;
+  border-radius:11px!important;
+}
+@media(max-width:620px){
+  .netflix-dialog-head{
+    padding:12px 14px!important;
+  }
+  .netflix-dialog-head h3{
+    font-size:1.05rem!important;
+  }
+  .netflix-top-save{
+    min-width:72px;
+    min-height:38px;
+    padding:7px 12px!important;
+  }
+}
+</style>
+
+
+<style id="site-palette-admin-v3">
+:root{
+  --bg:#0d1117!important;
+  --bg2:#11161d!important;
+  --surface:#161b22!important;
+  --surface2:#11161d!important;
+  --surface3:#21262d!important;
+  --text:#f0f6fc!important;
+  --muted:#8b949e!important;
+  --line:#30363d!important;
+  --line2:#3d444d!important;
+  --accent:#55E6D0!important;
+  --accent2:#2dd4bf!important;
+  --gold:#d29922!important;
+  --red:#ff5a63!important;
+  --purple:#a371f7!important;
+  --blue:#58a6ff!important;
+  --shadow:0 24px 70px rgba(0,0,0,.30)!important;
+}
+html[data-theme="light"]{
+  --bg:#ECEEEC!important;
+  --bg2:#EEF0EE!important;
+  --surface:#F6F7F5!important;
+  --surface2:#EEF0EE!important;
+  --surface3:#E2E5E2!important;
+  --text:#111311!important;
+  --muted:#6F7470!important;
+  --line:#CDD2CE!important;
+  --line2:#BCC2BD!important;
+  --shadow:0 18px 46px rgba(27,31,29,.09)!important;
+}
+body{background:var(--bg)!important;color:var(--text)!important}
+.sidebar,.topbar{border-color:var(--line)!important}
+.sidebar{background:color-mix(in srgb,var(--surface) 96%,transparent)!important}
+.topbar{background:color-mix(in srgb,var(--bg) 84%,transparent)!important}
+
+.primary-btn{
+  background:#55E6D0!important;
+  color:#06141B!important;
+  box-shadow:0 10px 26px rgba(85,230,208,.13)!important;
+}
+.primary-btn:hover{background:#63E9D5!important}
+.secondary-btn,.icon-btn{
+  background:var(--surface2)!important;
+  border-color:var(--line)!important;
+}
+.secondary-btn:hover,.icon-btn:hover{
+  border-color:#55E6D0!important;
+  color:#55E6D0!important;
+}
+
+input,select,textarea{
+  background:var(--bg2)!important;
+  color:var(--text)!important;
+  border-color:var(--line2)!important;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#55E6D0!important;
+  box-shadow:0 0 0 3px rgba(85,230,208,.10)!important;
+}
+
+.nav-item.active{
+  background:rgba(85,230,208,.10)!important;
+  color:#55E6D0!important;
+}
+.nav-item:hover{background:var(--surface2)!important;color:var(--text)!important}
+.nav-icon{border-color:var(--line)!important}
+
+.panel,.stat-card,.hero-card,.admin-profile,.sidebar-note,.quick-action,
+.user-card,.audit-card,.digital-admin-card,.switch-card{
+  border-color:var(--line)!important;
+}
+.panel,.stat-card,.admin-profile,.sidebar-note,.user-card,.audit-card{
+  background:var(--surface)!important;
+}
+.hero-card{
+  background:
+    radial-gradient(460px 180px at 90% 0,rgba(85,230,208,.10),transparent 70%),
+    var(--surface)!important;
+  border-color:rgba(85,230,208,.18)!important;
+}
+.quick-action,.digital-admin-card,.switch-card{background:var(--surface2)!important}
+
+.eyebrow,.admin-kicker,.top-eyebrow,.text-btn{color:#55E6D0!important}
+.status-pulse{
+  background:#55E6D0!important;
+  box-shadow:0 0 0 5px rgba(85,230,208,.10)!important;
+}
+.avatar{
+  background:linear-gradient(145deg,#55E6D0,#2dd4bf)!important;
+  color:#06141B!important;
+}
+
+.digital-admin-logo,.netflix-logo{
+  background:#090b0d!important;
+  color:#e50914!important;
+}
+.netflix-section-head em,.digital-service-label,.digital-featured-badge{
+  color:#ff5a63!important;
+}
+
+.package-dialog{
+  background:var(--surface)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+.dialog-head{
+  background:var(--surface)!important;
+  border-bottom-color:var(--line)!important;
+}
+.dialog-close{
+  background:var(--surface2)!important;
+  border-color:var(--line)!important;
+}
+
+.switch-card input:checked + .switch-ui{background:#55E6D0!important}
+.switch-card input:checked + .switch-ui:after{background:#06141B!important}
+
+.role-chip,.digital-admin-meta span,.digital-feature-chip,.visual-chips span{
+  border-color:var(--line)!important;
+}
+.digital-admin-price{color:#55E6D0!important}
+
+.login-panel{background:var(--surface)!important;border-color:var(--line)!important}
+.login-visual{
+  background:
+    radial-gradient(520px 320px at 20% 25%,rgba(85,230,208,.10),transparent 68%),
+    linear-gradient(145deg,var(--surface2),var(--surface))!important;
+  border-color:var(--line)!important;
+}
+
+@media(max-width:900px){
+  .mobile-nav{
+    background:color-mix(in srgb,var(--surface) 96%,transparent)!important;
+    border-color:var(--line)!important;
+  }
+  .mobile-nav button.active{
+    color:#55E6D0!important;
+    background:rgba(85,230,208,.08)!important;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1515,12 +1691,18 @@ textarea{resize:vertical}
   <dialog class="package-dialog" id="netflixDialog">
     <div class="netflix-dialog-layout">
       <section class="netflix-dialog-form">
-        <div class="dialog-head">
+        <div class="dialog-head netflix-dialog-head">
           <div>
             <span class="admin-kicker">NETFLIX PRODUCT</span>
             <h3 id="netflixDialogTitle">إضافة اشتراك Netflix</h3>
           </div>
-          <button class="dialog-close" id="netflixDialogClose" type="button" aria-label="إغلاق">×</button>
+          <div class="netflix-head-actions">
+            <button class="primary-btn compact netflix-top-save"
+                    id="saveNetflixTopBtn"
+                    type="submit"
+                    form="netflixForm">حفظ</button>
+            <button class="dialog-close" id="netflixDialogClose" type="button" aria-label="إغلاق">×</button>
+          </div>
         </div>
 
         <form id="netflixForm">
@@ -1974,7 +2156,7 @@ textarea{resize:vertical}
       const el=$(sel); if(el) el.hidden=!edit;
     });
 
-    $$('#netflixForm input,#netflixForm textarea,#netflixForm button').forEach(el=>el.disabled=!edit);
+    $$('#netflixForm input,#netflixForm textarea,#netflixForm select,#netflixForm button,#saveNetflixTopBtn').forEach(el=>el.disabled=!edit);
 
     const settingsJump = document.querySelector('[data-jump-view="settings"]');
     if(settingsJump) settingsJump.hidden=!edit;
