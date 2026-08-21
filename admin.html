@@ -1020,6 +1020,22 @@ textarea{resize:vertical}
 }
 </style>
 
+
+<style id="netflix-easy-admin-v2">
+#netflixForm select{
+  cursor:pointer;
+}
+#netflixForm textarea#netflixFeatures{
+  min-height:120px;
+  line-height:1.9;
+}
+#netflixForm label>span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1513,47 +1529,78 @@ textarea{resize:vertical}
           <div class="form-grid">
             <label>
               <span>اسم المنتج / الاشتراك</span>
-              <input id="netflixName" required maxlength="100" placeholder="مثال: Netflix Premium">
+              <select id="netflixName" required>
+                <option value="Netflix Basic">Netflix Basic</option>
+                <option value="Netflix Standard">Netflix Standard</option>
+                <option value="Netflix Premium" selected>Netflix Premium</option>
+              </select>
             </label>
 
             <label>
               <span>مدة الاشتراك</span>
-              <input id="netflixDuration" required maxlength="80" placeholder="مثال: شهر واحد">
+              <select id="netflixDuration" required>
+                <option value="شهر واحد" selected>شهر واحد</option>
+                <option value="3 أشهر">3 أشهر</option>
+                <option value="6 أشهر">6 أشهر</option>
+                <option value="12 شهر">12 شهر</option>
+              </select>
             </label>
 
             <label>
-              <span>السعر (ر.ع)</span>
-              <input id="netflixPrice" type="number" step="0.001" min="0" required placeholder="2.500">
+              <span>السعر (ر.ع) — اكتبه فقط</span>
+              <input id="netflixPrice" type="number" step="0.001" min="0" required
+                     placeholder="مثال: 10.000" inputmode="decimal">
             </label>
 
             <label>
               <span>نوع الاشتراك</span>
-              <input id="netflixType" maxlength="100" placeholder="مثال: حساب كامل / بروفايل خاص">
+              <select id="netflixType">
+                <option value="حساب مشترك" selected>حساب مشترك</option>
+                <option value="بروفايل خاص">بروفايل خاص</option>
+                <option value="حساب كامل">حساب كامل</option>
+              </select>
             </label>
 
             <label>
               <span>عدد الأجهزة / الشاشات</span>
-              <input id="netflixScreens" maxlength="100" placeholder="مثال: شاشة واحدة / 4 أجهزة">
+              <select id="netflixScreens">
+                <option value="شاشة واحدة">شاشة واحدة</option>
+                <option value="شاشتان">شاشتان</option>
+                <option value="4 شاشات" selected>4 شاشات</option>
+              </select>
             </label>
 
             <label>
               <span>الجودة</span>
-              <input id="netflixQuality" maxlength="100" placeholder="مثال: Full HD / 4K">
+              <select id="netflixQuality">
+                <option value="HD">HD</option>
+                <option value="Full HD">Full HD</option>
+                <option value="4K Ultra HD" selected>4K Ultra HD</option>
+              </select>
             </label>
 
             <label class="span-2">
-              <span>وصف قصير</span>
-              <input id="netflixDescription" maxlength="180" placeholder="مثال: مناسب للمشاهدة الشخصية">
+              <span>الوصف</span>
+              <select id="netflixDescription">
+                <option value="مناسب للمشاهدة الشخصية">مناسب للمشاهدة الشخصية</option>
+                <option value="خيار متوازن للاستخدام اليومي">خيار متوازن للاستخدام اليومي</option>
+                <option value="أفضل جودة وتجربة مشاهدة" selected>أفضل جودة وتجربة مشاهدة</option>
+              </select>
             </label>
 
             <label class="span-2">
-              <span>المميزات — كل ميزة في سطر</span>
-              <textarea id="netflixFeatures" rows="4" placeholder="تفعيل سريع&#10;دعم بعد الشراء&#10;تعليمات واضحة"></textarea>
+              <span>المميزات — جاهزة وتقدر تعدل عليها</span>
+              <textarea id="netflixFeatures" rows="4">تفعيل سريع
+دعم بعد الشراء
+تعليمات واضحة</textarea>
             </label>
 
             <label class="span-2">
               <span>طريقة التسليم</span>
-              <input id="netflixDelivery" maxlength="120" value="واتساب" placeholder="مثال: عبر واتساب">
+              <select id="netflixDelivery">
+                <option value="واتساب" selected>واتساب</option>
+                <option value="إرسال رقمي">إرسال رقمي</option>
+              </select>
             </label>
           </div>
 
@@ -2593,14 +2640,16 @@ textarea{resize:vertical}
   function openNetflixDialog(p=null){
     $('#netflixDialogTitle').textContent=p?'تعديل اشتراك Netflix':'إضافة اشتراك Netflix';
     $('#netflixId').value=p?.id||'';
-    $('#netflixName').value=p?.name||'';
-    $('#netflixDuration').value=p?.duration||'';
+    $('#netflixName').value=p?.name||'Netflix Premium';
+    $('#netflixDuration').value=p?.duration||'شهر واحد';
     $('#netflixPrice').value=p?money(p.price):'';
-    $('#netflixType').value=p?.subscription_type||'';
-    $('#netflixScreens').value=p?.screens||'';
-    $('#netflixQuality').value=p?.quality||'';
-    $('#netflixDescription').value=p?.description||'';
-    $('#netflixFeatures').value=Array.isArray(p?.features)?p.features.join('\n'):'';
+    $('#netflixType').value=p?.subscription_type||'حساب مشترك';
+    $('#netflixScreens').value=p?.screens||'4 شاشات';
+    $('#netflixQuality').value=p?.quality||'4K Ultra HD';
+    $('#netflixDescription').value=p?.description||'أفضل جودة وتجربة مشاهدة';
+    $('#netflixFeatures').value=Array.isArray(p?.features)&&p.features.length
+      ? p.features.join('\n')
+      : 'تفعيل سريع\nدعم بعد الشراء\nتعليمات واضحة';
     $('#netflixDelivery').value=p?.delivery_method||'واتساب';
     $('#netflixFeatured').checked=Boolean(p?.featured);
     msg($('#netflixMessage'));
@@ -2635,6 +2684,33 @@ textarea{resize:vertical}
   async function deleteNetflix(id){
     return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
   }
+
+
+  const NETFLIX_PRESETS={
+    'Netflix Basic':{
+      quality:'HD',
+      screens:'شاشة واحدة',
+      description:'مناسب للمشاهدة الشخصية'
+    },
+    'Netflix Standard':{
+      quality:'Full HD',
+      screens:'شاشتان',
+      description:'خيار متوازن للاستخدام اليومي'
+    },
+    'Netflix Premium':{
+      quality:'4K Ultra HD',
+      screens:'4 شاشات',
+      description:'أفضل جودة وتجربة مشاهدة'
+    }
+  };
+
+  $('#netflixName')?.addEventListener('change',e=>{
+    const preset=NETFLIX_PRESETS[e.target.value];
+    if(!preset) return;
+    $('#netflixQuality').value=preset.quality;
+    $('#netflixScreens').value=preset.screens;
+    $('#netflixDescription').value=preset.description;
+  });
 
   $('#newNetflixBtn')?.addEventListener('click',()=>openNetflixDialog());
   $('#netflixDialogClose')?.addEventListener('click',closeNetflixDialog);
