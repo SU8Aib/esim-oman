@@ -125,58 +125,63 @@ html[data-theme="light"]{
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 /* =========================================================
-   FEATURED CARDS — Yellow Best Value + Alternate Side Buttons
+   FEATURED CARDS — FINAL
+   Best Value = yellow border
+   Side buttons = slate
    ========================================================= */
 
-/* Best Value middle card: yellow edge/glow */
-.featured-grid .package-card.best-value{
-  border-color:#ffbf3f !important;
+/* middle / Best Value card */
+#featuredGrid .package-card.best-value{
+  border:2px solid #F0B429 !important;
   box-shadow:
-    0 0 0 1px rgba(255,191,63,.18),
-    0 24px 65px rgba(255,191,63,.12) !important;
+    0 0 0 1px rgba(240,180,41,.10),
+    0 22px 58px rgba(240,180,41,.13) !important;
 }
 
-/* Best Value badge */
-.featured-grid .best-badge{
-  background:#ffbf3f !important;
-  color:#251700 !important;
-  box-shadow:0 8px 18px rgba(255,191,63,.18);
+/* yellow badge */
+#featuredGrid .package-card.best-value .best-badge{
+  background:#F0B429 !important;
+  color:#1B1400 !important;
+  border:1px solid #FFD469 !important;
+  box-shadow:0 8px 20px rgba(240,180,41,.22) !important;
 }
 
-/* Best Value price */
-.featured-grid .package-card.best-value .price b{
-  color:#ffbf3f !important;
+/* middle price also yellow */
+#featuredGrid .package-card.best-value .price b{
+  color:#F0B429 !important;
 }
 
-/* Best Value button stays turquoise */
-.featured-grid .package-card.best-value .btn-block{
+/* middle button remains turquoise */
+#featuredGrid .package-card.best-value .btn.btn-block{
   background:#55E6D0 !important;
   color:#06141B !important;
-  border-color:transparent !important;
+  border:1px solid rgba(85,230,208,.35) !important;
+  box-shadow:0 10px 28px rgba(85,230,208,.16) !important;
 }
 
-/* Side cards use a different button color */
-.featured-grid .package-card:not(.best-value) .btn-block{
+/* right + left card buttons */
+#featuredGrid .package-card:not(.best-value) .btn.btn-block{
   background:#253745 !important;
-  color:#f0f6fc !important;
+  color:#F0F6FC !important;
   border:1px solid #4A5C6A !important;
   box-shadow:none !important;
 }
 
-.featured-grid .package-card:not(.best-value) .btn-block:hover{
-  background:#314657 !important;
-  color:#ffffff !important;
-  border-color:#5f7483 !important;
+#featuredGrid .package-card:not(.best-value) .btn.btn-block:hover{
+  background:#314A5E !important;
+  border-color:#627D91 !important;
+  color:#FFFFFF !important;
+  transform:translateY(-1px);
 }
 
-/* Light mode side buttons */
-html[data-theme="light"] .featured-grid .package-card:not(.best-value) .btn-block{
+/* light mode */
+html[data-theme="light"] #featuredGrid .package-card:not(.best-value) .btn.btn-block{
   background:#DDE3DF !important;
   color:#17221D !important;
-  border-color:#BAC5BE !important;
+  border-color:#B9C4BD !important;
 }
 
-html[data-theme="light"] .featured-grid .package-card:not(.best-value) .btn-block:hover{
+html[data-theme="light"] #featuredGrid .package-card:not(.best-value) .btn.btn-block:hover{
   background:#CDD7D1 !important;
   color:#111311 !important;
 }
