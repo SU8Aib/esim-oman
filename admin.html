@@ -162,7 +162,11 @@ textarea{resize:vertical}
 .nav-item.active{background:rgba(40,213,189,.10);color:var(--accent)}
 .nav-icon{width:28px;height:28px;border:1px solid var(--line);border-radius:9px;display:grid;place-items:center}
 .nav-item small{margin-right:auto;background:var(--surface3);border:1px solid var(--line);padding:1px 7px;border-radius:999px;font-family:'JetBrains Mono';font-size:.62rem}
-.nav-item.nav-subitem{margin:-1px 0 6px 0;padding-right:20px;font-size:.76rem;color:var(--muted);position:relative}
+.nav-chevron{font-size:.72rem;color:var(--muted);transition:transform .2s ease;display:inline-block}
+.nav-item.nav-expanded .nav-chevron{transform:rotate(180deg);color:var(--accent)}
+.nav-subgroup{max-height:0;overflow:hidden;transition:max-height .22s ease}
+.nav-subgroup.open{max-height:120px}
+.nav-item.nav-subitem{margin:1px 0 5px 0;padding-right:20px;font-size:.76rem;color:var(--muted);position:relative}
 .nav-item.nav-subitem:before{content:"";position:absolute;right:9px;top:0;bottom:50%;width:9px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);border-radius:0 0 0 8px}
 .nav-item.nav-subitem .nav-icon{width:22px;height:22px;font-size:.78rem}
 .nav-item.nav-subitem.active{background:rgba(40,213,189,.08)}
@@ -1438,10 +1442,13 @@ input:focus,select:focus,textarea:focus{
         <button class="nav-item" data-view="netflix">
           <span class="nav-icon">N</span><span>اشتراكات Netflix</span>
           <small id="sidebarNetflixCount">0</small>
+          <span class="nav-chevron">⌄</span>
         </button>
-        <button class="nav-item nav-subitem" id="netflixSettingsNav" data-view="netflix-settings">
-          <span class="nav-icon">✎</span><span>اعدادات القسم</span>
-        </button>
+        <div class="nav-subgroup" id="netflixSubgroup">
+          <button class="nav-item nav-subitem" id="netflixSettingsNav" data-view="netflix-settings">
+            <span class="nav-icon">✎</span><span>اعدادات القسم</span>
+          </button>
+        </div>
         <button class="nav-item" id="settingsNav" data-view="settings">
           <span class="nav-icon">⚙</span><span>الإعدادات</span>
         </button>
@@ -3180,6 +3187,11 @@ input:focus,select:focus,textarea:focus{
   function switchView(view){
     $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
     $$('.view').forEach(v=>v.classList.toggle('active',v.dataset.viewPanel===view));
+
+    const netflixGroupOpen=(view==='netflix'||view==='netflix-settings');
+    $('#netflixSubgroup')?.classList.toggle('open',netflixGroupOpen);
+    $('[data-view="netflix"]')?.classList.toggle('nav-expanded',netflixGroupOpen);
+
     const meta={
       overview:['Dashboard','نظرة عامة'],
       packages:['Packages','إدارة الباقات'],
