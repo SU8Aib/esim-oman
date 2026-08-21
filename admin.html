@@ -1212,6 +1212,109 @@ input:focus,select:focus,textarea:focus{
 }
 </style>
 
+
+<style id="unified-featured-admin-v1">
+.advanced-filterbar{
+  display:grid!important;
+  grid-template-columns:minmax(280px,1.8fr) repeat(4,minmax(140px,.65fr));
+  gap:9px!important;
+  align-items:center;
+}
+.advanced-filterbar select{
+  min-height:45px;
+}
+.netflix-search-wide{min-width:0}
+.unified-feature-switches{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+.feature-limit-note{
+  color:var(--muted);
+  font-size:.68rem;
+}
+.unified-feature-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:6px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--surface2);
+  color:var(--muted);
+  font-size:.65rem;
+  font-weight:700;
+}
+.unified-feature-chip.featured{
+  border-color:rgba(85,230,208,.28);
+  color:#55E6D0;
+  background:rgba(85,230,208,.08);
+}
+.unified-feature-chip.best{
+  border-color:rgba(210,153,34,.30);
+  color:#e3b341;
+  background:rgba(210,153,34,.08);
+}
+.digital-admin-status-wrap,
+.digital-admin-feature-wrap{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.digital-admin-card{
+  grid-template-columns:minmax(230px,1.5fr) .55fr .62fr .95fr auto!important;
+}
+.digital-admin-meta{
+  grid-column:1/-1!important;
+  margin-top:-2px;
+  padding-top:8px;
+  border-top:1px solid var(--line);
+}
+.mini-featured-service{
+  display:inline-flex;
+  width:max-content;
+  padding:2px 7px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:.58rem;
+  margin-bottom:5px;
+}
+@media(max-width:1100px){
+  .advanced-filterbar{
+    grid-template-columns:1fr 1fr 1fr!important;
+  }
+  .netflix-search-wide{
+    grid-column:1/-1;
+  }
+}
+@media(max-width:760px){
+  .advanced-filterbar{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .unified-feature-switches{
+    grid-template-columns:1fr!important;
+  }
+  .digital-admin-card{
+    grid-template-columns:1fr auto!important;
+  }
+  .digital-admin-status-wrap,
+  .digital-admin-feature-wrap,
+  .digital-admin-meta,
+  .digital-row-actions{
+    grid-column:1/-1!important;
+  }
+}
+@media(max-width:520px){
+  .advanced-filterbar{
+    grid-template-columns:1fr!important;
+  }
+  .netflix-search-wide{
+    grid-column:auto;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1470,7 +1573,7 @@ input:focus,select:focus,textarea:focus{
 
           <div class="results-foot">
             <span id="resultsCount">0 باقة</span>
-            <small>يمكن اختيار 3 باقات فقط كـ “الأكثر طلباً”، وباقة واحدة فقط كـ “الأفضل قيمة”.</small>
+            <small>يمكن اختيار 3 منتجات فقط من جميع الأقسام كـ “الأكثر طلباً”، ومنتج واحد فقط كـ “أفضل قيمة”.</small>
           </div>
         </section>
 
@@ -1486,15 +1589,40 @@ input:focus,select:focus,textarea:focus{
           </div>
 
           <div class="security-note">
-            لكل اشتراك يمكنك تحديد: <b>اسم المنتج، المدة، السعر، نوع الاشتراك، عدد الأجهزة/الشاشات، الجودة، الوصف، المميزات، مميز، وطريقة التسليم.</b>
-            رسالة واتساب تُنشأ تلقائياً حسب بيانات المنتج ورقم التحويل الحالي.
+            يمكنك التحكم في <b>الحالة، الأكثر طلباً، والأفضل قيمة</b> لكل اشتراك.
+            قسم “الأكثر طلباً” موحّد بين eSIM وNetflix وأي خدمة رقمية تضيفها لاحقاً:
+            <b>3 منتجات فقط كحد أقصى، ومنتج واحد فقط كأفضل قيمة.</b>
           </div>
 
-          <div class="netflix-toolbar">
-            <label class="search-box">
+          <div class="netflix-toolbar advanced-filterbar">
+            <label class="search-box netflix-search-wide">
               <span>⌕</span>
-              <input id="netflixSearch" type="search" placeholder="ابحث باسم الاشتراك أو المدة أو النوع...">
+              <input id="netflixSearch" type="search" placeholder="ابحث بالاسم، المدة، النوع، الجودة أو المميزات...">
             </label>
+
+            <select id="netflixNameFilter" aria-label="فلتر المنتج">
+              <option value="all">كل المنتجات</option>
+            </select>
+
+            <select id="netflixDurationFilter" aria-label="فلتر المدة">
+              <option value="all">كل المدد</option>
+            </select>
+
+            <select id="netflixStatusFilter" aria-label="فلتر الحالة">
+              <option value="all">كل الحالات</option>
+              <option value="active">فعّال</option>
+              <option value="inactive">معطّل</option>
+              <option value="featured">الأكثر طلباً</option>
+              <option value="best">أفضل قيمة</option>
+            </select>
+
+            <select id="netflixSortFilter" aria-label="الترتيب">
+              <option value="default">الترتيب الافتراضي</option>
+              <option value="price-asc">السعر: الأقل أولاً</option>
+              <option value="price-desc">السعر: الأعلى أولاً</option>
+              <option value="name">الاسم</option>
+              <option value="duration">المدة</option>
+            </select>
           </div>
 
           <article class="panel">
@@ -1786,11 +1914,23 @@ input:focus,select:focus,textarea:focus{
             </label>
           </div>
 
-          <div class="netflix-switch-grid">
+          <div class="netflix-switch-grid unified-feature-switches">
+            <label class="switch-card">
+              <input id="netflixActive" type="checkbox" checked>
+              <span class="switch-ui"></span>
+              <div><b>الحالة: فعّال</b><small>إذا عطلته يختفي من الموقع ومن الأكثر طلباً.</small></div>
+            </label>
+
             <label class="switch-card">
               <input id="netflixFeatured" type="checkbox">
               <span class="switch-ui"></span>
-              <div><b>منتج مميز</b><small>يظهر بعلامة “مميز” داخل قسم Netflix.</small></div>
+              <div><b>إضافة إلى الأكثر طلباً</b><small>الحد الأقصى 3 منتجات من جميع الأقسام.</small></div>
+            </label>
+
+            <label class="switch-card">
+              <input id="netflixBest" type="checkbox">
+              <span class="switch-ui"></span>
+              <div><b>أفضل قيمة</b><small>منتج واحد فقط، ويظهر في المنتصف.</small></div>
             </label>
           </div>
 
@@ -1875,13 +2015,13 @@ input:focus,select:focus,textarea:focus{
             <label class="switch-card">
               <input id="pkgFeatured" type="checkbox">
               <span class="switch-ui"></span>
-              <div><b>الأكثر طلباً</b><small>تظهر في القسم الرئيسي</small></div>
+              <div><b>إضافة إلى الأكثر طلباً</b><small>ضمن 3 منتجات فقط من جميع الأقسام</small></div>
             </label>
 
             <label class="switch-card">
               <input id="pkgBest" type="checkbox">
               <span class="switch-ui"></span>
-              <div><b>الأفضل قيمة</b><small>تمييز خاص للباقة</small></div>
+              <div><b>أفضل قيمة</b><small>منتج واحد فقط ويظهر في المنتصف</small></div>
             </label>
           </div>
 
@@ -1926,6 +2066,7 @@ input:focus,select:focus,textarea:focus{
   const SESSION_KEY = "esim_admin_session_rest_v1";
   let packages = [];
   let digitalProducts = [];
+  let featuredSelection = [];
   let whatsapp = CFG.whatsapp;
   let transferNumber = '91772654';
   let currentUser = null;
@@ -2267,7 +2408,8 @@ input:focus,select:focus,textarea:focus{
       packages:'الباقات',
       profiles:'المستخدمون',
       'auth.users':'الحسابات',
-      digital_products:'الخدمات الرقمية'
+      digital_products:'الخدمات الرقمية',
+      featured_selection:'الأكثر طلباً'
     })[table] || table || 'النظام';
   }
 
@@ -2304,6 +2446,7 @@ input:focus,select:focus,textarea:focus{
       description:'الوصف',
       features:'المميزات',
       featured:'مميز',
+      active:'الحالة',
       delivery_method:'طريقة التسليم',
       service_slug:'الخدمة'
     })[key] || key;
@@ -2429,6 +2572,30 @@ input:focus,select:focus,textarea:focus{
       }
 
       return changes.length ? changes.join(' • ') : `عدّل اشتراك Netflix: ${productName}`;
+    }
+
+    if(table==='featured_selection'){
+      const src=newData.source_type || oldData.source_type || '';
+      const pid=newData.product_id || oldData.product_id || '';
+      const label=src==='esim'
+        ? (packages.find(p=>p.id===pid)?.label || 'باقة eSIM')
+        : (digitalProducts.find(p=>p.id===pid)?.name || 'منتج رقمي');
+
+      if(action==='insert'){
+        return newData.best_value
+          ? `أضاف ${label} إلى الأكثر طلباً وحدده كأفضل قيمة`
+          : `أضاف ${label} إلى الأكثر طلباً`;
+      }
+
+      if(action==='delete') return `أزال ${label} من الأكثر طلباً`;
+
+      if(action==='update' && oldData.best_value!==newData.best_value){
+        return newData.best_value
+          ? `حدد ${label} كأفضل قيمة`
+          : `ألغى أفضل قيمة عن ${label}`;
+      }
+
+      return `حدّث إعدادات الأكثر طلباً للمنتج ${label}`;
     }
 
     if(action==='insert') return `أضاف سجلاً جديداً في ${auditTableLabel(table)}`;
@@ -2557,8 +2724,13 @@ input:focus,select:focus,textarea:focus{
   }
 
   async function loadDigitalProducts(){
-    const data = await db('digital_products?select=*&service_slug=eq.netflix&order=created_at.asc');
+    const data = await db('digital_products?select=*&order=created_at.asc');
     digitalProducts = Array.isArray(data) ? data : [];
+  }
+
+  async function loadFeaturedSelection(){
+    const data = await db('featured_selection?select=*&order=created_at.asc');
+    featuredSelection = Array.isArray(data) ? data : [];
   }
 
   async function loadSettings(){
@@ -2574,11 +2746,108 @@ input:focus,select:focus,textarea:focus{
 
   async function loadAll(){
     try{
-      await Promise.all([loadPackages(),loadDigitalProducts(),loadSettings(),loadUsersAndAudit()]);
+      await Promise.all([loadPackages(),loadDigitalProducts(),loadFeaturedSelection(),loadSettings(),loadUsersAndAudit()]);
       renderEverything();
     }catch(e){
       toast(`تعذر تحميل البيانات: ${e.message}`,'error');
     }
+  }
+
+  function featureEntry(sourceType,id){
+    return featuredSelection.find(x=>x.source_type===sourceType && x.product_id===id) || null;
+  }
+
+  function isFeaturedProduct(sourceType,id){
+    return Boolean(featureEntry(sourceType,id));
+  }
+
+  function isBestProduct(sourceType,id){
+    return Boolean(featureEntry(sourceType,id)?.best_value);
+  }
+
+  function activeFeaturedCount(excludeSource=null,excludeId=null){
+    return featuredSelection.filter(x=>!(x.source_type===excludeSource && x.product_id===excludeId)).length;
+  }
+
+  function resolveFeaturedItem(row){
+    if(row.source_type==='esim'){
+      const p=packages.find(x=>x.id===row.product_id);
+      if(!p || !p.active) return null;
+      return {
+        source_type:'esim',
+        id:p.id,
+        service:'eSIM',
+        name:p.label,
+        duration:p.duration,
+        price:p.price,
+        description:p.tagline || (p.type==='unlimited'?'غير محدود':'باقة eSIM'),
+        best_value:Boolean(row.best_value)
+      };
+    }
+
+    const p=digitalProducts.find(x=>x.id===row.product_id);
+    if(!p || !p.active) return null;
+    return {
+      source_type:'digital',
+      id:p.id,
+      service:(p.service_slug || 'Digital').replace(/(^|[-_])(\w)/g,(_,a,b)=>`${a}${b.toUpperCase()}`),
+      name:p.name,
+      duration:p.duration,
+      price:p.price,
+      description:p.description || p.subscription_type || 'اشتراك رقمي',
+      best_value:Boolean(row.best_value)
+    };
+  }
+
+  async function removeFeatured(sourceType,id){
+    await db(`featured_selection?source_type=eq.${encodeURIComponent(sourceType)}&product_id=eq.${encodeURIComponent(id)}`,{
+      method:'DELETE'
+    });
+  }
+
+  async function setFeatured(sourceType,id,{best=false}={}){
+    const existing=featureEntry(sourceType,id);
+
+    if(!existing && featuredSelection.length>=3){
+      throw new Error('يمكن اختيار 3 منتجات فقط ضمن الأكثر طلباً. أزل منتجاً أولاً.');
+    }
+
+    if(best){
+      await db('featured_selection?best_value=eq.true',{
+        method:'PATCH',
+        body:{best_value:false},
+        prefer:'return=minimal'
+      });
+    }
+
+    if(existing){
+      await db(`featured_selection?id=eq.${encodeURIComponent(existing.id)}`,{
+        method:'PATCH',
+        body:{best_value:Boolean(best)},
+        prefer:'return=representation'
+      });
+    }else{
+      await db('featured_selection',{
+        method:'POST',
+        body:{
+          source_type:sourceType,
+          product_id:id,
+          best_value:Boolean(best)
+        },
+        prefer:'return=representation'
+      });
+    }
+  }
+
+  async function syncFeatured(sourceType,id,{featured,best}){
+    if(best) featured=true;
+
+    if(!featured){
+      if(isFeaturedProduct(sourceType,id)) await removeFeatured(sourceType,id);
+      return;
+    }
+
+    await setFeatured(sourceType,id,{best:Boolean(best)});
   }
 
   function renderEverything(){
@@ -2593,22 +2862,32 @@ input:focus,select:focus,textarea:focus{
   function renderStats(){
     $('#countAll').textContent=packages.length;
     $('#countActive').textContent=packages.filter(x=>x.active).length;
-    $('#countFeatured').textContent=packages.filter(x=>x.featured).length;
+    $('#countFeatured').textContent=featuredSelection.length;
     $('#countUnlimited').textContent=packages.filter(x=>x.type==='unlimited').length;
     $('#sidebarPackageCount').textContent=packages.length;
-    if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=digitalProducts.length;
+    if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=digitalProducts.filter(x=>x.service_slug==='netflix').length;
   }
 
   function renderFeatured(){
-    const list=packages.filter(x=>x.featured).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).slice(0,3);
+    const resolved=featuredSelection
+      .map(resolveFeaturedItem)
+      .filter(Boolean);
+
+    const best=resolved.find(x=>x.best_value);
+    const others=resolved.filter(x=>!x.best_value);
+    const list=best
+      ? [others[0],best,others[1]].filter(Boolean)
+      : resolved.slice(0,3);
+
     $('#featuredPreview').innerHTML=list.length?list.map(p=>`
       <article class="mini-featured ${p.best_value?'best':''}">
         ${p.best_value?'<span class="star">★</span>':''}
-        <span>${esc(p.tagline || (p.type==='unlimited'?'غير محدود':'باقة مميزة'))}</span>
-        <b>${esc(p.label)}</b>
+        <span class="mini-featured-service">${esc(p.service)}</span>
+        <span>${esc(p.description || '')}</span>
+        <b>${esc(p.name)}</b>
         <strong>${money(p.price)} ر.ع</strong>
       </article>`).join(''):
-      '<div class="empty-state"><b>لا توجد باقات مميزة</b><span>اختر حتى 3 باقات كالأكثر طلباً.</span></div>';
+      '<div class="empty-state"><b>لا توجد منتجات في الأكثر طلباً</b><span>اختر حتى 3 منتجات من أي قسم.</span></div>';
   }
 
   function filtered(){
@@ -2622,7 +2901,7 @@ input:focus,select:focus,textarea:focus{
     if(type!=='all') list=list.filter(p=>p.type===type);
     if(status==='active') list=list.filter(p=>p.active);
     if(status==='inactive') list=list.filter(p=>!p.active);
-    if(status==='featured') list=list.filter(p=>p.featured);
+    if(status==='featured') list=list.filter(p=>isFeaturedProduct('esim',p.id));
 
     if(sort==='price-asc') list.sort((a,b)=>Number(a.price)-Number(b.price));
     else if(sort==='price-desc') list.sort((a,b)=>Number(b.price)-Number(a.price));
@@ -2636,83 +2915,188 @@ input:focus,select:focus,textarea:focus{
     const list=filtered();
     const edit=canEdit();
     $('#resultsCount').textContent=`${list.length} باقة`;
-    $('#adminPackageList').innerHTML=list.length?list.map(p=>`
-      <article class="package-row-admin" data-id="${esc(p.id)}">
+
+    $('#adminPackageList').innerHTML=list.length?list.map(p=>{
+      const featured=isFeaturedProduct('esim',p.id);
+      const best=isBestProduct('esim',p.id);
+
+      return `<article class="package-row-admin" data-id="${esc(p.id)}">
         <div class="pkg-main">
           <div class="pkg-avatar">${p.type==='unlimited'?'∞':esc(p.label)}</div>
-          <div class="pkg-info"><b>${esc(p.label)} ${p.best_value?'⭐':''}</b><span>${esc(p.duration)}${p.tagline?` • ${esc(p.tagline)}`:''}</span></div>
+          <div class="pkg-info">
+            <b>${esc(p.label)} ${best?'⭐':''}</b>
+            <span>${esc(p.duration)}${p.tagline?` • ${esc(p.tagline)}`:''}</span>
+          </div>
         </div>
+
         <div class="pkg-price">${money(p.price)} ر.ع</div>
+
         <div>${edit
-          ? `<button class="status-pill ${p.active?'active':'inactive'}" data-action="toggle-active" data-id="${p.id}">${p.active?'● نشطة':'○ مخفية'}</button>`
+          ? `<button class="status-pill ${p.active?'active':'inactive'}" data-action="toggle-active" data-id="${p.id}">
+              ${p.active?'● نشطة':'○ مخفية'}
+            </button>`
           : `<span class="status-pill ${p.active?'active':'inactive'}">${p.active?'● نشطة':'○ مخفية'}</span>`
         }</div>
+
         <div>${edit
-          ? (p.best_value
-            ? `<button class="feature-pill best" data-action="unset-best" data-id="${p.id}">★ الأفضل قيمة</button>`
-            : p.featured
+          ? (best
+            ? `<button class="feature-pill best" data-action="unset-best" data-id="${p.id}">★ أفضل قيمة</button>`
+            : featured
               ? `<button class="feature-pill featured" data-action="toggle-featured" data-id="${p.id}">★ الأكثر طلباً</button>`
-              : `<button class="feature-pill" data-action="toggle-featured" data-id="${p.id}">＋ تمييز</button>`)
-          : `<span class="feature-pill ${p.best_value?'best':p.featured?'featured':''}">${p.best_value?'★ الأفضل قيمة':p.featured?'★ الأكثر طلباً':'—'}</span>`
+              : `<button class="feature-pill" data-action="toggle-featured" data-id="${p.id}">＋ الأكثر طلباً</button>`)
+          : `<span class="feature-pill ${best?'best':featured?'featured':''}">${best?'★ أفضل قيمة':featured?'★ الأكثر طلباً':'—'}</span>`
         }</div>
+
         <div class="row-actions">
           ${edit ? `
-            ${!p.best_value?`<button class="mini-action" data-action="set-best" data-id="${p.id}">أفضل قيمة</button>`:''}
+            ${!best?`<button class="mini-action" data-action="set-best" data-id="${p.id}">أفضل قيمة</button>`:''}
             <button class="mini-action" data-action="duplicate" data-id="${p.id}">نسخ</button>
             <button class="mini-action" data-action="edit" data-id="${p.id}">تعديل</button>
             <button class="mini-action danger" data-action="delete" data-id="${p.id}">حذف</button>
           ` : '<span class="read-only-badge">قراءة فقط</span>'}
         </div>
-      </article>`).join(''):
+      </article>`;
+    }).join(''):
       '<div class="empty-state"><b>لا توجد نتائج</b><span>غيّر البحث أو الفلاتر.</span></div>';
   }
 
 
+  function populateNetflixFilters(){
+    const netflix=digitalProducts.filter(x=>x.service_slug==='netflix');
+
+    const setOptions=(selector,values,label)=>{
+      const el=$(selector);
+      if(!el) return;
+      const current=el.value;
+      el.innerHTML=`<option value="all">${label}</option>`+
+        [...new Set(values.filter(Boolean))]
+          .sort((a,b)=>String(a).localeCompare(String(b),'ar'))
+          .map(v=>`<option value="${esc(v)}">${esc(v)}</option>`)
+          .join('');
+      if([...el.options].some(o=>o.value===current)) el.value=current;
+    };
+
+    setOptions('#netflixNameFilter',netflix.map(x=>x.name),'كل المنتجات');
+    setOptions('#netflixDurationFilter',netflix.map(x=>x.duration),'كل المدد');
+  }
+
   function filteredNetflix(){
     const q=($('#netflixSearch')?.value||'').trim().toLowerCase();
-    let list=[...digitalProducts];
+    const name=$('#netflixNameFilter')?.value||'all';
+    const duration=$('#netflixDurationFilter')?.value||'all';
+    const status=$('#netflixStatusFilter')?.value||'all';
+    const sort=$('#netflixSortFilter')?.value||'default';
+
+    let list=digitalProducts.filter(x=>x.service_slug==='netflix');
+
     if(q){
       list=list.filter(p=>[
-        p.name,p.duration,p.subscription_type,p.screens,p.quality,p.description,p.delivery_method,
+        p.name,p.duration,p.subscription_type,p.screens,p.quality,
+        p.description,p.delivery_method,
         ...(Array.isArray(p.features)?p.features:[])
       ].join(' ').toLowerCase().includes(q));
     }
+
+    if(name!=='all') list=list.filter(p=>p.name===name);
+    if(duration!=='all') list=list.filter(p=>p.duration===duration);
+    if(status==='active') list=list.filter(p=>p.active);
+    if(status==='inactive') list=list.filter(p=>!p.active);
+    if(status==='featured') list=list.filter(p=>isFeaturedProduct('digital',p.id));
+    if(status==='best') list=list.filter(p=>isBestProduct('digital',p.id));
+
+    if(sort==='price-asc') list.sort((a,b)=>Number(a.price)-Number(b.price));
+    else if(sort==='price-desc') list.sort((a,b)=>Number(b.price)-Number(a.price));
+    else if(sort==='name') list.sort((a,b)=>String(a.name).localeCompare(String(b.name),'ar'));
+    else if(sort==='duration') list.sort((a,b)=>String(a.duration).localeCompare(String(b.duration),'ar'));
+    else list.sort((a,b)=>String(a.created_at||'').localeCompare(String(b.created_at||'')));
+
     return list;
   }
 
   function renderNetflixAdmin(){
+    populateNetflixFilters();
+
     const list=filteredNetflix();
     const edit=canEdit();
+
     if($('#netflixCount')) $('#netflixCount').textContent=`${list.length} اشتراك`;
-    if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=digitalProducts.length;
+    if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=
+      digitalProducts.filter(x=>x.service_slug==='netflix').length;
 
     const target=$('#netflixAdminList');
     if(!target) return;
 
     target.innerHTML=list.length ? list.map(p=>{
       const meta=[p.subscription_type,p.screens,p.quality,p.delivery_method].filter(Boolean);
+      const featured=isFeaturedProduct('digital',p.id);
+      const best=isBestProduct('digital',p.id);
+
       return `<article class="digital-admin-card" data-id="${esc(p.id)}">
         <div class="digital-admin-main">
           <div class="digital-admin-logo">N</div>
           <div class="digital-admin-copy">
-            <b>${esc(p.name)}</b>
+            <b>${esc(p.name)} ${best?'⭐':''}</b>
             <span>${esc(p.duration)}${p.description?` • ${esc(p.description)}`:''}</span>
           </div>
         </div>
+
         <div class="digital-admin-price">${money(p.price)} ر.ع</div>
-        <div class="digital-admin-meta">${meta.length?meta.map(x=>`<span>${esc(x)}</span>`).join(''):'<span>بدون تفاصيل إضافية</span>'}</div>
-        <div><span class="digital-feature-chip ${p.featured?'on':''}">${p.featured?'★ مميز':'عادي'}</span></div>
+
+        <div class="digital-admin-status-wrap">
+          ${edit
+            ? `<button class="status-pill ${p.active?'active':'inactive'}"
+                      data-netflix-action="toggle-active"
+                      data-id="${p.id}">
+                ${p.active?'● فعّال':'○ معطّل'}
+               </button>`
+            : `<span class="status-pill ${p.active?'active':'inactive'}">${p.active?'● فعّال':'○ معطّل'}</span>`
+          }
+        </div>
+
+        <div class="digital-admin-feature-wrap">
+          ${edit
+            ? (best
+              ? `<button class="unified-feature-chip best"
+                        data-netflix-action="unset-best"
+                        data-id="${p.id}">★ أفضل قيمة</button>`
+              : featured
+                ? `<button class="unified-feature-chip featured"
+                          data-netflix-action="toggle-featured"
+                          data-id="${p.id}">★ الأكثر طلباً</button>
+                   <button class="mini-action"
+                          data-netflix-action="set-best"
+                          data-id="${p.id}">أفضل قيمة</button>`
+                : `<button class="unified-feature-chip"
+                          data-netflix-action="toggle-featured"
+                          data-id="${p.id}">＋ الأكثر طلباً</button>
+                   <button class="mini-action"
+                          data-netflix-action="set-best"
+                          data-id="${p.id}">أفضل قيمة</button>`)
+            : `<span class="unified-feature-chip ${best?'best':featured?'featured':''}">
+                ${best?'★ أفضل قيمة':featured?'★ الأكثر طلباً':'—'}
+               </span>`
+          }
+        </div>
+
         <div class="digital-row-actions">
           ${edit?`
             <button class="mini-action" data-netflix-action="edit" data-id="${p.id}">تعديل</button>
             <button class="mini-action danger" data-netflix-action="delete" data-id="${p.id}">حذف</button>
           `:'<span class="read-only-badge">قراءة فقط</span>'}
         </div>
+
+        <div class="digital-admin-meta">
+          ${meta.length?meta.map(x=>`<span>${esc(x)}</span>`).join(''):'<span>بدون تفاصيل إضافية</span>'}
+        </div>
       </article>`;
-    }).join('') : '<div class="empty-state"><b>لا توجد اشتراكات Netflix</b><span>أضف أول منتج ليظهر مباشرة في الموقع.</span></div>';
+    }).join('') :
+      '<div class="empty-state"><b>لا توجد نتائج</b><span>غيّر البحث أو الفلاتر.</span></div>';
   }
 
-  $('#netflixSearch')?.addEventListener('input',renderNetflixAdmin);
+  ['#netflixSearch','#netflixNameFilter','#netflixDurationFilter','#netflixStatusFilter','#netflixSortFilter'].forEach(sel=>{
+    const el=$(sel);
+    if(el) el.addEventListener(sel==='#netflixSearch'?'input':'change',renderNetflixAdmin);
+  });
 
   ['#packageSearch','#typeFilter','#statusFilter','#sortFilter'].forEach(sel=>{
     const el=$(sel);
@@ -2750,569 +3134,3 @@ input:focus,select:focus,textarea:focus{
     $('#dialogTitle').textContent=p?'تعديل الباقة':'إضافة باقة جديدة';
     $('#pkgId').value=p?.id||'';
     $('#pkgType').value=p?.type||'data';
-    $('#pkgLabel').value=p?.label||'';
-    $('#pkgDuration').value=p?.duration||'';
-    $('#pkgPrice').value=p?money(p.price):'';
-    $('#pkgTagline').value=p?.tagline||'';
-    $('#pkgPerks').value=Array.isArray(p?.perks)?p.perks.join('\n'):'';
-    $('#pkgSort').value=p?.sort_order??nextSort();
-    $('#pkgActive').checked=p?.active??true;
-    $('#pkgFeatured').checked=p?.featured??false;
-    $('#pkgBest').checked=p?.best_value??false;
-    msg($('#packageMessage'));
-    updatePreview();
-
-    if(typeof dialog.showModal==='function'){
-      dialog.showModal();
-    }else{
-      dialog.setAttribute('open','');
-      dialog.style.display='block';
-    }
-  }
-
-  function closeDialog(){
-    if(typeof dialog.close==='function' && dialog.open) dialog.close();
-    else{
-      dialog.removeAttribute('open');
-      dialog.style.display='none';
-    }
-  }
-
-  ['#topAddPackageBtn','#heroAddPackageBtn','#quickAddBtn','#newPackageBtn'].forEach(sel=>{
-    $(sel)?.addEventListener('click',()=>{
-      switchView('packages');
-      openDialog();
-    });
-  });
-
-  $('#dialogClose')?.addEventListener('click',closeDialog);
-  $('#cancelDialog')?.addEventListener('click',closeDialog);
-
-  $('#pkgBest')?.addEventListener('change',e=>{
-    if(e.target.checked) $('#pkgFeatured').checked=true;
-    updatePreview();
-  });
-  $('#pkgFeatured')?.addEventListener('change',e=>{
-    if(!e.target.checked) $('#pkgBest').checked=false;
-    updatePreview();
-  });
-
-  ['#pkgType','#pkgLabel','#pkgDuration','#pkgPrice','#pkgTagline','#pkgPerks'].forEach(sel=>{
-    $(sel)?.addEventListener('input',updatePreview);
-  });
-
-  function updatePreview(){
-    const type=$('#pkgType')?.value||'data';
-    const label=$('#pkgLabel')?.value.trim()||(type==='unlimited'?'غير محدود':'10GB');
-    const duration=$('#pkgDuration')?.value.trim()||'30 يوم';
-    const price=money($('#pkgPrice')?.value||0);
-    const tagline=$('#pkgTagline')?.value.trim()||(type==='unlimited'?'بلا حدود':'باقة مختارة');
-    const perks=($('#pkgPerks')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
-    const best=$('#pkgBest')?.checked;
-
-    $('#previewLabel').textContent=label;
-    $('#previewDuration').textContent=duration;
-    $('#previewPrice').textContent=price;
-    $('#previewTagline').textContent=tagline;
-    $('#previewBadge').hidden=!best;
-    $('#previewPerks').innerHTML=(perks.length?perks:['تفعيل سريع']).slice(0,4).map(x=>`<li>✓ ${esc(x)}</li>`).join('');
-  }
-
-
-  function openNetflixDialog(p=null){
-    $('#netflixDialogTitle').textContent=p?'تعديل اشتراك Netflix':'إضافة اشتراك Netflix';
-    $('#netflixId').value=p?.id||'';
-    $('#netflixName').value=p?.name||'Netflix Premium';
-    $('#netflixDuration').value=p?.duration||'شهر واحد';
-    $('#netflixPrice').value=p?money(p.price):'';
-    $('#netflixType').value=p?.subscription_type||'حساب مشترك';
-    $('#netflixScreens').value=p?.screens||'4 شاشات';
-    $('#netflixQuality').value=p?.quality||'4K Ultra HD';
-    $('#netflixDescription').value=p?.description||'أفضل جودة وتجربة مشاهدة';
-    $('#netflixFeatures').value=Array.isArray(p?.features)&&p.features.length
-      ? p.features.join('\n')
-      : 'تفعيل سريع\nدعم بعد الشراء\nتعليمات واضحة';
-    $('#netflixDelivery').value=p?.delivery_method||'واتساب';
-    $('#netflixFeatured').checked=Boolean(p?.featured);
-    msg($('#netflixMessage'));
-
-    if(typeof netflixDialog?.showModal==='function') netflixDialog.showModal();
-    else if(netflixDialog){
-      netflixDialog.setAttribute('open','');
-      netflixDialog.style.display='block';
-    }
-  }
-
-  function closeNetflixDialog(){
-    if(typeof netflixDialog?.close==='function' && netflixDialog.open) netflixDialog.close();
-    else if(netflixDialog){
-      netflixDialog.removeAttribute('open');
-      netflixDialog.style.display='none';
-    }
-  }
-
-  async function patchNetflix(id,payload){
-    return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{
-      method:'PATCH',body:payload,prefer:'return=representation'
-    });
-  }
-
-  async function insertNetflix(payload){
-    return db('digital_products',{
-      method:'POST',body:payload,prefer:'return=representation'
-    });
-  }
-
-  async function deleteNetflix(id){
-    return db(`digital_products?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
-  }
-
-
-  const NETFLIX_PRESETS={
-    'Netflix Basic':{
-      quality:'HD',
-      screens:'شاشة واحدة',
-      description:'مناسب للمشاهدة الشخصية'
-    },
-    'Netflix Standard':{
-      quality:'Full HD',
-      screens:'شاشتان',
-      description:'خيار متوازن للاستخدام اليومي'
-    },
-    'Netflix Premium':{
-      quality:'4K Ultra HD',
-      screens:'4 شاشات',
-      description:'أفضل جودة وتجربة مشاهدة'
-    }
-  };
-
-  $('#netflixName')?.addEventListener('change',e=>{
-    const preset=NETFLIX_PRESETS[e.target.value];
-    if(!preset) return;
-    $('#netflixQuality').value=preset.quality;
-    $('#netflixScreens').value=preset.screens;
-    $('#netflixDescription').value=preset.description;
-  });
-
-  $('#newNetflixBtn')?.addEventListener('click',()=>openNetflixDialog());
-  $('#netflixDialogClose')?.addEventListener('click',closeNetflixDialog);
-  $('#cancelNetflixDialog')?.addEventListener('click',closeNetflixDialog);
-
-  $('#netflixAdminList')?.addEventListener('click',async e=>{
-    if(!canEdit()) return;
-    const btn=e.target.closest('[data-netflix-action]');
-    if(!btn) return;
-    const p=digitalProducts.find(x=>x.id===btn.dataset.id);
-    if(!p) return;
-
-    if(btn.dataset.netflixAction==='edit'){
-      openNetflixDialog(p);
-      return;
-    }
-
-    if(btn.dataset.netflixAction==='delete'){
-      if(!confirm(`حذف اشتراك "${p.name}" نهائياً؟`)) return;
-      try{
-        await deleteNetflix(p.id);
-        await loadAll();
-        toast('تم حذف اشتراك Netflix.');
-      }catch(err){
-        toast(err.message,'error');
-      }
-    }
-  });
-
-  $('#netflixForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();
-    if(!canEdit()) return toast('هذا الحساب للقراءة فقط.','error');
-
-    const id=$('#netflixId').value;
-    const payload={
-      service_slug:'netflix',
-      name:$('#netflixName').value.trim(),
-      duration:$('#netflixDuration').value.trim(),
-      price:Number($('#netflixPrice').value),
-      subscription_type:$('#netflixType').value.trim(),
-      screens:$('#netflixScreens').value.trim(),
-      quality:$('#netflixQuality').value.trim(),
-      description:$('#netflixDescription').value.trim(),
-      features:$('#netflixFeatures').value.split('\n').map(x=>x.trim()).filter(Boolean),
-      featured:$('#netflixFeatured').checked,
-      delivery_method:$('#netflixDelivery').value.trim()||'واتساب'
-    };
-
-    if(!payload.name) return msg($('#netflixMessage'),'أدخل اسم المنتج.','error');
-    if(!payload.duration) return msg($('#netflixMessage'),'أدخل مدة الاشتراك.','error');
-    if(!Number.isFinite(payload.price) || payload.price<0) return msg($('#netflixMessage'),'أدخل سعراً صحيحاً.','error');
-
-    const btn=$('#saveNetflixBtn');
-    setBusy(btn,true);
-    msg($('#netflixMessage'));
-
-    try{
-      if(id) await patchNetflix(id,payload);
-      else await insertNetflix(payload);
-
-      await loadAll();
-      msg($('#netflixMessage'),id?'تم تحديث الاشتراك.':'تمت إضافة الاشتراك.','success');
-      toast(id?'تم تحديث اشتراك Netflix.':'تمت إضافة اشتراك Netflix.');
-      setTimeout(closeNetflixDialog,300);
-    }catch(err){
-      msg($('#netflixMessage'),err.message,'error');
-    }finally{
-      setBusy(btn,false);
-    }
-  });
-
-  async function patchPackage(id,payload){
-    return db(`packages?id=eq.${encodeURIComponent(id)}`,{
-      method:'PATCH',body:payload,prefer:'return=representation'
-    });
-  }
-
-  async function insertPackage(payload){
-    return db('packages',{
-      method:'POST',body:payload,prefer:'return=representation'
-    });
-  }
-
-  async function deletePackage(id){
-    return db(`packages?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
-  }
-
-  $('#adminPackageList')?.addEventListener('click',async e=>{
-    if(!canEdit()) return;
-    const btn=e.target.closest('[data-action]');
-    if(!btn) return;
-    const p=packages.find(x=>x.id===btn.dataset.id);
-    if(!p) return;
-
-    try{
-      const action=btn.dataset.action;
-      if(action==='edit') return openDialog(p);
-
-      if(action==='toggle-active'){
-        await patchPackage(p.id,{active:!p.active});
-        toast('تم تحديث حالة الباقة.');
-      }
-
-      if(action==='toggle-featured'){
-        if(!p.featured && packages.filter(x=>x.featured&&x.id!==p.id).length>=3){
-          return toast('يمكن اختيار 3 باقات فقط ضمن الأكثر طلباً.','error');
-        }
-        await patchPackage(p.id,{featured:!p.featured,best_value:p.featured?false:p.best_value});
-        toast('تم تحديث الباقة.');
-      }
-
-      if(action==='set-best'){
-        if(!p.featured && packages.filter(x=>x.featured&&x.id!==p.id).length>=3){
-          return toast('أزل باقة مميزة أولاً.','error');
-        }
-        await db(`packages?id=neq.${encodeURIComponent(p.id)}`,{
-          method:'PATCH',body:{best_value:false},prefer:'return=minimal'
-        });
-        await patchPackage(p.id,{best_value:true,featured:true});
-        toast('تم تحديد الباقة كأفضل قيمة.');
-      }
-
-      if(action==='unset-best'){
-        await patchPackage(p.id,{best_value:false});
-        toast('تم إلغاء الأفضل قيمة.');
-      }
-
-      if(action==='duplicate'){
-        await insertPackage({
-          type:p.type,label:p.label,duration:p.duration,price:Number(p.price),
-          tagline:p.tagline?`${p.tagline} - نسخة`:'نسخة',
-          perks:Array.isArray(p.perks)?p.perks:[],
-          featured:false,best_value:false,sort_order:Number(p.sort_order||100)+1,active:false
-        });
-        toast('تم إنشاء نسخة مخفية من الباقة.');
-      }
-
-      if(action==='delete'){
-        if(!confirm(`حذف باقة "${p.label}" نهائياً؟`)) return;
-        await deletePackage(p.id);
-        toast('تم حذف الباقة.');
-      }
-
-      await loadAll();
-    }catch(err){
-      toast(err.message,'error');
-    }
-  });
-
-  $('#packageForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();
-    if(!canEdit()) return toast('هذا الحساب للقراءة فقط.','error');
-    const id=$('#pkgId').value;
-    const payload={
-      type:$('#pkgType').value,
-      label:$('#pkgLabel').value.trim(),
-      duration:$('#pkgDuration').value.trim(),
-      price:Number($('#pkgPrice').value),
-      tagline:$('#pkgTagline').value.trim(),
-      perks:$('#pkgPerks').value.split('\n').map(x=>x.trim()).filter(Boolean),
-      sort_order:Number($('#pkgSort').value||100),
-      active:$('#pkgActive').checked,
-      featured:$('#pkgFeatured').checked,
-      best_value:$('#pkgBest').checked
-    };
-
-    if(payload.best_value) payload.featured=true;
-    const count=packages.filter(x=>x.featured&&x.id!==id).length;
-    if(payload.featured && count>=3){
-      return msg($('#packageMessage'),'يمكن اختيار 3 باقات فقط ضمن الأكثر طلباً. أزل واحدة أولاً.','error');
-    }
-
-    const btn=$('#savePackageBtn');
-    setBusy(btn,true);
-    msg($('#packageMessage'));
-
-    try{
-      if(payload.best_value){
-        const filter=id?`id=neq.${encodeURIComponent(id)}`:'id=not.is.null';
-        await db(`packages?${filter}`,{
-          method:'PATCH',body:{best_value:false},prefer:'return=minimal'
-        });
-      }
-
-      if(id) await patchPackage(id,payload);
-      else await insertPackage(payload);
-
-      await loadAll();
-      msg($('#packageMessage'),id?'تم تحديث الباقة.':'تمت إضافة الباقة.','success');
-      toast(id?'تم تحديث الباقة بنجاح.':'تمت إضافة الباقة بنجاح.');
-      setTimeout(closeDialog,350);
-    }catch(err){
-      msg($('#packageMessage'),err.message,'error');
-    }finally{
-      setBusy(btn,false);
-    }
-  });
-
-  $('#settingsForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();
-    if(!canEdit()) return toast('ليس لديك صلاحية تعديل الإعدادات.','error');
-
-    const whatsappValue = $('#whatsappSetting').value.replace(/\D/g,'');
-    const transferValue = $('#transferNumberSetting').value.replace(/\D/g,'');
-
-    if(!whatsappValue) return msg($('#settingsMessage'),'أدخل رقم واتساب.','error');
-    if(!transferValue) return msg($('#settingsMessage'),'أدخل رقم التحويل.','error');
-
-    const btn=e.submitter;
-    setBusy(btn,true);
-
-    try{
-      await db('site_settings?on_conflict=key',{
-        method:'POST',
-        body:[
-          {key:'whatsapp_number',value:whatsappValue},
-          {key:'bank_transfer_number',value:transferValue}
-        ],
-        prefer:'resolution=merge-duplicates,return=representation'
-      });
-
-      whatsapp=whatsappValue;
-      transferNumber=transferValue;
-      msg($('#settingsMessage'),'تم حفظ إعدادات واتساب والتحويل بنجاح.','success');
-      toast('تم تحديث إعدادات الطلب والتحويل.');
-    }catch(err){
-      msg($('#settingsMessage'),err.message,'error');
-    }finally{
-      setBusy(btn,false);
-    }
-  });
-
-
-  function generateTemporaryPassword(){
-    const upper='ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const lower='abcdefghijkmnopqrstuvwxyz';
-    const nums='23456789';
-    const symbols='!@#$%&*?';
-    const all=upper+lower+nums+symbols;
-    const pick=s=>{
-      const a=new Uint32Array(1);
-      crypto.getRandomValues(a);
-      return s[a[0] % s.length];
-    };
-    let out=pick(upper)+pick(lower)+pick(nums)+pick(symbols);
-    while(out.length<14) out+=pick(all);
-    const chars=[...out];
-    for(let i=chars.length-1;i>0;i--){
-      const a=new Uint32Array(1); crypto.getRandomValues(a);
-      const j=a[0]%(i+1);
-      [chars[i],chars[j]]=[chars[j],chars[i]];
-    }
-    return chars.join('');
-  }
-
-  $('#generatePasswordBtn')?.addEventListener('click',()=>{
-    const field=$('#newUserPassword');
-    if(field){
-      field.value=generateTemporaryPassword();
-      field.focus();
-      field.select();
-    }
-  });
-
-  $('#createUserForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();
-    if(!isSuperAdmin()) return;
-
-    const username=$('#newUsername').value.trim().toLowerCase();
-    const password=$('#newUserPassword').value;
-    const role=$('#newUserRole').value;
-    const btn=$('#createUserBtn');
-
-    msg($('#createUserMessage'));
-
-    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
-      return msg($('#createUserMessage'),'اسم المستخدم: 3–30 خانة، حروف إنجليزية وأرقام و . _ - فقط.','error');
-    }
-    if(password.length<8){
-      return msg($('#createUserMessage'),'كلمة المرور يجب أن تكون 8 أحرف على الأقل.','error');
-    }
-    if(!['super_admin','admin','sales','viewer'].includes(role)){
-      return msg($('#createUserMessage'),'الصلاحية غير صحيحة.','error');
-    }
-
-    setBusy(btn,true,'جاري إنشاء الحساب...');
-    try{
-      const result=await callFunction('create-admin-user',{
-        username,
-        password,
-        role
-      });
-
-      $('#createUserForm').reset();
-      $('#newUserRole').value='viewer';
-      msg($('#createUserMessage'),`تم إنشاء الحساب ${result?.user?.username || username} بنجاح.`,'success');
-
-      await loadUsersAndAudit();
-      renderUsers();
-      renderAudit();
-      toast('تم إنشاء المستخدم وإضافته إلى فريق الإدارة.');
-    }catch(err){
-      msg($('#createUserMessage'),err.message,'error');
-      toast(err.message,'error');
-    }finally{
-      setBusy(btn,false);
-    }
-  });
-
-  $('#usersList')?.addEventListener('click',async e=>{
-    const toggle=e.target.closest('[data-toggle-user-password]');
-    if(toggle){
-      const input=toggle.closest('.user-password-wrap')?.querySelector('[data-user-password]');
-      if(input){
-        input.type=input.type==='password'?'text':'password';
-        toggle.textContent=input.type==='password'?'◉':'◌';
-      }
-      return;
-    }
-
-    const btn=e.target.closest('[data-save-user]');
-    if(!btn || !isSuperAdmin()) return;
-
-    const card=btn.closest('[data-user-id]');
-    const userId=card?.dataset.userId;
-    if(!userId) return;
-
-    const username=(card.querySelector('[data-user-username]')?.value || '').trim().toLowerCase();
-    const password=card.querySelector('[data-user-password]')?.value || '';
-
-    if(!/^[a-z0-9._-]{3,30}$/.test(username)){
-      toast('اسم المستخدم يجب أن يكون 3–30 خانة: حروف إنجليزية وأرقام و . _ - فقط.','error');
-      card.querySelector('[data-user-username]')?.focus();
-      return;
-    }
-
-    if(password && password.length<8){
-      toast('كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل.','error');
-      card.querySelector('[data-user-password]')?.focus();
-      return;
-    }
-
-    const self=userId===currentUser?.id;
-    const role=card.querySelector('[data-user-role]')?.value;
-    const active=Boolean(card.querySelector('[data-user-active]')?.checked);
-
-    setBusy(btn,true,'حفظ...');
-    try{
-      await callFunction('update-admin-user',{
-        user_id:userId,
-        username,
-        password:password || null,
-        ...(self ? {} : {role,active})
-      });
-
-      if(self){
-        await loadCurrentProfile();
-        applyRoleUI();
-      }
-
-      await loadUsersAndAudit();
-      renderUsers();
-      renderAudit();
-      toast(password ? 'تم تغيير اسم المستخدم وكلمة المرور.' : 'تم تحديث المستخدم.');
-    }catch(err){
-      toast(err.message || 'تعذر حفظ التغيير.','error');
-    }finally{
-      setBusy(btn,false);
-    }
-  });
-
-  $('#usersList')?.addEventListener('input',e=>{
-    if(e.target.matches('[data-user-username]')){
-      const clean=e.target.value
-        .toLowerCase()
-        .replace(/@/g,'')
-        .replace(/[^a-z0-9._-]/g,'')
-        .slice(0,30);
-      if(e.target.value!==clean) e.target.value=clean;
-    }
-  });
-
-  $('#usersList')?.addEventListener('change',e=>{
-    if(e.target.matches('[data-user-active]')){
-      const label=e.target.closest('.user-active')?.querySelector('span');
-      if(label) label.textContent=e.target.checked?'نشط':'موقوف';
-    }
-  });
-
-  $('#exportBtn')?.addEventListener('click',()=>{
-    const payload={exported_at:new Date().toISOString(),whatsapp_number:whatsapp,bank_transfer_number:transferNumber,packages,digital_products:digitalProducts};
-    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download=`esim-oman-backup-${new Date().toISOString().slice(0,10)}.json`;
-    a.click();URL.revokeObjectURL(url);
-    toast('تم تنزيل النسخة الاحتياطية.');
-  });
-
-  // Theme
-  const root=document.documentElement;
-  const savedTheme=localStorage.getItem('esim-admin-theme');
-  if(savedTheme==='light'||savedTheme==='dark') root.dataset.theme=savedTheme;
-  function updateThemeButtons(){
-    const icon=root.dataset.theme==='light'?'☀':'☾';
-    ['#themeBtn','#loginThemeBtn'].forEach(id=>{const el=$(id);if(el)el.textContent=icon});
-  }
-  function toggleTheme(){
-    root.dataset.theme=root.dataset.theme==='light'?'dark':'light';
-    localStorage.setItem('esim-admin-theme',root.dataset.theme);
-    updateThemeButtons();
-  }
-  $('#themeBtn')?.addEventListener('click',toggleTheme);
-  $('#loginThemeBtn')?.addEventListener('click',toggleTheme);
-  updateThemeButtons();
-
-  startInactivityProtection();
-  checkSession();
-})();
-
-  </script>
-</body>
-</html>
