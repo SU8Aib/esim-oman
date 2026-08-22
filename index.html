@@ -9,26 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260822-netflix-balance1" />
-
-  <style id="best-value-yellow-force">
-    /* ONLY: Best Value yellow identification */
-    #featuredGrid .package-card.best-value{
-      border:2px solid #F4B942 !important;
-      box-shadow:
-        0 0 0 1px rgba(244,185,66,.16),
-        0 22px 55px rgba(244,185,66,.10) !important;
-    }
-
-    #featuredGrid .package-card.best-value .best-badge,
-    #featuredGrid .best-badge{
-      background:#F4B942 !important;
-      color:#111111 !important;
-      border:1px solid #FFD66B !important;
-      box-shadow:0 8px 20px rgba(244,185,66,.22) !important;
-    }
-  </style>
-
+  <link rel="stylesheet" href="styles.css?v=20260822-cms-v3" />
 </head>
 <body>
   <div class="ambient" aria-hidden="true"></div>
@@ -66,7 +47,7 @@
 
           <div class="hero-visual" aria-label="خدمات eSIM.OM">
             <div class="visual-orb"></div>
-            <div class="service-stack">
+            <div class="service-stack" id="heroServiceStack">
               <article class="service-line"><div class="service-info"><span class="service-icon esim">eSIM</span><span><b>Oman eSIM</b><small>باقات بيانات مرنة وسريعة</small></span></div><span class="service-status live"><i></i> متوفر</span></article>
               <article class="service-line"><div class="service-info"><span class="service-icon netflix">N</span><span><b>Netflix</b><small>قسم اشتراكات رقمية</small></span></div><span class="service-status soon">قريباً</span></article>
               <article class="service-line"><div class="service-info"><span class="service-icon chatgpt">AI</span><span><b>ChatGPT</b><small>خدمات اشتراك رقمية</small></span></div><span class="service-status soon">قريباً</span></article>
@@ -98,10 +79,12 @@
 <section class="section-space available-section" id="available">
       <div class="container">
         <div class="section-head"><span class="eyebrow">AVAILABLE NOW</span><h2>المتوفر <em>الآن.</em></h2><p>اختر القسم المناسب لك. eSIM متوفرة الآن، والخدمات الجديدة تظهر عند تجهيزها.</p></div>
-        <div class="service-filters" role="tablist" aria-label="فلترة الخدمات">
-          <button class="service-filter active" data-service-filter="all">الكل</button><button class="service-filter" data-service-filter="esim">eSIM</button><button class="service-filter" data-service-filter="netflix">Netflix</button><button class="service-filter" data-service-filter="chatgpt">ChatGPT</button>
+        <div class="service-filters" id="homepageQuickLinks" aria-label="روابط الخدمات السريعة">
+          <button class="service-filter" type="button" data-scroll-target="#packages">eSIM</button>
+          <button class="service-filter" type="button" data-scroll-target="#service-netflix">Netflix</button>
+          <button class="service-filter" type="button" data-scroll-target="#service-chatgpt">ChatGPT</button>
         </div>
-        <div class="available-grid">
+        <div class="available-grid" id="availabilityGrid">
           <article class="available-card" data-service="esim"><div class="service-info"><span class="service-icon esim">eSIM</span><span><b>Oman eSIM</b><small>باقات بيانات مرنة وسريعة</small></span></div><span class="service-status live"><i></i> متوفر</span></article>
           <article class="available-card disabled-service" data-service="netflix"><div class="service-info"><span class="service-icon netflix">N</span><span><b>Netflix</b><small>قسم اشتراكات رقمية</small></span></div><span class="service-status soon">قريباً</span></article>
           <article class="available-card disabled-service" data-service="chatgpt"><div class="service-info"><span class="service-icon chatgpt">AI</span><span><b>ChatGPT</b><small>خدمات اشتراك رقمية</small></span></div><span class="service-status soon">قريباً</span></article>
@@ -130,7 +113,8 @@
     </section>
 
 
-    <section class="section-space netflix-section" id="netflixSection">
+    <div id="digitalServicesRoot">
+    <section class="section-space netflix-section" id="service-netflix">
       <div class="container">
         <div class="section-head netflix-section-head">
           <span class="eyebrow">NETFLIX</span>
@@ -149,6 +133,8 @@
         </div>
       </div>
     </section>
+
+    </div>
 
     <section class="section-space compact-why">
       <div class="container why-layout">
@@ -185,6 +171,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js?v=20260819-2058"></script>
-  <script src="app.js?v=20260822-netflix-balance1"></script>
+  <script src="app.js?v=20260822-cms-v3"></script>
 </body>
 </html>
