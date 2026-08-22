@@ -133,7 +133,7 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
 .micro-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:22px}
 
 
-/* Netflix products — responsive professional card */
+/* Netflix products — compact approved card */
 .netflix-section{
   padding-top:52px;
 }
@@ -146,13 +146,12 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
   gap:14px;
 }
 
-/* Desktop: same footprint, new internal layout */
 .netflix-product-card{
   min-height:242px;
   display:flex;
   flex-direction:column;
   background:
-    radial-gradient(circle at 100% 0,rgba(229,9,20,.055),transparent 34%),
+    radial-gradient(circle at 100% 0,rgba(229,9,20,.06),transparent 34%),
     var(--surface);
   border:1px solid var(--line);
   border-radius:18px;
@@ -162,42 +161,38 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
 }
 .netflix-product-card:hover{
   transform:translateY(-3px);
-  border-color:rgba(85,230,208,.28);
+  border-color:rgba(85,230,208,.30);
   box-shadow:0 18px 42px rgba(0,0,0,.16);
 }
 
 .netflix-card-head{
   display:flex;
-  direction:rtl;
   align-items:flex-start;
   gap:12px;
 }
 .netflix-logo{
   width:50px;
   height:50px;
-  border-radius:13px;
+  border-radius:12px;
   display:grid;
   place-items:center;
-  flex:0 0 50px;
   background:#050505;
   color:#e50914;
   font-family:Arial,sans-serif;
   font-size:1.45rem;
   font-weight:900;
   line-height:1;
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.05),
-    0 8px 20px rgba(229,9,20,.08);
+  flex:0 0 auto;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
 }
 .netflix-title-wrap{
   min-width:0;
-  flex:1;
-  padding-top:1px;
+  padding-top:2px;
 }
 .netflix-title-wrap h3{
   margin:0;
   font-family:'IBM Plex Sans Arabic',sans-serif;
-  font-size:1rem;
+  font-size:.98rem;
   line-height:1.35;
   font-weight:700;
   color:var(--text);
@@ -205,163 +200,71 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
   overflow:hidden;
   text-overflow:ellipsis;
 }
-.netflix-meta-chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-  margin-top:7px;
-}
-.netflix-meta-chips span{
+.netflix-quality{
   display:inline-flex;
   align-items:center;
   min-height:22px;
+  margin-top:7px;
   padding:2px 8px;
-  border:1px solid var(--line);
   border-radius:999px;
   background:var(--surface-2);
+  border:1px solid var(--line);
   color:var(--muted);
-  font-size:.6rem;
+  font-size:.62rem;
   font-weight:700;
-  white-space:nowrap;
 }
 
-
-/*
-  Netflix middle content slot:
-  Keeps cards visually balanced whether a customer note exists or not.
-  With a note: features stay above the note.
-  Without a note: features move to the visual center of the same reserved area.
-*/
-.netflix-card-content{
-  flex:1;
-  min-height:92px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.netflix-product-card.has-note .netflix-card-content{
-  justify-content:flex-start;
-}
-.netflix-product-card.no-note .netflix-feature-row{
-  margin-top:auto;
-  margin-bottom:auto;
-}
-
-.netflix-feature-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px 16px;
-  margin:14px 0 0;
-  color:var(--muted);
-  font-size:.71rem;
-}
-.netflix-feature-item{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-}
-.netflix-feature-item i{
-  color:#55E6D0;
-  font-style:normal;
-  font-weight:900;
-}
-
-.netflix-product-note{
-  margin-top:12px;
-  padding:8px 10px;
-  display:flex;
-  direction:rtl;
-  align-items:flex-start;
-  gap:8px;
-  border:1px solid rgba(244,185,66,.30);
-  border-radius:11px;
-  background:rgba(244,185,66,.075);
-  color:var(--muted);
-}
-.netflix-note-icon{
-  width:20px;
-  height:20px;
-  flex:0 0 20px;
+.netflix-compact-features{
+  list-style:none;
   display:grid;
-  place-items:center;
-  border-radius:7px;
-  background:#F4B942;
-  color:#2a1b00;
-  font-family:'JetBrains Mono',monospace;
-  font-size:.68rem;
+  gap:8px;
+  margin:18px 0 16px;
+  padding:0;
+  color:var(--muted);
+  font-size:.72rem;
+}
+.netflix-compact-features li{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.netflix-compact-features li span{
+  color:#55E6D0;
   font-weight:900;
-}
-.netflix-product-note p{
-  margin:0;
-  font-size:.65rem;
-  line-height:1.55;
-}
-.netflix-product-note b{
-  color:#F4B942;
-}
-
-.netflix-product-card.has-note .netflix-feature-row{
-  margin-top:13px;
-}
-.netflix-product-card.has-note .netflix-product-note{
-  margin-top:10px;
-}
-
-/* Keep long notes from changing card proportions too much. */
-.netflix-product-note p{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
 }
 
 .netflix-card-bottom{
   margin-top:auto;
-  padding-top:12px;
+  padding-top:13px;
   border-top:1px solid var(--line-soft);
-  display:grid;
-  grid-template-columns:minmax(82px,auto) 1fr minmax(68px,auto);
-  grid-template-areas:"button price duration";
-  align-items:center;
-  gap:10px;
-  direction:ltr;
-}
-.netflix-duration-wrap{
-  grid-area:duration;
-  direction:rtl;
-  text-align:right;
-}
-.netflix-duration-wrap small{
-  color:var(--muted);
-  font-size:.63rem;
-  white-space:nowrap;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
 }
 .netflix-price-wrap{
-  grid-area:price;
-  direction:rtl;
-  display:flex;
-  justify-content:center;
-  align-items:baseline;
-  gap:5px;
-  min-width:0;
+  display:grid;
+  gap:1px;
+}
+.netflix-price-wrap small{
+  color:var(--muted);
+  font-size:.62rem;
 }
 .netflix-price-wrap strong{
   font-family:'JetBrains Mono',monospace;
-  color:var(--text);
-  font-size:1.05rem;
+  font-size:1.08rem;
   line-height:1.2;
+  color:var(--text);
 }
-.netflix-price-wrap span{
-  color:var(--muted);
-  font-size:.67rem;
+.netflix-price-wrap strong span{
+  font-family:'Tajawal',sans-serif;
+  font-size:.72rem;
   font-weight:700;
 }
 .netflix-order-btn{
-  grid-area:button;
-  direction:rtl;
   min-width:82px;
-  min-height:40px;
-  padding:0 14px;
+  min-height:42px;
+  padding:0 15px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -369,7 +272,7 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
   background:#55E6D0;
   color:#06141B;
   font-weight:800;
-  font-size:.73rem;
+  font-size:.75rem;
   transition:background .18s ease,transform .18s ease;
 }
 .netflix-order-btn:hover{
@@ -377,7 +280,7 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
   transform:translateY(-1px);
 }
 
-/* Empty state */
+/* Empty state remains simple */
 .digital-empty{
   grid-column:1/-1;
   min-height:120px;
@@ -402,110 +305,20 @@ html[data-theme="light"] .theme-sun{opacity:1;transform:translateY(0)}
 }
 
 @media(max-width:900px){
-  .netflix-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
+  .netflix-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-
-/* Mobile: genuinely smaller card, not just a scaled desktop card */
 @media(max-width:620px){
-  .netflix-section{
-    padding-top:44px;
-  }
-  .netflix-section .section-head{
-    margin-bottom:24px;
-  }
-  .netflix-grid{
-    grid-template-columns:1fr;
-    gap:10px;
-  }
+  .netflix-grid{grid-template-columns:1fr}
   .netflix-product-card{
-    min-height:0;
-    padding:14px 14px 12px;
-    border-radius:20px;
-    box-shadow:0 12px 28px rgba(0,0,0,.11);
-  }
-  .netflix-card-head{
-    gap:10px;
+    min-height:220px;
+    padding:15px;
   }
   .netflix-logo{
     width:46px;
     height:46px;
-    flex-basis:46px;
-    border-radius:12px;
-    font-size:1.35rem;
-  }
-  .netflix-title-wrap h3{
-    font-size:.98rem;
-  }
-  .netflix-meta-chips{
-    gap:4px;
-    margin-top:5px;
-  }
-  .netflix-meta-chips span{
-    min-height:20px;
-    padding:1px 7px;
-    font-size:.56rem;
-  }
-  .netflix-card-content{
-    min-height:80px;
-  }
-  .netflix-product-card.has-note .netflix-card-content{
-    justify-content:flex-start;
-  }
-  .netflix-product-card.no-note .netflix-feature-row{
-    margin-top:auto;
-    margin-bottom:auto;
-  }
-  .netflix-feature-row{
-    margin-top:9px;
-    gap:5px 13px;
-    font-size:.66rem;
-  }
-  .netflix-product-card.no-note .netflix-feature-row{
-    margin-top:auto;
-  }
-  .netflix-product-note{
-    margin-top:10px;
-    padding:7px 9px;
-    border-radius:10px;
-    gap:7px;
-  }
-  .netflix-note-icon{
-    width:18px;
-    height:18px;
-    flex-basis:18px;
-    border-radius:6px;
-    font-size:.61rem;
-  }
-  .netflix-product-note p{
-    font-size:.61rem;
-    line-height:1.5;
   }
   .netflix-card-bottom{
-    margin-top:10px;
-    padding-top:10px;
-    grid-template-columns:minmax(76px,auto) 1fr minmax(62px,auto);
-    gap:7px;
-  }
-  .netflix-duration-wrap small{
-    font-size:.59rem;
-  }
-  .netflix-price-wrap{
-    gap:4px;
-  }
-  .netflix-price-wrap strong{
-    font-size:.96rem;
-  }
-  .netflix-price-wrap span{
-    font-size:.6rem;
-  }
-  .netflix-order-btn{
-    min-width:76px;
-    min-height:39px;
-    padding:0 12px;
-    border-radius:12px;
-    font-size:.7rem;
+    align-items:center;
   }
 }
 
@@ -583,3 +396,109 @@ footer{border-top:1px solid var(--line-soft);padding:30px 0 94px}.footer-inner{d
    Only:
    1) Best Value border = yellow
    2) Side-card order buttons = slate
+   ========================================================= */
+
+/* Best Value: yellow edge only */
+#featuredGrid .package-card.best-value{
+  border-color:#F4B942 !important;
+  box-shadow:
+    0 0 0 1px rgba(244,185,66,.14),
+    0 24px 60px rgba(244,185,66,.10) !important;
+}
+
+/* Keep middle button turquoise */
+#featuredGrid .package-card.best-value .btn-block{
+  background:#55E6D0 !important;
+  color:#06141B !important;
+  border-color:rgba(6,20,27,.08) !important;
+}
+
+/* Right + left buttons: dark slate */
+#featuredGrid .package-card:not(.best-value) .btn-block{
+  background:#21262D !important;
+  color:#F0F6FC !important;
+  border:1px solid #3D444D !important;
+  box-shadow:none !important;
+}
+
+#featuredGrid .package-card:not(.best-value) .btn-block:hover{
+  background:#30363D !important;
+  border-color:#57606A !important;
+  color:#FFFFFF !important;
+}
+
+/* Light mode */
+html[data-theme="light"] #featuredGrid .package-card:not(.best-value) .btn-block{
+  background:#E2E5E2 !important;
+  color:#111311 !important;
+  border-color:#CDD2CE !important;
+}
+
+html[data-theme="light"] #featuredGrid .package-card:not(.best-value) .btn-block:hover{
+  background:#D5DAD6 !important;
+}
+
+
+/* Best Value badge color only */
+#featuredGrid .best-badge,
+#featuredGrid .package-card.best-value .best-badge{
+  background:#F4B942 !important;
+  color:#111111 !important;
+  box-shadow:0 10px 24px rgba(244,185,66,.22) !important;
+}
+
+/* =========================================================
+   eSIM.OM Dynamic CMS v3
+   Keeps the approved visual language; only the data source is dynamic.
+   ========================================================= */
+.homepage-service-card{cursor:pointer}
+.homepage-service-card.disabled-service{cursor:default;opacity:.62}
+.home-dynamic-icon{background:color-mix(in srgb,var(--accent-2) 10%,var(--surface));color:var(--text)}
+.service-status.home-status-available{display:flex;align-items:center;gap:6px;color:var(--text)}
+.service-status.home-status-available i{width:7px;height:7px;border-radius:50%;background:#34d399}
+.service-status.home-status-unavailable,.service-status.home-status-sold_out{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.service-status.home-status-unavailable i,.service-status.home-status-sold_out i{width:7px;height:7px;border-radius:50%;background:#ef4444}
+.service-status.home-status-soon{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.service-status.home-status-soon i{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.homepage-quick-link{transition:.2s ease}
+.homepage-quick-link:hover{border-color:var(--accent-2);color:var(--text);transform:translateY(-1px)}
+
+.digital-service-section{padding-top:52px;scroll-margin-top:86px}
+.digital-service-head .eyebrow{border-color:color-mix(in srgb,var(--service-accent,#55E6D0) 30%,transparent);background:color-mix(in srgb,var(--service-accent,#55E6D0) 8%,transparent);color:var(--service-accent,#55E6D0)}
+.digital-service-head h2{font-family:'IBM Plex Sans Arabic',sans-serif}
+.digital-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+
+.digital-product-card{
+  min-height:242px;display:flex;flex-direction:column;
+  background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--service-accent,#55E6D0) 7%,transparent),transparent 34%),var(--surface);
+  border:1px solid var(--line);border-radius:18px;padding:17px;
+  box-shadow:0 14px 34px rgba(0,0,0,.12);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease
+}
+.digital-product-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--service-accent,#55E6D0) 32%,var(--line));box-shadow:0 18px 42px rgba(0,0,0,.16)}
+.digital-card-head{display:flex;align-items:flex-start;gap:12px}
+.digital-service-logo{width:50px;height:50px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--service-accent,#55E6D0) 12%,#050505);color:var(--service-accent,#55E6D0);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:1rem;font-weight:900;line-height:1;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.service-netflix-card .digital-service-logo,.digital-empty .netflix-logo{background:#050505;color:#e50914;font-family:Arial,sans-serif;font-size:1.45rem}
+.digital-title-wrap{min-width:0;padding-top:2px}
+.digital-title-wrap h3{margin:0;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.98rem;line-height:1.35;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.digital-primary-tag{display:inline-flex;align-items:center;min-height:22px;margin-top:7px;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-size:.62rem;font-weight:700}
+.digital-compact-features{list-style:none;display:grid;gap:8px;margin:18px 0 16px;padding:0;color:var(--muted);font-size:.72rem}
+.digital-compact-features li{display:flex;align-items:center;gap:8px}.digital-compact-features li span{color:var(--service-accent,#55E6D0);font-weight:900}
+.digital-note{margin:0 0 13px;padding:8px 10px;border-radius:11px;background:rgba(244,185,66,.08);border:1px solid rgba(244,185,66,.2);color:var(--muted);font-size:.66rem}
+.digital-card-bottom{margin-top:auto;padding-top:13px;border-top:1px solid var(--line-soft);display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.digital-price-wrap{display:grid;gap:1px}.digital-price-wrap small{color:var(--muted);font-size:.62rem}.digital-price-wrap strong{font-family:'JetBrains Mono',monospace;font-size:1.08rem;line-height:1.2;color:var(--text)}.digital-price-wrap strong span{font-family:'Tajawal',sans-serif;font-size:.72rem;font-weight:700}
+.digital-order-btn{min-width:82px;min-height:42px;padding:0 15px;display:inline-flex;align-items:center;justify-content:center;border-radius:13px;background:var(--service-accent,#55E6D0);color:#06141B;font-weight:800;font-size:.75rem;transition:filter .18s ease,transform .18s ease}.digital-order-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.digital-empty{grid-column:1/-1;min-height:120px;display:flex;align-items:center;justify-content:center;gap:14px;text-align:right;background:var(--surface);border:1px dashed var(--line);border-radius:18px;padding:22px}.digital-empty b{display:block;font-family:'IBM Plex Sans Arabic',sans-serif;margin-bottom:3px}.digital-empty p{color:var(--muted);font-size:.76rem}
+
+/* Preserve Netflix's approved identity exactly while it runs through the generic engine. */
+.digital-service-section.netflix-section{--service-accent:#e50914}
+.digital-service-section.netflix-section .digital-service-head em{color:#ff4652!important}
+.digital-service-section.netflix-section .digital-product-card{background:radial-gradient(circle at 100% 0,rgba(229,9,20,.06),transparent 34%),var(--surface)}
+.digital-service-section.netflix-section .digital-product-card:hover{border-color:rgba(85,230,208,.30)}
+.digital-service-section.netflix-section .digital-order-btn{background:#55E6D0;color:#06141B}
+.digital-service-section.netflix-section .digital-order-btn:hover{background:#63E9D5;filter:none}
+
+@media(max-width:900px){.digital-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.digital-service-grid{grid-template-columns:1fr}.digital-product-card{min-height:220px;padding:15px}.digital-service-logo{width:46px;height:46px}.digital-card-bottom{align-items:center}}
+
+.digital-product-card.no-note .digital-compact-features{margin-top:20px;margin-bottom:auto;padding-bottom:16px}
