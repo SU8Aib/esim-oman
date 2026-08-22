@@ -254,6 +254,17 @@ textarea{resize:vertical}
 .mini-action{border:1px solid var(--line);background:var(--surface2);padding:6px 8px;border-radius:9px;cursor:pointer;font-size:.64rem;color:var(--muted)}
 .mini-action:hover{border-color:var(--accent);color:var(--accent)}
 .mini-action.danger:hover{border-color:var(--red);color:var(--red)}
+.mini-action.service-activate{
+  border-color:rgba(40,213,189,.35);
+  background:rgba(40,213,189,.10);
+  color:var(--accent);
+  font-weight:700;
+}
+.mini-action.service-activate:hover{
+  border-color:var(--accent);
+  background:rgba(40,213,189,.16);
+  color:var(--accent);
+}
 .results-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;color:var(--muted);font-size:.68rem;padding:10px 3px}
 .empty-state{padding:50px 20px;text-align:center;color:var(--muted)}
 .empty-state b{display:block;color:var(--text);margin-bottom:4px}
@@ -1815,7 +1826,7 @@ input:focus,select:focus,textarea:focus{
           </div>
 
           <div class="service-stats">
-            <article class="service-stat"><div><span>منشورة</span><b id="servicePublishedCount">0</b></div><span class="service-status published">منشور</span></article>
+            <article class="service-stat"><div><span>مفعّلة</span><b id="servicePublishedCount">0</b></div><span class="service-status published">مفعّل</span></article>
             <article class="service-stat"><div><span>مسودات</span><b id="serviceDraftCount">0</b></div><span class="service-status draft">مسودة</span></article>
             <article class="service-stat"><div><span>مؤرشفة</span><b id="serviceArchivedCount">0</b></div><span class="service-status archived">مؤرشف</span></article>
           </div>
@@ -1824,7 +1835,7 @@ input:focus,select:focus,textarea:focus{
             <label class="search-box"><span>⌕</span><input id="serviceSearch" type="search" placeholder="ابحث باسم الخدمة..."></label>
             <select id="serviceStatusFilter" aria-label="حالة القسم">
               <option value="all">كل الحالات</option>
-              <option value="published">منشور</option>
+              <option value="published">مفعّل</option>
               <option value="draft">مسودة</option>
               <option value="archived">مؤرشف</option>
             </select>
@@ -1998,7 +2009,7 @@ input:focus,select:focus,textarea:focus{
                   <div>
                     <button class="secondary-btn" id="builderNextBtn" type="button">التالي</button>
                     <button class="secondary-btn" id="builderSaveDraftBtn" type="button">حفظ كمسودة</button>
-                    <button class="primary-btn" id="builderPublishBtn" type="button">حفظ ونشر</button>
+                    <button class="primary-btn" id="builderPublishBtn" type="button">حفظ وتفعيل</button>
                   </div>
                 </div>
 
@@ -3717,7 +3728,7 @@ input:focus,select:focus,textarea:focus{
 
 
   // ---------- SERVICE BUILDER / DIGITAL SERVICES ----------
-  const SERVICE_STATUS_LABELS={draft:'مسودة',published:'منشور',archived:'مؤرشف'};
+  const SERVICE_STATUS_LABELS={draft:'مسودة',published:'مفعّل',archived:'مؤرشف'};
   const CORE_COLUMN_KEYS=new Set(['name','duration','price','subscription_type','screens','quality','description','features','note','delivery_method']);
 
   function serviceStatusLabel(status){ return SERVICE_STATUS_LABELS[status] || status || '—'; }
@@ -3790,7 +3801,7 @@ input:focus,select:focus,textarea:focus{
         <div class="service-actions">
           <span class="service-status ${esc(svc.status)}">${esc(serviceStatusLabel(svc.status))}</span>
           <button class="mini-action" data-service-action="manage" data-id="${esc(svc.id)}">إدارة</button>
-          ${edit?`<button class="mini-action" data-service-action="edit" data-id="${esc(svc.id)}">تعديل</button><button class="mini-action ${svc.status==='archived'?'':'danger'}" data-service-action="archive" data-id="${esc(svc.id)}">${svc.status==='archived'?'استعادة':'أرشفة'}</button>`:''}
+          ${edit?`${svc.status!=='archived'?`<button class="mini-action ${svc.status==='published'?'':'service-activate'}" data-service-action="toggle-publish" data-id="${esc(svc.id)}">${svc.status==='published'?'إيقاف':'تفعيل'}</button>`:''}<button class="mini-action" data-service-action="edit" data-id="${esc(svc.id)}">تعديل</button><button class="mini-action ${svc.status==='archived'?'':'danger'}" data-service-action="archive" data-id="${esc(svc.id)}">${svc.status==='archived'?'استعادة':'أرشفة'}</button>`:''}
         </div>
       </article>`;
     }).join(''):`<div class="empty-state"><b>لا توجد خدمات رقمية بعد</b><span>اضغط “＋ إنشاء قسم جديد” لإضافة أول خدمة.</span></div>`;
@@ -4232,7 +4243,7 @@ input:focus,select:focus,textarea:focus{
       selectedServiceId=serviceId;
       selectedServiceTab='fields';
       renderEverything();
-      toast(builderState.status==='published'?'تم حفظ ونشر القسم.':'تم حفظ القسم كمسودة.');
+      toast(builderState.status==='published'?'تم حفظ وتفعيل القسم.':'تم حفظ القسم كمسودة.');
       switchView('digital-service');
       renderDigitalServiceDetail();
     }catch(e){
@@ -4247,6 +4258,28 @@ input:focus,select:focus,textarea:focus{
   $('#serviceSearch')?.addEventListener('input',renderServicesManager);
   $('#serviceStatusFilter')?.addEventListener('change',renderServicesManager);
   $('#newServiceBtn')?.addEventListener('click',()=>openServiceBuilder());
+  async function setServicePublishState(svc){
+    if(!canEdit() || !svc || svc.status==='archived') return;
+    const activating=svc.status!=='published';
+    const nextStatus=activating?'published':'draft';
+    const question=activating
+      ? `تفعيل قسم "${svc.name}"؟ سيظهر في القائمة والموقع حسب إعداداته.`
+      : `إيقاف قسم "${svc.name}" وتحويله إلى مسودة؟ سيختفي من الموقع والسايدبار الديناميكي.`;
+    if(!confirm(question)) return;
+    try{
+      await db(`digital_services?id=eq.${encodeURIComponent(svc.id)}`,{
+        method:'PATCH',
+        body:{status:nextStatus,archived_at:null},
+        prefer:'return=minimal'
+      });
+      await loadDigitalServices();
+      renderEverything();
+      toast(activating?'تم تفعيل القسم.':'تم إيقاف القسم وتحويله إلى مسودة.');
+    }catch(e){
+      toast(e.message||'تعذر تحديث حالة القسم.','error');
+    }
+  }
+
   async function setServiceArchiveState(svc){
     if(!canEdit()) return;
     const restoring=svc.status==='archived';
@@ -4276,6 +4309,7 @@ input:focus,select:focus,textarea:focus{
       }
       selectedServiceId=svc.id;selectedServiceTab='products';switchView('digital-service');renderDigitalServiceDetail();
     }
+    if(btn.dataset.serviceAction==='toggle-publish') setServicePublishState(svc);
     if(btn.dataset.serviceAction==='edit') openServiceBuilder(svc);
     if(btn.dataset.serviceAction==='archive') setServiceArchiveState(svc);
   });
@@ -5587,7 +5621,7 @@ input:focus,select:focus,textarea:focus{
       <section class="service-tab-panel ${selectedServiceTab==='fields'?'active':''}">${selectedServiceTab==='fields'?renderServiceFieldSettingsPanel(svc):''}</section>
       <section class="service-tab-panel ${selectedServiceTab==='display'?'active':''}">${selectedServiceTab==='display'?`<form class="panel service-display-editor" id="serviceDisplayForm"><div class="panel-head"><div><span class="top-eyebrow">Display</span><h3>إعداد العرض</h3></div></div><div class="service-display-grid"><label><span>العنوان في الموقع</span><input id="serviceDisplayTitle" value="${esc(svc.public_title||'')}"></label><label><span>لون الخدمة</span><input id="serviceDisplayAccent" dir="ltr" value="${esc(accent)}"></label><label class="span-2"><span>الوصف</span><textarea id="serviceDisplayDescription" rows="4">${esc(svc.description||'')}</textarea></label><label class="span-2"><span>المميزات الافتراضية</span><textarea id="serviceDisplayFeatures" rows="5">${esc((Array.isArray(svc.default_features)?svc.default_features:[]).join('\n'))}</textarea></label></div><div class="cms-check-grid">${fields.map(f=>`<label class="cms-check"><input type="checkbox" data-display-field="${esc(f.id||f.field_key)}" ${f.show_on_card?'checked':''}>${esc(f.label)}</label>`).join('')}</div>${canEdit()?'<div class="dialog-actions"><button class="primary-btn" type="submit">حفظ إعداد العرض</button></div>':''}</form>`:''}</section>
       <section class="service-tab-panel ${selectedServiceTab==='whatsapp'?'active':''}">${selectedServiceTab==='whatsapp'?`<form class="panel service-display-editor" id="serviceWhatsappForm"><div class="panel-head"><div><span class="top-eyebrow">WhatsApp</span><h3>إعداد رسالة الطلب</h3></div></div><label><span>بداية الرسالة</span><textarea id="serviceWhatsappIntro" rows="5">${esc(svc.whatsapp_intro||'')}</textarea></label><div class="cms-check-grid">${fields.map(f=>`<label class="cms-check"><input type="checkbox" data-whatsapp-field="${esc(f.id||f.field_key)}" ${f.show_on_whatsapp?'checked':''}>${esc(f.whatsapp_icon||'')} ${esc(f.label)}</label>`).join('')}</div>${canEdit()?'<div class="dialog-actions"><button class="primary-btn" type="submit">حفظ إعداد واتساب</button></div>':''}</form>`:''}</section>
-      <section class="service-tab-panel ${selectedServiceTab==='settings'?'active':''}">${selectedServiceTab==='settings'?`<article class="panel"><div class="panel-head"><div><span class="top-eyebrow">Settings</span><h3>إعدادات الخدمة</h3></div></div><div class="system-row"><span>الحالة</span><b>${esc(serviceStatusLabel(svc.status))}</b></div><div class="system-row"><span>عدد المنتجات</span><b>${products.length}</b></div><div class="system-row"><span>الترتيب</span><b>${esc(svc.sort_order||100)}</b></div>${canEdit()&&svc.slug!=='netflix'?`<div class="dialog-actions" style="margin-top:14px"><button class="secondary-btn" data-detail-action="edit">تعديل الخدمة</button><button class="secondary-btn" data-detail-action="archive-service">${svc.status==='archived'?'استعادة كمسودة':'أرشفة'}</button>${products.length===0?'<button class="secondary-btn danger-outline" data-detail-action="delete-service">حذف نهائي</button>':''}</div>`:''}</article>`:''}</section>`;
+      <section class="service-tab-panel ${selectedServiceTab==='settings'?'active':''}">${selectedServiceTab==='settings'?`<article class="panel"><div class="panel-head"><div><span class="top-eyebrow">Settings</span><h3>إعدادات الخدمة</h3></div></div><div class="system-row"><span>الحالة</span><b>${esc(serviceStatusLabel(svc.status))}</b></div><div class="system-row"><span>عدد المنتجات</span><b>${products.length}</b></div><div class="system-row"><span>الترتيب</span><b>${esc(svc.sort_order||100)}</b></div>${canEdit()&&svc.slug!=='netflix'?`<div class="dialog-actions" style="margin-top:14px">${svc.status!=='archived'?`<button class="${svc.status==='published'?'secondary-btn':'primary-btn'}" data-detail-action="toggle-service-publish">${svc.status==='published'?'إيقاف الخدمة':'تفعيل الخدمة'}</button>`:''}<button class="secondary-btn" data-detail-action="edit">تعديل الخدمة</button><button class="secondary-btn" data-detail-action="archive-service">${svc.status==='archived'?'استعادة كمسودة':'أرشفة'}</button>${products.length===0?'<button class="secondary-btn danger-outline" data-detail-action="delete-service">حذف نهائي</button>':''}</div>`:''}</article>`:''}</section>`;
   }
 
   $('#serviceDetailRoot')?.addEventListener('input',e=>{if(e.target.id==='genericProductSearch'){genericSearchQuery=e.target.value;renderDigitalServiceDetail();const n=$('#genericProductSearch');if(n){n.focus();const l=n.value.length;try{n.setSelectionRange(l,l)}catch{}}}});
@@ -5606,6 +5640,7 @@ input:focus,select:focus,textarea:focus{
       }catch(err){toast(err.message||'تعذر تنفيذ العملية.','error')}return;
     }
     const detail=e.target.closest('[data-detail-action]')?.dataset.detailAction;const svc=serviceById(selectedServiceId);
+    if(detail==='toggle-service-publish'&&svc)return setServicePublishState(svc);
     if(detail==='archive-service'&&svc)return setServiceArchiveState(svc);
     if(detail==='delete-service'&&svc){if(!confirm(`حذف قسم "${svc.name}" نهائياً؟ لا يمكن التراجع.`))return;try{await db('rpc/fn_delete_digital_service',{method:'POST',body:{p_service_id:svc.id}});selectedServiceId=null;await Promise.all([loadDigitalServices(),loadServiceFields(),loadHomepageQuickLinks(),loadHomepageAvailabilityCards()]);renderEverything();switchView('services');toast('تم حذف القسم نهائياً.')}catch(err){const m=String(err.message||'');toast(m.includes('SERVICE_HAS_PRODUCTS')?'احذف منتجات القسم أولاً قبل الحذف النهائي.':m.includes('NETFLIX_LEGACY_PROTECTED')?'Netflix محمي مؤقتاً حتى اكتمال الهجرة.':m,'error')}return;}
   });
@@ -5630,7 +5665,7 @@ input:focus,select:focus,textarea:focus{
   function renderServicesManager(){
     const target=$('#serviceAdminList');if(!target)return;const list=filteredServices().sort((a,b)=>Number(a.sort_order||100)-Number(b.sort_order||100)),edit=canEdit(),global=orderedServices();
     $('#servicePublishedCount').textContent=digitalServices.filter(x=>x.status==='published').length;$('#serviceDraftCount').textContent=digitalServices.filter(x=>x.status==='draft').length;$('#serviceArchivedCount').textContent=digitalServices.filter(x=>x.status==='archived').length;$('#serviceResultsCount').textContent=`${list.length} خدمة`;if($('#sidebarServiceCount'))$('#sidebarServiceCount').textContent=digitalServices.filter(x=>x.status!=='archived').length;
-    target.innerHTML=list.length?list.map(svc=>{const fields=fieldsForService(svc.id,{includeArchived:false}),products=productsForService(svc),accent=validAccent(svc.accent_color),idx=global.findIndex(x=>x.id===svc.id);return `<article class="service-admin-card" data-service-id="${esc(svc.id)}" style="--service-accent:${accent}"><div class="service-main">${serviceIconMarkup(svc)}<div class="service-copy"><b>${esc(svc.name)}</b><span>${esc(svc.public_title||svc.description||'بدون وصف')}</span></div></div><div class="service-metric fields"><small>المعلومات</small><b>${fields.length}</b></div><div class="service-metric"><small>المنتجات</small><b>${products.length}</b></div><div class="service-actions"><span class="service-status ${esc(svc.status)}">${esc(serviceStatusLabel(svc.status))}</span><span class="service-order-chip">#${Number(svc.sort_order||100)}</span>${edit?`<span class="service-order-actions"><button class="mini-action" data-service-action="move-up" data-id="${esc(svc.id)}" ${idx<=0?'disabled':''}>↑</button><button class="mini-action" data-service-action="move-down" data-id="${esc(svc.id)}" ${idx<0||idx>=global.length-1?'disabled':''}>↓</button></span>`:''}<button class="mini-action" data-service-action="manage" data-id="${esc(svc.id)}">إدارة</button>${edit?`<button class="mini-action" data-service-action="edit" data-id="${esc(svc.id)}">تعديل</button><button class="mini-action ${svc.status==='archived'?'':'danger'}" data-service-action="archive" data-id="${esc(svc.id)}">${svc.status==='archived'?'استعادة':'أرشفة'}</button>${products.length===0&&svc.slug!=='netflix'?`<button class="mini-action danger" data-service-action="delete-final" data-id="${esc(svc.id)}">حذف نهائي</button>`:''}`:''}</div></article>`}).join(''):'<div class="empty-state"><b>لا توجد خدمات رقمية بعد</b><span>اضغط “＋ إنشاء قسم جديد”.</span></div>';
+    target.innerHTML=list.length?list.map(svc=>{const fields=fieldsForService(svc.id,{includeArchived:false}),products=productsForService(svc),accent=validAccent(svc.accent_color),idx=global.findIndex(x=>x.id===svc.id);return `<article class="service-admin-card" data-service-id="${esc(svc.id)}" style="--service-accent:${accent}"><div class="service-main">${serviceIconMarkup(svc)}<div class="service-copy"><b>${esc(svc.name)}</b><span>${esc(svc.public_title||svc.description||'بدون وصف')}</span></div></div><div class="service-metric fields"><small>المعلومات</small><b>${fields.length}</b></div><div class="service-metric"><small>المنتجات</small><b>${products.length}</b></div><div class="service-actions"><span class="service-status ${esc(svc.status)}">${esc(serviceStatusLabel(svc.status))}</span><span class="service-order-chip">#${Number(svc.sort_order||100)}</span>${edit?`<span class="service-order-actions"><button class="mini-action" data-service-action="move-up" data-id="${esc(svc.id)}" ${idx<=0?'disabled':''}>↑</button><button class="mini-action" data-service-action="move-down" data-id="${esc(svc.id)}" ${idx<0||idx>=global.length-1?'disabled':''}>↓</button></span>`:''}<button class="mini-action" data-service-action="manage" data-id="${esc(svc.id)}">إدارة</button>${edit?`${svc.status!=='archived'?`<button class="mini-action ${svc.status==='published'?'':'service-activate'}" data-service-action="toggle-publish" data-id="${esc(svc.id)}">${svc.status==='published'?'إيقاف':'تفعيل'}</button>`:''}<button class="mini-action" data-service-action="edit" data-id="${esc(svc.id)}">تعديل</button><button class="mini-action ${svc.status==='archived'?'':'danger'}" data-service-action="archive" data-id="${esc(svc.id)}">${svc.status==='archived'?'استعادة':'أرشفة'}</button>${products.length===0&&svc.slug!=='netflix'?`<button class="mini-action danger" data-service-action="delete-final" data-id="${esc(svc.id)}">حذف نهائي</button>`:''}`:''}</div></article>`}).join(''):'<div class="empty-state"><b>لا توجد خدمات رقمية بعد</b><span>اضغط “＋ إنشاء قسم جديد”.</span></div>';
   }
   $('#serviceAdminList')?.addEventListener('click',async e=>{
     const btn=e.target.closest('[data-service-action]');if(!btn)return;const action=btn.dataset.serviceAction;
