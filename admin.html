@@ -1344,6 +1344,58 @@ input:focus,select:focus,textarea:focus{
 }
 </style>
 
+
+<style id="netflix-customer-note-admin-v1">
+.netflix-note-field small{
+  color:var(--muted);
+  font-size:.64rem;
+  font-weight:400;
+  margin-top:-2px;
+}
+#netflixNote{
+  min-height:76px;
+  line-height:1.65;
+}
+.digital-admin-note{
+  grid-column:1/-1!important;
+  display:flex;
+  align-items:flex-start;
+  gap:7px;
+  padding:8px 10px;
+  margin-top:-2px;
+  border:1px solid rgba(244,185,66,.25);
+  border-radius:10px;
+  background:rgba(244,185,66,.06);
+  color:var(--muted);
+}
+.digital-admin-note>span{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  display:grid;
+  place-items:center;
+  border-radius:6px;
+  background:#F4B942;
+  color:#2a1b00;
+  font-family:'JetBrains Mono';
+  font-size:.6rem;
+  font-weight:900;
+}
+.digital-admin-note p{
+  margin:0;
+  font-size:.64rem;
+  line-height:1.55;
+}
+.digital-admin-note b{
+  color:#F4B942;
+}
+@media(max-width:620px){
+  #netflixNote{
+    min-height:70px;
+  }
+}
+</style>
+
 </head>
 <body>
   <div class="ambient ambient-a"></div>
@@ -1977,6 +2029,13 @@ input:focus,select:focus,textarea:focus{
               </select>
             </label>
 
+            <label class="span-2 netflix-note-field">
+              <span>ملاحظة للعميل — اختياري</span>
+              <textarea id="netflixNote" rows="2" maxlength="220"
+                        placeholder="مثال: الاشتراك خاص بحساب مشترك وقد يتم تغييره عند مخالفة الشروط."></textarea>
+              <small>إذا تركتها فارغة لن يظهر شريط الملاحظة في بطاقة Netflix.</small>
+            </label>
+
             <div id="netflixCustomFieldsAnchor"></div>
 
             <label class="span-2">
@@ -2016,7 +2075,7 @@ input:focus,select:focus,textarea:focus{
           </div>
 
           <div class="netflix-form-note">
-            <b>رسالة واتساب تلقائية:</b> سيتم إدراج اسم المنتج، المدة، السعر، النوع، الأجهزة، الجودة، طريقة التسليم ورقم التحويل تلقائياً.
+            <b>رسالة واتساب تلقائية:</b> سيتم إدراج اسم المنتج، المدة، السعر، النوع، الأجهزة، الجودة، الملاحظة (إن وجدت)، طريقة التسليم ورقم التحويل تلقائياً.
           </div>
 
           <div class="dialog-actions">
@@ -2525,6 +2584,7 @@ input:focus,select:focus,textarea:focus{
       screens:'الأجهزة/الشاشات',
       quality:'الجودة',
       description:'الوصف',
+      note:'ملاحظة العميل',
       features:'المميزات',
       featured:'مميز',
       active:'الحالة',
@@ -2637,7 +2697,7 @@ input:focus,select:focus,textarea:focus{
       if(action==='insert') return `أضاف اشتراك Netflix: ${productName}`;
       if(action==='delete') return `حذف اشتراك Netflix: ${productName}`;
 
-      const fields=['name','duration','price','subscription_type','screens','quality','description','features','featured','delivery_method'];
+      const fields=['name','duration','price','subscription_type','screens','quality','description','note','features','active','featured','delivery_method'];
       const changes=[];
 
       for(const field of fields){
@@ -3073,7 +3133,7 @@ input:focus,select:focus,textarea:focus{
     if(q){
       list=list.filter(p=>[
         p.name,p.duration,p.subscription_type,p.screens,p.quality,
-        p.description,p.delivery_method,
+        p.description,p.note,p.delivery_method,
         ...(Array.isArray(p.features)?p.features:[])
       ].join(' ').toLowerCase().includes(q));
     }
@@ -3169,6 +3229,13 @@ input:focus,select:focus,textarea:focus{
         <div class="digital-admin-meta">
           ${meta.length?meta.map(x=>`<span>${esc(x)}</span>`).join(''):'<span>بدون تفاصيل إضافية</span>'}
         </div>
+
+        ${p.note?`
+          <div class="digital-admin-note">
+            <span>!</span>
+            <p><b>ملاحظة العميل:</b> ${esc(p.note)}</p>
+          </div>
+        `:''}
       </article>`;
     }).join('') :
       '<div class="empty-state"><b>لا توجد نتائج</b><span>غيّر البحث أو الفلاتر.</span></div>';
@@ -3300,6 +3367,7 @@ input:focus,select:focus,textarea:focus{
     $('#netflixScreens').value=p?.screens||'4 شاشات';
     $('#netflixQuality').value=p?.quality||'4K Ultra HD';
     $('#netflixDescription').value=p?.description||'أفضل جودة وتجربة مشاهدة';
+    $('#netflixNote').value=p?.note||'';
     $('#netflixFeatures').value=Array.isArray(p?.features)&&p.features.length
       ? p.features.join('\n')
       : 'تفعيل سريع\nدعم بعد الشراء\nتعليمات واضحة';
@@ -3698,6 +3766,7 @@ input:focus,select:focus,textarea:focus{
       screens:$('#netflixScreens').value.trim(),
       quality:$('#netflixQuality').value.trim(),
       description:$('#netflixDescription').value.trim(),
+      note:$('#netflixNote').value.trim(),
       features:$('#netflixFeatures').value.split('\n').map(x=>x.trim()).filter(Boolean),
       active:$('#netflixActive').checked,
       delivery_method:$('#netflixDelivery').value.trim()||'واتساب'
