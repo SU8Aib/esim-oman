@@ -2940,44 +2940,35 @@ input:focus,select:focus,textarea:focus{
     };
   }
 
+  // ⚠️ لا تكتب على featured_selection مباشرة (INSERT/PATCH/DELETE) — الصلاحية
+  // مسحوبة على مستوى قاعدة البيانات (راجع 01_service_builder_foundation.sql
+  // القسم 6). أي كتابة يجب أن تمر عبر fn_set_featured / fn_remove_featured
+  // فقط، لأن هذي الدوال تضمن القفل الذرّي (Advisory Lock) ضد التزامن بين
+  // أكثر من مسؤول بنفس اللحظة، وتتحقق من صلاحية المستخدم ومن أن المنتج فعّال.
+
   async function removeFeatured(sourceType,id){
-    await db(`featured_selection?source_type=eq.${encodeURIComponent(sourceType)}&product_id=eq.${encodeURIComponent(id)}`,{
-      method:'DELETE'
+    await db('rpc/fn_remove_featured',{
+      method:'POST',
+      body:{
+        p_source_type:sourceType,
+        p_product_id:id
+      }
     });
   }
 
   async function setFeatured(sourceType,id,{best=false}={}){
-    const existing=featureEntry(sourceType,id);
-
-    if(!existing && featuredSelection.length>=3){
-      throw new Error('يمكن اختيار 3 منتجات فقط ضمن الأكثر طلباً. أزل منتجاً أولاً.');
-    }
-
-    if(best){
-      await db('featured_selection?best_value=eq.true',{
-        method:'PATCH',
-        body:{best_value:false},
-        prefer:'return=minimal'
-      });
-    }
-
-    if(existing){
-      await db(`featured_selection?id=eq.${encodeURIComponent(existing.id)}`,{
-        method:'PATCH',
-        body:{best_value:Boolean(best)},
-        prefer:'return=representation'
-      });
-    }else{
-      await db('featured_selection',{
-        method:'POST',
-        body:{
-          source_type:sourceType,
-          product_id:id,
-          best_value:Boolean(best)
-        },
-        prefer:'return=representation'
-      });
-    }
+    // ملاحظة: فحص حد الـ3 والـ Best Value الوحيد صار يتم داخل الدالة نفسها
+    // بقاعدة البيانات بشكل ذرّي (Advisory Lock)، وليس هنا بالـ JS فقط —
+    // هذا يمنع دخول منتج رابع حتى لو ضغط مسؤولان بنفس اللحظة تمامًا.
+    // نبقي رسالة الخطأ الواضحة تُعرض للمستخدم عبر catch بمكان الاستدعاء.
+    await db('rpc/fn_set_featured',{
+      method:'POST',
+      body:{
+        p_source_type:sourceType,
+        p_product_id:id,
+        p_best:Boolean(best)
+      }
+    });
   }
 
   async function syncFeatured(sourceType,id,{featured,best}){
@@ -3729,13 +3720,8 @@ input:focus,select:focus,textarea:focus{
       }
 
       if(action==='unset-best'){
-        const entry=featureEntry('digital',p.id);
-        if(entry){
-          await db(`featured_selection?id=eq.${encodeURIComponent(entry.id)}`,{
-            method:'PATCH',
-            body:{best_value:false},
-            prefer:'return=minimal'
-          });
+        if(isFeaturedProduct('digital',p.id)){
+          await setFeatured('digital',p.id,{best:false});
         }
         toast('تم إلغاء أفضل قيمة.');
       }
@@ -3877,13 +3863,8 @@ input:focus,select:focus,textarea:focus{
       }
 
       if(action==='unset-best'){
-        const entry=featureEntry('esim',p.id);
-        if(entry){
-          await db(`featured_selection?id=eq.${encodeURIComponent(entry.id)}`,{
-            method:'PATCH',
-            body:{best_value:false},
-            prefer:'return=minimal'
-          });
+        if(isFeaturedProduct('esim',p.id)){
+          await setFeatured('esim',p.id,{best:false});
         }
         toast('تم إلغاء أفضل قيمة.');
       }
