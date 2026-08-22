@@ -1345,54 +1345,135 @@ input:focus,select:focus,textarea:focus{
 </style>
 
 
-<style id="netflix-customer-note-admin-v1">
-.netflix-note-field small{
-  color:var(--muted);
-  font-size:.64rem;
-  font-weight:400;
-  margin-top:-2px;
-}
-#netflixNote{
-  min-height:76px;
-  line-height:1.65;
-}
-.digital-admin-note{
-  grid-column:1/-1!important;
-  display:flex;
-  align-items:flex-start;
-  gap:7px;
-  padding:8px 10px;
-  margin-top:-2px;
-  border:1px solid rgba(244,185,66,.25);
-  border-radius:10px;
-  background:rgba(244,185,66,.06);
-  color:var(--muted);
-}
-.digital-admin-note>span{
-  width:18px;
-  height:18px;
-  flex:0 0 18px;
+<style id="service-builder-admin-style">
+/* Phase 2 — Generic Service Manager / Field Builder.
+   Intentionally reuses the current admin design system. */
+.service-manager-toolbar{
   display:grid;
-  place-items:center;
-  border-radius:6px;
-  background:#F4B942;
-  color:#2a1b00;
-  font-family:'JetBrains Mono';
-  font-size:.6rem;
-  font-weight:900;
+  grid-template-columns:minmax(220px,1fr) 190px;
+  gap:10px;
+  margin-bottom:14px;
 }
-.digital-admin-note p{
-  margin:0;
-  font-size:.64rem;
-  line-height:1.55;
+.service-admin-list{display:grid;gap:10px}
+.service-admin-card{
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:16px;
+  padding:16px;
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) auto auto;
+  gap:14px;
+  align-items:center;
 }
-.digital-admin-note b{
-  color:#F4B942;
+.service-admin-main{display:flex;align-items:center;gap:12px;min-width:0}
+.service-admin-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;flex:0 0 auto;
+  border:1px solid var(--line);
+  background:var(--surface2);
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  font-weight:800;font-size:1rem;
+}
+.service-admin-copy{display:grid;gap:3px;min-width:0}
+.service-admin-copy b{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.service-admin-copy span{font-size:.68rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.service-admin-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.service-admin-meta span,.field-meta-chip{
+  border:1px solid var(--line);
+  background:var(--surface2);
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:.61rem;
+  color:var(--muted);
+}
+.service-status{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:86px;padding:6px 10px;border-radius:999px;
+  border:1px solid var(--line);font-size:.64rem;font-weight:700;
+}
+.service-status.published{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 38%,var(--line));background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.service-status.draft{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 38%,var(--line));background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.service-status.archived{color:var(--muted);background:var(--surface2)}
+.service-admin-actions{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap}
+.service-builder-head{
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:16px;
+  padding:16px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:16px;align-items:start;
+  margin-bottom:14px;
+}
+.service-builder-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.service-builder-title h2{margin:0}
+.service-builder-copy p{margin:6px 0 0;color:var(--muted);font-size:.72rem}
+.service-builder-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.service-builder-stats{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px
+}
+.builder-stat{
+  border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:13px 14px;display:grid;gap:4px
+}
+.builder-stat span{font-size:.63rem;color:var(--muted)}
+.builder-stat b{font-family:'JetBrains Mono';font-size:1.05rem}
+.field-builder-list{display:grid;gap:9px}
+.field-builder-row{
+  border:1px solid var(--line);
+  background:var(--surface2);
+  border-radius:14px;
+  padding:13px 14px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;align-items:center;
+}
+.field-builder-main{min-width:0}
+.field-builder-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.field-builder-name b{font-size:.78rem}
+.field-key{
+  direction:ltr;unicode-bidi:plaintext;
+  font-family:'JetBrains Mono';font-size:.6rem;color:var(--muted);
+  border:1px solid var(--line);border-radius:7px;padding:3px 6px;background:var(--surface)
+}
+.field-builder-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.field-builder-actions{display:flex;gap:7px;align-items:center}
+.field-archived{opacity:.58}
+.service-builder-legacy{
+  border-style:dashed;
+}
+.builder-form-section{
+  border-top:1px solid var(--line);
+  padding-top:14px;margin-top:14px;
+}
+.builder-check-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px
+}
+.builder-check{
+  border:1px solid var(--line);border-radius:12px;background:var(--surface2);
+  padding:9px 10px;display:flex;gap:8px;align-items:center;font-size:.67rem
+}
+.builder-check input{width:auto!important;margin:0}
+.builder-inline-note{
+  font-size:.64rem;color:var(--muted);
+  border:1px dashed var(--line);
+  padding:9px 10px;border-radius:11px;background:var(--surface2);
+}
+#serviceAccent{min-height:42px;padding:4px}
+#fieldOptionsWrap[hidden]{display:none!important}
+.service-empty-note{margin-top:10px}
+@media(max-width:900px){
+  .service-admin-card{grid-template-columns:1fr}
+  .service-admin-actions{justify-content:flex-start}
+  .service-builder-head{grid-template-columns:1fr}
+  .service-builder-actions{justify-content:flex-start}
+  .service-builder-stats{grid-template-columns:1fr 1fr 1fr}
 }
 @media(max-width:620px){
-  #netflixNote{
-    min-height:70px;
-  }
+  .service-manager-toolbar{grid-template-columns:1fr}
+  .service-builder-stats{grid-template-columns:1fr}
+  .builder-check-grid{grid-template-columns:1fr 1fr}
+  .field-builder-row{grid-template-columns:1fr}
+  .field-builder-actions{justify-content:flex-start}
 }
 </style>
 
@@ -1490,6 +1571,10 @@ input:focus,select:focus,textarea:focus{
         <button class="nav-item" data-view="packages">
           <span class="nav-icon">▦</span><span>إدارة الباقات</span>
           <small id="sidebarPackageCount">0</small>
+        </button>
+        <button class="nav-item" data-view="services">
+          <span class="nav-icon">◇</span><span>الخدمات الرقمية</span>
+          <small id="sidebarServiceCount">0</small>
         </button>
         <button class="nav-item" data-view="netflix">
           <span class="nav-icon">N</span><span>اشتراكات Netflix</span>
@@ -1662,6 +1747,97 @@ input:focus,select:focus,textarea:focus{
             <span id="resultsCount">0 باقة</span>
             <small>يمكن اختيار 3 منتجات فقط من جميع الأقسام كـ “الأكثر طلباً”، ومنتج واحد فقط كـ “أفضل قيمة”.</small>
           </div>
+        </section>
+
+
+        <!-- GENERIC DIGITAL SERVICES -->
+        <section class="view" data-view-panel="services">
+          <div class="section-title-row">
+            <div>
+              <span class="top-eyebrow">Service Builder</span>
+              <h2>إدارة الأقسام</h2>
+              <p>أنشئ وأدر أقسام الخدمات الرقمية من لوحة الإدارة نفسها، بدون إنشاء كود خاص لكل خدمة.</p>
+            </div>
+            <button class="primary-btn" id="newServiceBtn" type="button">＋ إنشاء قسم جديد</button>
+          </div>
+
+          <div class="security-note">
+            هذه هي واجهة <b>Service Builder</b> الجديدة. Netflix الحالي يبقى على المحرك القديم مؤقتاً حتى مرحلة
+            اختبار التوافق، لذلك لن ننقله أو نحذف صفحته الحالية في هذه المرحلة.
+          </div>
+
+          <div class="service-manager-toolbar">
+            <label class="search-box">
+              <span>⌕</span>
+              <input id="serviceSearch" type="search" placeholder="ابحث باسم القسم أو الـ slug...">
+            </label>
+            <select id="serviceStatusFilter" aria-label="حالة القسم">
+              <option value="all">كل الحالات</option>
+              <option value="draft">مسودة</option>
+              <option value="published">منشور</option>
+              <option value="archived">مؤرشف</option>
+            </select>
+          </div>
+
+          <div class="service-admin-list" id="serviceAdminList"></div>
+          <div class="results-foot">
+            <span id="serviceResultsCount">0 قسم</span>
+            <small>الأقسام الجديدة تُحفظ كبيانات Configuration داخل Supabase. لا يتم توليد HTML/JS لكل قسم.</small>
+          </div>
+        </section>
+
+        <!-- GENERIC FIELD BUILDER -->
+        <section class="view" data-view-panel="service-builder">
+          <div class="section-title-row">
+            <div>
+              <span class="top-eyebrow">Service Builder · Fields</span>
+              <h2>بناء حقول القسم</h2>
+              <p>كل حقل هنا يصبح جزءاً من تعريف الخدمة في Supabase، ويُستخدم لاحقاً بواسطة المحرك العام.</p>
+            </div>
+            <button class="secondary-btn compact" id="backToServicesBtn" type="button">← إدارة الأقسام</button>
+          </div>
+
+          <div class="service-builder-head">
+            <div class="service-builder-copy">
+              <div class="service-builder-title">
+                <h2 id="serviceBuilderTitle">—</h2>
+                <span class="service-status draft" id="serviceBuilderStatus">مسودة</span>
+              </div>
+              <p id="serviceBuilderDescription">—</p>
+              <div class="service-admin-meta" id="serviceBuilderMeta"></div>
+            </div>
+            <div class="service-builder-actions">
+              <select id="serviceStatusControl" aria-label="حالة القسم">
+                <option value="draft">مسودة</option>
+                <option value="published">منشور</option>
+                <option value="archived">مؤرشف</option>
+              </select>
+              <button class="secondary-btn compact" id="editServiceBtn" type="button">تعديل القسم</button>
+              <button class="primary-btn compact" id="newServiceFieldBtn" type="button">＋ إضافة حقل</button>
+            </div>
+          </div>
+
+          <div class="service-builder-stats">
+            <article class="builder-stat"><span>الحقول الفعالة</span><b id="serviceFieldCount">0</b></article>
+            <article class="builder-stat"><span>المنتجات المرتبطة</span><b id="serviceProductCount">0</b></article>
+            <article class="builder-stat"><span>Schema Version</span><b id="serviceSchemaVersion">1</b></article>
+          </div>
+
+          <div class="security-note">
+            <b>قاعدة مهمة:</b> المفتاح التقني <code>field_key</code> يبقى ثابتاً بعد استخدام الحقل في المنتجات.
+            يمكنك لاحقاً تعديل الاسم، الخيارات، الترتيب، والظهور في الكرت/واتساب بدون تغيير المفتاح.
+          </div>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="top-eyebrow">Field Builder</span>
+                <h3>حقول القسم</h3>
+              </div>
+              <span class="role-chip admin" id="serviceAllFieldCount">0 حقل</span>
+            </div>
+            <div class="field-builder-list" id="serviceFieldsList"></div>
+          </article>
         </section>
 
         <!-- NETFLIX -->
@@ -1946,6 +2122,177 @@ input:focus,select:focus,textarea:focus{
 
   <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
+
+  <!-- CREATE / EDIT DIGITAL SERVICE -->
+  <dialog class="package-dialog" id="serviceDialog">
+    <section class="dialog-form" style="max-width:760px;width:min(760px,94vw)">
+      <div class="dialog-head">
+        <div>
+          <span class="top-eyebrow">Service Builder</span>
+          <h3 id="serviceDialogTitle">إنشاء قسم جديد</h3>
+        </div>
+        <button class="dialog-close" id="serviceDialogClose" type="button" aria-label="إغلاق">×</button>
+      </div>
+
+      <form id="serviceForm" style="padding:20px">
+        <input id="serviceId" type="hidden">
+        <input id="serviceVersion" type="hidden">
+
+        <div class="form-grid">
+          <label>
+            <span>اسم القسم الإداري *</span>
+            <input id="serviceName" type="text" placeholder="مثال: اشتراكات Claude" required>
+          </label>
+          <label>
+            <span>العنوان في الموقع *</span>
+            <input id="servicePublicTitle" type="text" placeholder="مثال: اختر اشتراك Claude المناسب لك" required>
+          </label>
+
+          <label>
+            <span>Slug تقني *</span>
+            <input id="serviceSlug" type="text" dir="ltr" placeholder="claude" pattern="[a-z0-9][a-z0-9-]*" required>
+            <small>حروف إنجليزية صغيرة وأرقام وشرطة فقط.</small>
+          </label>
+          <label>
+            <span>رمز / أيقونة نصية</span>
+            <input id="serviceIcon" type="text" maxlength="4" placeholder="C">
+          </label>
+
+          <label>
+            <span>Accent Color</span>
+            <input id="serviceAccent" type="color" value="#55e6d0">
+          </label>
+          <label>
+            <span>الترتيب</span>
+            <input id="serviceSortOrder" type="number" value="100" step="10">
+          </label>
+
+          <label style="grid-column:1/-1">
+            <span>وصف القسم</span>
+            <textarea id="serviceDescription" rows="3" placeholder="وصف مختصر يظهر تحت عنوان القسم..."></textarea>
+          </label>
+
+          <label style="grid-column:1/-1">
+            <span>مقدمة رسالة واتساب</span>
+            <textarea id="serviceWhatsappIntro" rows="2" placeholder="مثال: أرغب في طلب اشتراك Claude"></textarea>
+          </label>
+
+          <label>
+            <span>الحالة</span>
+            <select id="serviceStatus">
+              <option value="draft">مسودة</option>
+              <option value="published">منشور</option>
+              <option value="archived">مؤرشف</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="builder-inline-note">
+          عند إنشاء قسم جديد سنضيف له تلقائياً الحقول الأساسية: الاسم، المدة، السعر، الوصف، المميزات، الملاحظة وطريقة التسليم.
+          أي حقل إضافي تنشئه من Field Builder يُحفظ داخل <code>attributes</code>.
+        </div>
+
+        <div class="dialog-actions">
+          <button class="secondary-btn" id="cancelServiceDialog" type="button">إلغاء</button>
+          <button class="primary-btn" id="saveServiceBtn" type="submit">حفظ القسم</button>
+        </div>
+        <div class="form-message" id="serviceFormMessage"></div>
+      </form>
+    </section>
+  </dialog>
+
+  <!-- CREATE / EDIT SERVICE FIELD -->
+  <dialog class="package-dialog" id="serviceFieldDialog">
+    <section class="dialog-form" style="max-width:780px;width:min(780px,94vw)">
+      <div class="dialog-head">
+        <div>
+          <span class="top-eyebrow">Field Builder</span>
+          <h3 id="serviceFieldDialogTitle">إضافة حقل</h3>
+        </div>
+        <button class="dialog-close" id="serviceFieldDialogClose" type="button" aria-label="إغلاق">×</button>
+      </div>
+
+      <form id="serviceFieldForm" style="padding:20px">
+        <input id="serviceFieldId" type="hidden">
+        <input id="serviceFieldVersion" type="hidden">
+        <input id="serviceFieldStorage" type="hidden" value="attributes">
+
+        <div class="form-grid">
+          <label>
+            <span>اسم الحقل *</span>
+            <input id="serviceFieldLabel" type="text" placeholder="مثال: مستوى الاستخدام" required>
+          </label>
+          <label>
+            <span>المفتاح التقني *</span>
+            <input id="serviceFieldKey" type="text" dir="ltr" placeholder="usage_tier" pattern="[a-z][a-z0-9_]*" required>
+            <small>مثال: usage_tier — لا يُغيّر بعد استخدام الحقل.</small>
+          </label>
+
+          <label>
+            <span>نوع الحقل *</span>
+            <select id="serviceFieldType">
+              <option value="text">Text</option>
+              <option value="select">Select</option>
+              <option value="number">Number</option>
+              <option value="textarea">Textarea</option>
+            </select>
+          </label>
+          <label>
+            <span>الترتيب</span>
+            <input id="serviceFieldSortOrder" type="number" value="100" step="10">
+          </label>
+
+          <label>
+            <span>Placeholder</span>
+            <input id="serviceFieldPlaceholder" type="text" placeholder="نص مساعد داخل الحقل">
+          </label>
+          <label>
+            <span>القيمة الافتراضية</span>
+            <input id="serviceFieldDefault" type="text" placeholder="اختياري">
+          </label>
+
+          <label style="grid-column:1/-1">
+            <span>Help text</span>
+            <input id="serviceFieldHelp" type="text" placeholder="شرح قصير يظهر للمسؤول">
+          </label>
+
+          <label id="fieldOptionsWrap" style="grid-column:1/-1" hidden>
+            <span>خيارات Select</span>
+            <textarea id="serviceFieldOptions" rows="4" placeholder="اكتب كل خيار في سطر، أو افصل بينها بفاصلة"></textarea>
+          </label>
+
+          <label>
+            <span>رمز واتساب</span>
+            <input id="serviceFieldWhatsappIcon" type="text" maxlength="8" placeholder="مثال: ◈">
+          </label>
+        </div>
+
+        <div class="builder-form-section">
+          <span class="top-eyebrow">Behavior</span>
+          <div class="builder-check-grid">
+            <label class="builder-check"><input id="serviceFieldRequired" type="checkbox"> مطلوب</label>
+            <label class="builder-check"><input id="serviceFieldSearchable" type="checkbox"> يدخل في البحث</label>
+            <label class="builder-check"><input id="serviceFieldFilterable" type="checkbox"> فلتر</label>
+            <label class="builder-check"><input id="serviceFieldAdminList" type="checkbox"> يظهر بقائمة الأدمن</label>
+            <label class="builder-check"><input id="serviceFieldCard" type="checkbox" checked> يظهر في الكرت</label>
+            <label class="builder-check"><input id="serviceFieldWhatsapp" type="checkbox" checked> يظهر في واتساب</label>
+          </div>
+        </div>
+
+        <div class="builder-inline-note">
+          الحقول الجديدة تُحفظ كخصائص ديناميكية داخل <code>digital_products.attributes</code>.
+          الحقول الأساسية المرتبطة بأعمدة فعلية يتم إنشاؤها تلقائياً مع القسم.
+        </div>
+
+        <div class="dialog-actions">
+          <button class="secondary-btn" id="cancelServiceFieldDialog" type="button">إلغاء</button>
+          <button class="primary-btn" id="saveServiceFieldBtn" type="submit">حفظ الحقل</button>
+        </div>
+        <div class="form-message" id="serviceFieldMessage"></div>
+      </form>
+    </section>
+  </dialog>
+
   <!-- NETFLIX PRODUCT MODAL -->
   <dialog class="package-dialog" id="netflixDialog">
     <div class="netflix-dialog-layout">
@@ -2029,13 +2376,6 @@ input:focus,select:focus,textarea:focus{
               </select>
             </label>
 
-            <label class="span-2 netflix-note-field">
-              <span>ملاحظة للعميل — اختياري</span>
-              <textarea id="netflixNote" rows="2" maxlength="220"
-                        placeholder="مثال: الاشتراك خاص بحساب مشترك وقد يتم تغييره عند مخالفة الشروط."></textarea>
-              <small>إذا تركتها فارغة لن يظهر شريط الملاحظة في بطاقة Netflix.</small>
-            </label>
-
             <div id="netflixCustomFieldsAnchor"></div>
 
             <label class="span-2">
@@ -2075,7 +2415,7 @@ input:focus,select:focus,textarea:focus{
           </div>
 
           <div class="netflix-form-note">
-            <b>رسالة واتساب تلقائية:</b> سيتم إدراج اسم المنتج، المدة، السعر، النوع، الأجهزة، الجودة، الملاحظة (إن وجدت)، طريقة التسليم ورقم التحويل تلقائياً.
+            <b>رسالة واتساب تلقائية:</b> سيتم إدراج اسم المنتج، المدة، السعر، النوع، الأجهزة، الجودة، طريقة التسليم ورقم التحويل تلقائياً.
           </div>
 
           <div class="dialog-actions">
@@ -2206,6 +2546,9 @@ input:focus,select:focus,textarea:focus{
   const SESSION_KEY = "esim_admin_session_rest_v1";
   let packages = [];
   let digitalProducts = [];
+  let digitalServices = [];
+  let serviceFields = [];
+  let activeServiceId = null;
   let featuredSelection = [];
   let whatsapp = CFG.whatsapp;
   let transferNumber = '91772654';
@@ -2221,6 +2564,8 @@ input:focus,select:focus,textarea:focus{
   const dashboardView = $('#dashboardView');
   const dialog = $('#packageDialog');
   const netflixDialog = $('#netflixDialog');
+  const serviceDialog = $('#serviceDialog');
+  const serviceFieldDialog = $('#serviceFieldDialog');
   const setup = $('#setupWarning');
 
   if (setup) setup.hidden = true;
@@ -2433,7 +2778,7 @@ input:focus,select:focus,textarea:focus{
     $('#auditNav').hidden = !superAdmin;
     $('#settingsNav').hidden = !edit;
 
-    ['#topAddPackageBtn','#heroAddPackageBtn','#newPackageBtn','#quickAddBtn','#newNetflixBtn'].forEach(sel=>{
+    ['#topAddPackageBtn','#heroAddPackageBtn','#newPackageBtn','#quickAddBtn','#newNetflixBtn','#newServiceBtn','#editServiceBtn','#newServiceFieldBtn'].forEach(sel=>{
       const el=$(sel); if(el) el.hidden=!edit;
     });
 
@@ -2584,7 +2929,6 @@ input:focus,select:focus,textarea:focus{
       screens:'الأجهزة/الشاشات',
       quality:'الجودة',
       description:'الوصف',
-      note:'ملاحظة العميل',
       features:'المميزات',
       featured:'مميز',
       active:'الحالة',
@@ -2697,7 +3041,7 @@ input:focus,select:focus,textarea:focus{
       if(action==='insert') return `أضاف اشتراك Netflix: ${productName}`;
       if(action==='delete') return `حذف اشتراك Netflix: ${productName}`;
 
-      const fields=['name','duration','price','subscription_type','screens','quality','description','note','features','active','featured','delivery_method'];
+      const fields=['name','duration','price','subscription_type','screens','quality','description','features','featured','delivery_method'];
       const changes=[];
 
       for(const field of fields){
@@ -2869,6 +3213,16 @@ input:focus,select:focus,textarea:focus{
     digitalProducts = Array.isArray(data) ? data : [];
   }
 
+  async function loadDigitalServices(){
+    const data = await db('digital_services?select=*&order=sort_order.asc,created_at.asc');
+    digitalServices = Array.isArray(data) ? data : [];
+  }
+
+  async function loadServiceFields(){
+    const data = await db('service_fields?select=*&order=sort_order.asc,created_at.asc');
+    serviceFields = Array.isArray(data) ? data : [];
+  }
+
   async function loadFeaturedSelection(){
     const data = await db('featured_selection?select=*&order=created_at.asc');
     featuredSelection = Array.isArray(data) ? data : [];
@@ -2887,7 +3241,7 @@ input:focus,select:focus,textarea:focus{
 
   async function loadAll(){
     try{
-      await Promise.all([loadPackages(),loadDigitalProducts(),loadFeaturedSelection(),loadSettings(),loadUsersAndAudit()]);
+      await Promise.all([loadPackages(),loadDigitalProducts(),loadDigitalServices(),loadServiceFields(),loadFeaturedSelection(),loadSettings(),loadUsersAndAudit()]);
       renderEverything();
     }catch(e){
       toast(`تعذر تحميل البيانات: ${e.message}`,'error');
@@ -2941,43 +3295,32 @@ input:focus,select:focus,textarea:focus{
   }
 
   async function removeFeatured(sourceType,id){
-    await db(`featured_selection?source_type=eq.${encodeURIComponent(sourceType)}&product_id=eq.${encodeURIComponent(id)}`,{
-      method:'DELETE'
+    await db('rpc/fn_remove_featured',{
+      method:'POST',
+      body:{
+        p_source_type:sourceType,
+        p_product_id:id
+      }
     });
   }
 
   async function setFeatured(sourceType,id,{best=false}={}){
     const existing=featureEntry(sourceType,id);
 
+    // UX guard only. The database RPC is authoritative and serializes
+    // concurrent writes before enforcing the global max-3 rule.
     if(!existing && featuredSelection.length>=3){
       throw new Error('يمكن اختيار 3 منتجات فقط ضمن الأكثر طلباً. أزل منتجاً أولاً.');
     }
 
-    if(best){
-      await db('featured_selection?best_value=eq.true',{
-        method:'PATCH',
-        body:{best_value:false},
-        prefer:'return=minimal'
-      });
-    }
-
-    if(existing){
-      await db(`featured_selection?id=eq.${encodeURIComponent(existing.id)}`,{
-        method:'PATCH',
-        body:{best_value:Boolean(best)},
-        prefer:'return=representation'
-      });
-    }else{
-      await db('featured_selection',{
-        method:'POST',
-        body:{
-          source_type:sourceType,
-          product_id:id,
-          best_value:Boolean(best)
-        },
-        prefer:'return=representation'
-      });
-    }
+    await db('rpc/fn_set_featured',{
+      method:'POST',
+      body:{
+        p_source_type:sourceType,
+        p_product_id:id,
+        p_best:Boolean(best)
+      }
+    });
   }
 
   async function syncFeatured(sourceType,id,{featured,best}){
@@ -2995,6 +3338,8 @@ input:focus,select:focus,textarea:focus{
     renderStats();
     renderFeatured();
     renderPackages();
+    renderServicesManager();
+    renderServiceBuilder();
     renderNetflixAdmin();
     renderUsers();
     renderAudit();
@@ -3007,6 +3352,7 @@ input:focus,select:focus,textarea:focus{
     $('#countUnlimited').textContent=packages.filter(x=>x.type==='unlimited').length;
     $('#sidebarPackageCount').textContent=packages.length;
     if($('#sidebarNetflixCount')) $('#sidebarNetflixCount').textContent=digitalProducts.filter(x=>x.service_slug==='netflix').length;
+    if($('#sidebarServiceCount')) $('#sidebarServiceCount').textContent=digitalServices.filter(x=>x.status!=='archived').length;
   }
 
   function renderFeatured(){
@@ -3133,7 +3479,7 @@ input:focus,select:focus,textarea:focus{
     if(q){
       list=list.filter(p=>[
         p.name,p.duration,p.subscription_type,p.screens,p.quality,
-        p.description,p.note,p.delivery_method,
+        p.description,p.delivery_method,
         ...(Array.isArray(p.features)?p.features:[])
       ].join(' ').toLowerCase().includes(q));
     }
@@ -3229,17 +3575,602 @@ input:focus,select:focus,textarea:focus{
         <div class="digital-admin-meta">
           ${meta.length?meta.map(x=>`<span>${esc(x)}</span>`).join(''):'<span>بدون تفاصيل إضافية</span>'}
         </div>
-
-        ${p.note?`
-          <div class="digital-admin-note">
-            <span>!</span>
-            <p><b>ملاحظة العميل:</b> ${esc(p.note)}</p>
-          </div>
-        `:''}
       </article>`;
     }).join('') :
       '<div class="empty-state"><b>لا توجد نتائج</b><span>غيّر البحث أو الفلاتر.</span></div>';
   }
+
+
+  const SERVICE_STATUS_LABELS={
+    draft:'مسودة',
+    published:'منشور',
+    archived:'مؤرشف'
+  };
+
+  function serviceStatusLabel(status){
+    return SERVICE_STATUS_LABELS[status] || status || '—';
+  }
+
+  function serviceById(id){
+    return digitalServices.find(s=>s.id===id) || null;
+  }
+
+  function fieldsForService(serviceId,{includeArchived=true}={}){
+    return serviceFields
+      .filter(f=>f.service_id===serviceId && (includeArchived || f.status!=='archived'))
+      .sort((a,b)=>Number(a.sort_order||100)-Number(b.sort_order||100) || String(a.created_at||'').localeCompare(String(b.created_at||'')));
+  }
+
+  function productsForService(service){
+    if(!service) return [];
+    return digitalProducts.filter(p=>
+      p.service_id===service.id ||
+      (!p.service_id && p.service_slug===service.slug)
+    );
+  }
+
+  function normalizeServiceSlug(v){
+    return String(v||'').trim().toLowerCase()
+      .replace(/\s+/g,'-')
+      .replace(/[^a-z0-9-]/g,'')
+      .replace(/-+/g,'-')
+      .replace(/^-|-$/g,'');
+  }
+
+  function normalizeFieldKey(v){
+    return String(v||'').trim().toLowerCase()
+      .replace(/\s+/g,'_')
+      .replace(/[^a-z0-9_]/g,'')
+      .replace(/_+/g,'_')
+      .replace(/^_+|_+$/g,'');
+  }
+
+  function filteredServices(){
+    const q=($('#serviceSearch')?.value||'').trim().toLowerCase();
+    const status=$('#serviceStatusFilter')?.value||'all';
+
+    return digitalServices.filter(s=>{
+      if(status!=='all' && s.status!==status) return false;
+      if(!q) return true;
+      return [s.name,s.public_title,s.slug,s.description]
+        .join(' ').toLowerCase().includes(q);
+    });
+  }
+
+  function renderServicesManager(){
+    const target=$('#serviceAdminList');
+    if(!target) return;
+
+    const list=filteredServices();
+    const edit=canEdit();
+    $('#serviceResultsCount').textContent=`${list.length} قسم`;
+    if($('#sidebarServiceCount')) $('#sidebarServiceCount').textContent=digitalServices.filter(x=>x.status!=='archived').length;
+
+    target.innerHTML=list.length ? list.map(s=>{
+      const fields=fieldsForService(s.id,{includeArchived:false});
+      const products=productsForService(s);
+      const icon=(s.icon && typeof s.icon==='object' && s.icon.value) ? s.icon.value : (s.name||'?').slice(0,1);
+      const accent=s.accent_color || 'var(--accent)';
+      return `<article class="service-admin-card" data-service-id="${esc(s.id)}">
+        <div>
+          <div class="service-admin-main">
+            <div class="service-admin-icon" style="border-color:${esc(accent)}">${esc(icon)}</div>
+            <div class="service-admin-copy">
+              <b>${esc(s.name)}</b>
+              <span>${esc(s.public_title)} · <span dir="ltr">${esc(s.slug)}</span></span>
+            </div>
+          </div>
+          <div class="service-admin-meta">
+            <span>${fields.length} حقل</span>
+            <span>${products.length} منتج</span>
+            <span>Schema v${Number(s.schema_version||1)}</span>
+          </div>
+        </div>
+
+        <span class="service-status ${esc(s.status)}">${serviceStatusLabel(s.status)}</span>
+
+        <div class="service-admin-actions">
+          <button class="secondary-btn compact" data-service-action="manage" data-id="${s.id}">إدارة الحقول</button>
+          ${edit ? `
+            <button class="mini-action" data-service-action="edit" data-id="${s.id}">تعديل</button>
+            ${s.status==='published'
+              ? `<button class="mini-action" data-service-action="draft" data-id="${s.id}">إرجاع لمسودة</button>`
+              : s.status==='draft'
+                ? `<button class="mini-action" data-service-action="publish" data-id="${s.id}">نشر</button>`
+                : `<button class="mini-action" data-service-action="restore" data-id="${s.id}">استعادة</button>`
+            }
+            ${s.status!=='archived'
+              ? `<button class="mini-action danger" data-service-action="archive" data-id="${s.id}">أرشفة</button>`
+              : ''
+            }
+          ` : ''}
+        </div>
+      </article>`;
+    }).join('') : `
+      <div class="empty-state service-empty-note">
+        <b>لا توجد أقسام في المحرك العام بعد</b>
+        <span>ابدأ بزر “＋ إنشاء قسم جديد”. Netflix الحالي سيبقى منفصلاً حتى مرحلة التوافق.</span>
+      </div>`;
+  }
+
+  function renderServiceBuilder(){
+    const service=serviceById(activeServiceId);
+    const target=$('#serviceFieldsList');
+    if(!target) return;
+
+    if(!service){
+      $('#serviceBuilderTitle').textContent='اختر قسماً من إدارة الأقسام';
+      $('#serviceBuilderDescription').textContent='لم يتم اختيار قسم بعد.';
+      $('#serviceBuilderStatus').textContent='—';
+      $('#serviceBuilderStatus').className='service-status archived';
+      $('#serviceBuilderMeta').innerHTML='';
+      $('#serviceFieldCount').textContent='0';
+      $('#serviceProductCount').textContent='0';
+      $('#serviceSchemaVersion').textContent='—';
+      $('#serviceAllFieldCount').textContent='0 حقل';
+      target.innerHTML='<div class="empty-state"><b>لا يوجد قسم محدد</b><span>ارجع إلى إدارة الأقسام واختر “إدارة الحقول”.</span></div>';
+      return;
+    }
+
+    const fields=fieldsForService(service.id,{includeArchived:true});
+    const activeFields=fields.filter(f=>f.status!=='archived');
+    const products=productsForService(service);
+
+    $('#serviceBuilderTitle').textContent=service.name;
+    $('#serviceBuilderDescription').textContent=service.description || service.public_title || 'بدون وصف';
+    $('#serviceBuilderStatus').textContent=serviceStatusLabel(service.status);
+    $('#serviceBuilderStatus').className=`service-status ${service.status}`;
+    $('#serviceBuilderMeta').innerHTML=`
+      <span dir="ltr">${esc(service.slug)}</span>
+      <span>${esc(service.public_title)}</span>
+    `;
+    $('#serviceFieldCount').textContent=activeFields.length;
+    $('#serviceProductCount').textContent=products.length;
+    $('#serviceSchemaVersion').textContent=Number(service.schema_version||1);
+    $('#serviceAllFieldCount').textContent=`${fields.length} حقل`;
+    if($('#serviceStatusControl')) $('#serviceStatusControl').value=service.status;
+
+    const edit=canEdit();
+
+    target.innerHTML=fields.length ? fields.map(f=>{
+      const options=Array.isArray(f.options)?f.options:[];
+      const flags=[
+        f.required?'مطلوب':'',
+        f.searchable?'بحث':'',
+        f.filterable?'فلتر':'',
+        f.show_on_admin_list?'قائمة الأدمن':'',
+        f.show_on_card?'الكرت':'',
+        f.show_on_whatsapp?'واتساب':''
+      ].filter(Boolean);
+
+      return `<article class="field-builder-row ${f.status==='archived'?'field-archived':''}" data-field-id="${esc(f.id)}">
+        <div class="field-builder-main">
+          <div class="field-builder-name">
+            <b>${esc(f.label)}</b>
+            <span class="field-key">${esc(f.field_key)}</span>
+            <span class="field-meta-chip">${esc(f.field_type)}</span>
+            <span class="field-meta-chip">${f.storage==='column'?'Column':'Attributes'}</span>
+            ${f.status==='archived'?'<span class="service-status archived">مؤرشف</span>':''}
+          </div>
+          <div class="field-builder-meta">
+            <span>ترتيب ${Number(f.sort_order||100)}</span>
+            ${f.field_type==='select'?`<span>${options.length} خيار</span>`:''}
+            ${flags.map(x=>`<span>${esc(x)}</span>`).join('')}
+          </div>
+        </div>
+        <div class="field-builder-actions">
+          ${edit ? `
+            <button class="mini-action" data-field-action="edit" data-id="${f.id}">تعديل</button>
+            ${f.status==='archived'
+              ? `<button class="mini-action" data-field-action="restore" data-id="${f.id}">استعادة</button>`
+              : `<button class="mini-action danger" data-field-action="archive" data-id="${f.id}">أرشفة</button>`
+            }
+          ` : '<span class="read-only-badge">قراءة فقط</span>'}
+        </div>
+      </article>`;
+    }).join('') : '<div class="empty-state"><b>لا توجد حقول</b><span>أضف أول حقل لهذا القسم.</span></div>';
+  }
+
+  function nextServiceSort(){
+    return digitalServices.reduce((m,s)=>Math.max(m,Number(s.sort_order||0)),0)+10 || 100;
+  }
+
+  function nextFieldSort(serviceId){
+    return fieldsForService(serviceId).reduce((m,f)=>Math.max(m,Number(f.sort_order||0)),0)+10 || 100;
+  }
+
+  function showModal(el){
+    if(!el) return;
+    if(typeof el.showModal==='function') el.showModal();
+    else{el.setAttribute('open','');el.style.display='block'}
+  }
+
+  function hideModal(el){
+    if(!el) return;
+    if(typeof el.close==='function' && el.open) el.close();
+    else{el.removeAttribute('open');el.style.display='none'}
+  }
+
+  function openServiceDialog(service=null){
+    $('#serviceDialogTitle').textContent=service?'تعديل القسم':'إنشاء قسم جديد';
+    $('#serviceId').value=service?.id||'';
+    $('#serviceVersion').value=service?.updated_at||'';
+    $('#serviceName').value=service?.name||'';
+    $('#servicePublicTitle').value=service?.public_title||'';
+    $('#serviceSlug').value=service?.slug||'';
+    $('#serviceSlug').readOnly=Boolean(service);
+    $('#serviceIcon').value=(service?.icon && typeof service.icon==='object' ? service.icon.value : '') || '';
+    $('#serviceAccent').value=/^#[0-9a-f]{6}$/i.test(service?.accent_color||'')?service.accent_color:'#55e6d0';
+    $('#serviceSortOrder').value=service?.sort_order??nextServiceSort();
+    $('#serviceDescription').value=service?.description||'';
+    $('#serviceWhatsappIntro').value=service?.whatsapp_intro||'';
+    $('#serviceStatus').value=service?.status||'draft';
+    msg($('#serviceFormMessage'));
+    showModal(serviceDialog);
+  }
+
+  function closeServiceDialog(){
+    hideModal(serviceDialog);
+  }
+
+  function parseOptions(v){
+    return [...new Set(String(v||'')
+      .split(/\n|,|،/)
+      .map(x=>x.trim())
+      .filter(Boolean))];
+  }
+
+  function openServiceFieldDialog(field=null){
+    const service=serviceById(activeServiceId);
+    if(!service){
+      toast('اختر قسماً أولاً.','error');
+      return;
+    }
+
+    $('#serviceFieldDialogTitle').textContent=field?'تعديل الحقل':'إضافة حقل';
+    $('#serviceFieldId').value=field?.id||'';
+    $('#serviceFieldVersion').value=field?.updated_at||'';
+    $('#serviceFieldStorage').value=field?.storage||'attributes';
+    $('#serviceFieldLabel').value=field?.label||'';
+    $('#serviceFieldKey').value=field?.field_key||'';
+    $('#serviceFieldKey').readOnly=Boolean(field);
+    $('#serviceFieldType').value=field?.field_type||'text';
+    $('#serviceFieldSortOrder').value=field?.sort_order??nextFieldSort(service.id);
+    $('#serviceFieldPlaceholder').value=field?.placeholder||'';
+    $('#serviceFieldDefault').value=field?.default_value||'';
+    $('#serviceFieldHelp').value=field?.help_text||'';
+    $('#serviceFieldOptions').value=Array.isArray(field?.options)?field.options.join('\n'):'';
+    $('#serviceFieldWhatsappIcon').value=field?.whatsapp_icon||'';
+    $('#serviceFieldRequired').checked=Boolean(field?.required);
+    $('#serviceFieldSearchable').checked=Boolean(field?.searchable);
+    $('#serviceFieldFilterable').checked=Boolean(field?.filterable);
+    $('#serviceFieldAdminList').checked=Boolean(field?.show_on_admin_list);
+    $('#serviceFieldCard').checked=field?.show_on_card ?? true;
+    $('#serviceFieldWhatsapp').checked=field?.show_on_whatsapp ?? true;
+    $('#fieldOptionsWrap').hidden=$('#serviceFieldType').value!=='select';
+    msg($('#serviceFieldMessage'));
+    showModal(serviceFieldDialog);
+  }
+
+  function closeServiceFieldDialog(){
+    hideModal(serviceFieldDialog);
+  }
+
+  const BASE_SERVICE_FIELDS=[
+    {field_key:'name',label:'اسم المنتج',field_type:'text',storage:'column',required:true,searchable:true,filterable:false,show_on_admin_list:true,show_on_card:true,show_on_whatsapp:true,whatsapp_icon:'◈',sort_order:10},
+    {field_key:'duration',label:'المدة',field_type:'text',storage:'column',required:true,searchable:true,filterable:true,show_on_admin_list:true,show_on_card:true,show_on_whatsapp:true,whatsapp_icon:'◷',sort_order:20},
+    {field_key:'price',label:'السعر',field_type:'number',storage:'column',required:true,searchable:false,filterable:false,show_on_admin_list:true,show_on_card:true,show_on_whatsapp:true,whatsapp_icon:'ر.ع',sort_order:30},
+    {field_key:'description',label:'الوصف',field_type:'textarea',storage:'column',required:false,searchable:true,filterable:false,show_on_admin_list:false,show_on_card:true,show_on_whatsapp:false,whatsapp_icon:'',sort_order:40},
+    {field_key:'features',label:'المميزات',field_type:'textarea',storage:'column',required:false,searchable:true,filterable:false,show_on_admin_list:false,show_on_card:true,show_on_whatsapp:false,whatsapp_icon:'✓',sort_order:50},
+    {field_key:'note',label:'ملاحظة للعميل',field_type:'textarea',storage:'column',required:false,searchable:true,filterable:false,show_on_admin_list:false,show_on_card:true,show_on_whatsapp:true,whatsapp_icon:'⚠',sort_order:60},
+    {field_key:'delivery_method',label:'طريقة التسليم',field_type:'text',storage:'column',required:false,searchable:true,filterable:true,show_on_admin_list:false,show_on_card:false,show_on_whatsapp:true,whatsapp_icon:'⇢',sort_order:70}
+  ];
+
+  async function createBaseFields(serviceId,schemaVersion=1){
+    const rows=BASE_SERVICE_FIELDS.map(f=>({
+      service_id:serviceId,
+      ...f,
+      options:[],
+      placeholder:'',
+      help_text:'',
+      default_value:null,
+      validation:{},
+      schema_version:Number(schemaVersion||1),
+      status:'active'
+    }));
+
+    await db('service_fields',{
+      method:'POST',
+      body:rows,
+      prefer:'return=minimal'
+    });
+  }
+
+  async function updateServiceStatus(service,status){
+    if(!canEdit()) return;
+    const archived_at=status==='archived'?new Date().toISOString():null;
+    const path=`digital_services?id=eq.${encodeURIComponent(service.id)}&updated_at=eq.${encodeURIComponent(service.updated_at)}`;
+    const rows=await db(path,{
+      method:'PATCH',
+      body:{status,archived_at},
+      prefer:'return=representation'
+    });
+    if(!Array.isArray(rows) || rows.length===0){
+      throw new Error('تم تعديل هذا القسم من جلسة أخرى. حدّث البيانات وحاول مرة ثانية.');
+    }
+    await loadDigitalServices();
+    renderServicesManager();
+    renderServiceBuilder();
+  }
+
+  $('#newServiceBtn')?.addEventListener('click',()=>openServiceDialog());
+  $('#serviceDialogClose')?.addEventListener('click',closeServiceDialog);
+  $('#cancelServiceDialog')?.addEventListener('click',closeServiceDialog);
+
+  $('#serviceName')?.addEventListener('input',()=>{
+    if(!$('#serviceId').value && !$('#serviceSlug').value){
+      const guessed=normalizeServiceSlug($('#serviceName').value);
+      if(guessed) $('#serviceSlug').value=guessed;
+    }
+  });
+  $('#serviceSlug')?.addEventListener('input',e=>{
+    if(!e.target.readOnly) e.target.value=normalizeServiceSlug(e.target.value);
+  });
+
+  $('#serviceForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!canEdit()) return;
+
+    const btn=$('#saveServiceBtn');
+    const id=$('#serviceId').value;
+    const slug=normalizeServiceSlug($('#serviceSlug').value);
+    const name=$('#serviceName').value.trim();
+    const public_title=$('#servicePublicTitle').value.trim();
+
+    if(!name || !public_title || !/^[a-z0-9][a-z0-9-]*$/.test(slug)){
+      msg($('#serviceFormMessage'),'تحقق من الاسم والعنوان والـ slug.','error');
+      return;
+    }
+
+    const status=$('#serviceStatus').value;
+    const payload={
+      slug,
+      name,
+      public_title,
+      description:$('#serviceDescription').value.trim(),
+      icon:{type:'text',value:$('#serviceIcon').value.trim() || name.slice(0,1)},
+      accent_color:$('#serviceAccent').value || '',
+      status,
+      sort_order:Number($('#serviceSortOrder').value||100),
+      whatsapp_intro:$('#serviceWhatsappIntro').value.trim(),
+      archived_at:status==='archived'?new Date().toISOString():null
+    };
+
+    try{
+      setBusy(btn,true);
+      msg($('#serviceFormMessage'));
+
+      if(id){
+        const version=$('#serviceVersion').value;
+        const rows=await db(`digital_services?id=eq.${encodeURIComponent(id)}&updated_at=eq.${encodeURIComponent(version)}`,{
+          method:'PATCH',
+          body:payload,
+          prefer:'return=representation'
+        });
+        if(!Array.isArray(rows) || rows.length===0){
+          throw new Error('تم تعديل هذا القسم من جلسة أخرى. حدّث البيانات ثم حاول مجدداً.');
+        }
+        activeServiceId=id;
+        toast('تم تحديث القسم.');
+      }else{
+        const rows=await db('digital_services',{
+          method:'POST',
+          body:payload,
+          prefer:'return=representation'
+        });
+        const created=Array.isArray(rows)?rows[0]:null;
+        if(!created?.id) throw new Error('تم إنشاء القسم لكن تعذر قراءة رقمه.');
+        await createBaseFields(created.id,created.schema_version||1);
+        activeServiceId=created.id;
+        toast('تم إنشاء القسم والحقول الأساسية.');
+      }
+
+      await Promise.all([loadDigitalServices(),loadServiceFields()]);
+      renderServicesManager();
+      renderServiceBuilder();
+      closeServiceDialog();
+      switchView('service-builder');
+    }catch(err){
+      msg($('#serviceFormMessage'),err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  $('#serviceAdminList')?.addEventListener('click',async e=>{
+    const btn=e.target.closest('[data-service-action]');
+    if(!btn) return;
+
+    const service=serviceById(btn.dataset.id);
+    if(!service) return;
+    const action=btn.dataset.serviceAction;
+
+    try{
+      if(action==='manage'){
+        activeServiceId=service.id;
+        renderServiceBuilder();
+        switchView('service-builder');
+        return;
+      }
+      if(action==='edit') return openServiceDialog(service);
+      if(action==='publish') await updateServiceStatus(service,'published');
+      if(action==='draft') await updateServiceStatus(service,'draft');
+      if(action==='restore') await updateServiceStatus(service,'draft');
+      if(action==='archive'){
+        if(!confirm(`أرشفة القسم "${service.name}"؟ لن تُحذف بياناته.`)) return;
+        await updateServiceStatus(service,'archived');
+      }
+      toast('تم تحديث حالة القسم.');
+    }catch(err){
+      toast(err.message,'error');
+    }
+  });
+
+  $('#backToServicesBtn')?.addEventListener('click',()=>switchView('services'));
+  $('#editServiceBtn')?.addEventListener('click',()=>{
+    const s=serviceById(activeServiceId);
+    if(s) openServiceDialog(s);
+  });
+  $('#newServiceFieldBtn')?.addEventListener('click',()=>openServiceFieldDialog());
+
+  $('#serviceStatusControl')?.addEventListener('change',async e=>{
+    const service=serviceById(activeServiceId);
+    if(!service || !canEdit()) return;
+    try{
+      await updateServiceStatus(service,e.target.value);
+      toast('تم تحديث حالة القسم.');
+    }catch(err){
+      e.target.value=service.status;
+      toast(err.message,'error');
+    }
+  });
+
+  $('#serviceFieldType')?.addEventListener('change',e=>{
+    $('#fieldOptionsWrap').hidden=e.target.value!=='select';
+  });
+  $('#serviceFieldDialogClose')?.addEventListener('click',closeServiceFieldDialog);
+  $('#cancelServiceFieldDialog')?.addEventListener('click',closeServiceFieldDialog);
+  $('#serviceFieldKey')?.addEventListener('input',e=>{
+    if(!e.target.readOnly) e.target.value=normalizeFieldKey(e.target.value);
+  });
+
+  $('#serviceFieldForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!canEdit()) return;
+
+    const service=serviceById(activeServiceId);
+    if(!service){
+      msg($('#serviceFieldMessage'),'لم يتم اختيار قسم.','error');
+      return;
+    }
+
+    const btn=$('#saveServiceFieldBtn');
+    const id=$('#serviceFieldId').value;
+    const field_key=normalizeFieldKey($('#serviceFieldKey').value);
+    const label=$('#serviceFieldLabel').value.trim();
+    const field_type=$('#serviceFieldType').value;
+
+    if(!label || !/^[a-z][a-z0-9_]*$/.test(field_key)){
+      msg($('#serviceFieldMessage'),'تحقق من اسم الحقل والمفتاح التقني.','error');
+      return;
+    }
+
+    const payload={
+      service_id:service.id,
+      field_key,
+      label,
+      field_type,
+      storage:$('#serviceFieldStorage').value || 'attributes',
+      options:field_type==='select'?parseOptions($('#serviceFieldOptions').value):[],
+      required:$('#serviceFieldRequired').checked,
+      placeholder:$('#serviceFieldPlaceholder').value.trim(),
+      help_text:$('#serviceFieldHelp').value.trim(),
+      default_value:$('#serviceFieldDefault').value.trim() || null,
+      searchable:$('#serviceFieldSearchable').checked,
+      filterable:$('#serviceFieldFilterable').checked,
+      show_on_admin_list:$('#serviceFieldAdminList').checked,
+      show_on_card:$('#serviceFieldCard').checked,
+      show_on_whatsapp:$('#serviceFieldWhatsapp').checked,
+      whatsapp_icon:$('#serviceFieldWhatsappIcon').value.trim(),
+      validation:{},
+      sort_order:Number($('#serviceFieldSortOrder').value||100),
+      schema_version:Number(service.schema_version||1),
+      status:'active',
+      archived_at:null
+    };
+
+    try{
+      setBusy(btn,true);
+      msg($('#serviceFieldMessage'));
+
+      if(id){
+        const current=serviceFields.find(f=>f.id===id);
+        if(!current) throw new Error('الحقل غير موجود.');
+
+        // Preserve immutable storage/key for existing fields.
+        payload.field_key=current.field_key;
+        payload.storage=current.storage;
+        const version=$('#serviceFieldVersion').value;
+        const rows=await db(`service_fields?id=eq.${encodeURIComponent(id)}&updated_at=eq.${encodeURIComponent(version)}`,{
+          method:'PATCH',
+          body:payload,
+          prefer:'return=representation'
+        });
+        if(!Array.isArray(rows) || rows.length===0){
+          throw new Error('تم تعديل هذا الحقل من جلسة أخرى. حدّث البيانات وحاول مرة ثانية.');
+        }
+        toast('تم تحديث الحقل.');
+      }else{
+        if(serviceFields.some(f=>f.service_id===service.id && f.field_key===field_key)){
+          throw new Error('يوجد حقل بنفس المفتاح التقني داخل هذا القسم.');
+        }
+        await db('service_fields',{
+          method:'POST',
+          body:payload,
+          prefer:'return=representation'
+        });
+        toast('تمت إضافة الحقل.');
+      }
+
+      await loadServiceFields();
+      renderServiceBuilder();
+      renderServicesManager();
+      closeServiceFieldDialog();
+    }catch(err){
+      msg($('#serviceFieldMessage'),err.message,'error');
+    }finally{
+      setBusy(btn,false);
+    }
+  });
+
+  $('#serviceFieldsList')?.addEventListener('click',async e=>{
+    const btn=e.target.closest('[data-field-action]');
+    if(!btn) return;
+    const field=serviceFields.find(f=>f.id===btn.dataset.id);
+    if(!field) return;
+    const action=btn.dataset.fieldAction;
+
+    if(action==='edit') return openServiceFieldDialog(field);
+    if(!canEdit()) return;
+
+    try{
+      const nextStatus=action==='archive'?'archived':'active';
+      if(action==='archive' && !confirm(`أرشفة الحقل "${field.label}"؟ لن تُحذف بياناته القديمة.`)) return;
+      const rows=await db(`service_fields?id=eq.${encodeURIComponent(field.id)}&updated_at=eq.${encodeURIComponent(field.updated_at)}`,{
+        method:'PATCH',
+        body:{
+          status:nextStatus,
+          archived_at:nextStatus==='archived'?new Date().toISOString():null
+        },
+        prefer:'return=representation'
+      });
+      if(!Array.isArray(rows) || rows.length===0){
+        throw new Error('تم تعديل هذا الحقل من جلسة أخرى. حدّث البيانات وحاول مرة ثانية.');
+      }
+      await loadServiceFields();
+      renderServiceBuilder();
+      renderServicesManager();
+      toast(nextStatus==='archived'?'تمت أرشفة الحقل.':'تمت استعادة الحقل.');
+    }catch(err){
+      toast(err.message,'error');
+    }
+  });
+
+  ['#serviceSearch','#serviceStatusFilter'].forEach(sel=>{
+    const el=$(sel);
+    if(el) el.addEventListener(sel==='#serviceSearch'?'input':'change',renderServicesManager);
+  });
+
 
   ['#netflixSearch','#netflixNameFilter','#netflixDurationFilter','#netflixStatusFilter','#netflixSortFilter'].forEach(sel=>{
     const el=$(sel);
@@ -3262,6 +4193,8 @@ input:focus,select:focus,textarea:focus{
     const meta={
       overview:['Dashboard','نظرة عامة'],
       packages:['Packages','إدارة الباقات'],
+      services:['Service Builder','إدارة الأقسام'],
+      'service-builder':['Service Builder · Fields','بناء حقول القسم'],
       netflix:['Netflix','اشتراكات Netflix'],
       'netflix-settings':['Netflix · Section Settings','اعدادات قسم Netflix'],
       settings:['Settings','الإعدادات'],
@@ -3367,7 +4300,6 @@ input:focus,select:focus,textarea:focus{
     $('#netflixScreens').value=p?.screens||'4 شاشات';
     $('#netflixQuality').value=p?.quality||'4K Ultra HD';
     $('#netflixDescription').value=p?.description||'أفضل جودة وتجربة مشاهدة';
-    $('#netflixNote').value=p?.note||'';
     $('#netflixFeatures').value=Array.isArray(p?.features)&&p.features.length
       ? p.features.join('\n')
       : 'تفعيل سريع\nدعم بعد الشراء\nتعليمات واضحة';
@@ -3729,13 +4661,8 @@ input:focus,select:focus,textarea:focus{
       }
 
       if(action==='unset-best'){
-        const entry=featureEntry('digital',p.id);
-        if(entry){
-          await db(`featured_selection?id=eq.${encodeURIComponent(entry.id)}`,{
-            method:'PATCH',
-            body:{best_value:false},
-            prefer:'return=minimal'
-          });
+        if(featureEntry('digital',p.id)){
+          await setFeatured('digital',p.id,{best:false});
         }
         toast('تم إلغاء أفضل قيمة.');
       }
@@ -3766,7 +4693,6 @@ input:focus,select:focus,textarea:focus{
       screens:$('#netflixScreens').value.trim(),
       quality:$('#netflixQuality').value.trim(),
       description:$('#netflixDescription').value.trim(),
-      note:$('#netflixNote').value.trim(),
       features:$('#netflixFeatures').value.split('\n').map(x=>x.trim()).filter(Boolean),
       active:$('#netflixActive').checked,
       delivery_method:$('#netflixDelivery').value.trim()||'واتساب'
@@ -3877,13 +4803,8 @@ input:focus,select:focus,textarea:focus{
       }
 
       if(action==='unset-best'){
-        const entry=featureEntry('esim',p.id);
-        if(entry){
-          await db(`featured_selection?id=eq.${encodeURIComponent(entry.id)}`,{
-            method:'PATCH',
-            body:{best_value:false},
-            prefer:'return=minimal'
-          });
+        if(featureEntry('esim',p.id)){
+          await setFeatured('esim',p.id,{best:false});
         }
         toast('تم إلغاء أفضل قيمة.');
       }
