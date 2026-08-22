@@ -76,7 +76,8 @@
       p.subscription_type ? `📦 النوع: ${p.subscription_type}` : '',
       p.screens ? `🖥 الأجهزة/الشاشات: ${p.screens}` : '',
       p.quality ? `✨ الجودة: ${p.quality}` : '',
-      p.delivery_method ? `🚚 التسليم: ${p.delivery_method}` : ''
+      p.delivery_method ? `🚚 التسليم: ${p.delivery_method}` : '',
+      p.note ? `⚠️ ملاحظة: ${p.note}` : ''
     ].filter(Boolean).join('\n');
 
     return `مرحبًا 👋
@@ -91,26 +92,49 @@ ${details}
 
   function netflixCard(p){
     const features=Array.isArray(p.features)?p.features:[];
-    const compactFeatures=[p.subscription_type,...features].filter(Boolean).slice(0,2);
+    const featureItems=features.filter(Boolean).slice(0,2);
+    const meta=[p.subscription_type,p.quality,p.screens].filter(Boolean);
 
     return `<article class="netflix-product-card">
       <div class="netflix-card-head">
-        <span class="netflix-logo">N</span>
+        <span class="netflix-logo" aria-hidden="true">N</span>
+
         <div class="netflix-title-wrap">
           <h3>${escapeHtml(p.name)}</h3>
-          ${p.quality?`<span class="netflix-quality">${escapeHtml(p.quality)}</span>`:''}
+
+          ${meta.length?`
+            <div class="netflix-meta-chips">
+              ${meta.map(x=>`<span>${escapeHtml(x)}</span>`).join('')}
+            </div>
+          `:''}
         </div>
       </div>
 
-      ${compactFeatures.length?`
-        <ul class="netflix-compact-features">
-          ${compactFeatures.map(x=>`<li><span>✓</span>${escapeHtml(x)}</li>`).join('')}
-        </ul>`:''}
+      ${featureItems.length?`
+        <div class="netflix-feature-row">
+          ${featureItems.map(x=>`
+            <span class="netflix-feature-item">
+              <i>✓</i>${escapeHtml(x)}
+            </span>
+          `).join('')}
+        </div>
+      `:''}
+
+      ${p.note?`
+        <div class="netflix-product-note" role="note">
+          <span class="netflix-note-icon">!</span>
+          <p><b>ملاحظة:</b> ${escapeHtml(p.note)}</p>
+        </div>
+      `:''}
 
       <div class="netflix-card-bottom">
-        <div class="netflix-price-wrap">
+        <div class="netflix-duration-wrap">
           <small>${escapeHtml(p.duration)}</small>
-          <strong>${money(p.price)} <span>ر.ع</span></strong>
+        </div>
+
+        <div class="netflix-price-wrap">
+          <strong>${money(p.price)}</strong>
+          <span>ر.ع</span>
         </div>
 
         <a class="netflix-order-btn"
