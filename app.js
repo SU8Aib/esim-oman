@@ -95,7 +95,7 @@ ${details}
     const featureItems=features.filter(Boolean).slice(0,2);
     const meta=[p.subscription_type,p.quality,p.screens].filter(Boolean);
 
-    return `<article class="netflix-product-card">
+    return `<article class="netflix-product-card ${p.note ? 'has-note' : 'no-note'}">
       <div class="netflix-card-head">
         <span class="netflix-logo" aria-hidden="true">N</span>
 
@@ -110,22 +110,24 @@ ${details}
         </div>
       </div>
 
-      ${featureItems.length?`
-        <div class="netflix-feature-row">
-          ${featureItems.map(x=>`
-            <span class="netflix-feature-item">
-              <i>✓</i>${escapeHtml(x)}
-            </span>
-          `).join('')}
-        </div>
-      `:''}
+      <div class="netflix-card-content">
+        ${featureItems.length?`
+          <div class="netflix-feature-row">
+            ${featureItems.map(x=>`
+              <span class="netflix-feature-item">
+                <i>✓</i>${escapeHtml(x)}
+              </span>
+            `).join('')}
+          </div>
+        `:''}
 
-      ${p.note?`
-        <div class="netflix-product-note" role="note">
-          <span class="netflix-note-icon">!</span>
-          <p><b>ملاحظة:</b> ${escapeHtml(p.note)}</p>
-        </div>
-      `:''}
+        ${p.note?`
+          <div class="netflix-product-note" role="note">
+            <span class="netflix-note-icon">!</span>
+            <p><b>ملاحظة:</b> ${escapeHtml(p.note)}</p>
+          </div>
+        `:''}
+      </div>
 
       <div class="netflix-card-bottom">
         <div class="netflix-duration-wrap">
