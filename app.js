@@ -38,6 +38,10 @@
   }
 
   function money(v){ const n=Number(v); return Number.isFinite(n)?n.toFixed(3):'0.000'; }
+  function safeAccent(v){
+    const x=String(v||'').trim();
+    return /^#[0-9a-f]{6}$/i.test(x)?x:'#55E6D0';
+  }
   function escapeHtml(v){ return String(v ?? '').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
   function waLink(text='مرحبًا 👋، أبغى أعرف أكثر عن خدمات eSIM.OM.'){
     return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
@@ -118,8 +122,9 @@
       return {service:'eSIM',name:p.label,duration:p.duration,price:p.price,description:p.tagline||(p.type==='unlimited'?'إنترنت غير محدود':'باقة eSIM'),perks:Array.isArray(p.perks)?p.perks:[],best_value:Boolean(row.best_value),orderUrl:waLink(pkgMessage(p)),cta:'اطلب الباقة'};
     }
     const p=digitalProducts.find(x=>x.id===row.product_id); if(!p||p.active===false)return null;
-    const svc=serviceForProduct(p) || {name:(p.service_slug||'خدمة رقمية'),slug:p.service_slug||'digital',id:null,whatsapp_intro:''};
-    const fields=svc.id?effectiveFields(svc):[];
+    const svc=serviceForProduct(p);
+    if(!svc || svc.status!=='published') return null;
+    const fields=effectiveFields(svc);
     const perks=fields.filter(f=>f.show_on_card&&!['name','duration','price'].includes(f.field_key)).map(f=>displayValue(fieldValue(p,f))).filter(Boolean).slice(0,3);
     if(!perks.length) perks.push(p.subscription_type,p.quality,...(Array.isArray(p.features)?p.features:[]));
     return {service:svc.name,name:p.name,duration:p.duration,price:p.price,description:p.description||p.subscription_type||'اشتراك رقمي',perks:perks.filter(Boolean).slice(0,3),best_value:Boolean(row.best_value),orderUrl:waLink(digitalMessage(p,svc)),cta:'اطلب الاشتراك'};
@@ -135,14 +140,45 @@
     const others=items.filter(x=>x!==best); return [others[0],best,others[1]].filter(Boolean);
   }
 
+  function legacyNetflixCard(product,svc){
+    const fields=effectiveFields(svc);
+    const visibleKeys=new Set(fields.filter(f=>f.show_on_card).map(f=>f.field_key));
+    const quality=visibleKeys.has('quality')?displayValue(product.quality):'';
+    const featureList=Array.isArray(product.features)?product.features:[];
+    const compact=[];
+    if(visibleKeys.has('subscription_type') && product.subscription_type) compact.push(product.subscription_type);
+    if(visibleKeys.has('screens') && product.screens) compact.push(product.screens);
+    for(const x of featureList){
+      if(compact.length>=2) break;
+      if(x) compact.push(x);
+    }
+    const note=(visibleKeys.has('note') && product.note)?String(product.note).trim():'';
+    return `<article class="netflix-product-card ${note?'has-note':'no-note'}">
+      <div class="netflix-card-head">
+        <span class="netflix-logo">N</span>
+        <div class="netflix-title-wrap">
+          <h3>${escapeHtml(product.name||'')}</h3>
+          ${quality?`<span class="netflix-quality">${escapeHtml(quality)}</span>`:''}
+        </div>
+      </div>
+      ${compact.length?`<ul class="netflix-compact-features">${compact.slice(0,2).map(x=>`<li><span>✓</span>${escapeHtml(x)}</li>`).join('')}</ul>`:''}
+      ${note?`<div class="digital-note">⚠ ${escapeHtml(note)}</div>`:''}
+      <div class="netflix-card-bottom">
+        <div class="netflix-price-wrap"><small>${escapeHtml(product.duration||'')}</small><strong>${money(product.price)} <span>ر.ع</span></strong></div>
+        <a class="netflix-order-btn" href="${waLink(digitalMessage(product,svc))}" target="_blank" rel="noopener">اطلب</a>
+      </div>
+    </article>`;
+  }
+
   function digitalCard(product, svc){
+    if(svc.slug==='netflix') return legacyNetflixCard(product,svc);
     const fields=effectiveFields(svc);
     const visible=fields.filter(f=>f.show_on_card&&!['name','duration','price','features','note'].includes(f.field_key));
     const features=Array.isArray(product.features)&&product.features.length?product.features:(Array.isArray(svc.default_features)?svc.default_features:[]);
     const meta=visible.map(f=>({label:f.label,value:displayValue(fieldValue(product,f))})).filter(x=>x.value).slice(0,3);
     const compact=[...meta.map(x=>x.value),...features].filter(Boolean).slice(0,3);
     const note=product.note?String(product.note).trim():'';
-    const accent=svc.accent_color||'#55E6D0';
+    const accent=safeAccent(svc.accent_color);
     const netflix=svc.slug==='netflix';
     return `<article class="digital-product-card ${netflix?'service-netflix-card':''} ${note?'has-note':'no-note'}" style="--service-accent:${escapeHtml(accent)}">
       <div class="digital-card-head"><span class="digital-service-logo ${netflix?'netflix-logo':''}">${escapeHtml(serviceIcon(svc))}</span><div class="digital-title-wrap"><h3>${escapeHtml(product.name||'')}</h3>${meta[0]?`<span class="digital-primary-tag">${escapeHtml(meta[0].value)}</span>`:''}</div></div>
@@ -158,8 +194,8 @@
     root.innerHTML=published.map(svc=>{
       const products=productsForService(svc).filter(p=>p.active!==false).sort((a,b)=>Number(a.sort_order||100)-Number(b.sort_order||100)||String(a.created_at||'').localeCompare(String(b.created_at||'')));
       const icon=serviceIcon(svc);
-      const body=products.length?products.map(p=>digitalCard(p,svc)).join(''):`<div class="digital-empty"><span class="digital-service-logo ${svc.slug==='netflix'?'netflix-logo':''}" style="--service-accent:${escapeHtml(svc.accent_color||'#55E6D0')}">${escapeHtml(icon)}</span><div><b>لا توجد اشتراكات ${escapeHtml(svc.name)} متاحة حالياً</b><p>ستظهر المنتجات هنا عند تفعيلها.</p></div></div>`;
-      return `<section class="section-space digital-service-section ${svc.slug==='netflix'?'netflix-section':''}" id="service-${escapeHtml(svc.slug)}" data-digital-service-id="${escapeHtml(svc.id)}" style="--service-accent:${escapeHtml(svc.accent_color||'#55E6D0')}"><div class="container"><div class="section-head digital-service-head ${svc.slug==='netflix'?'netflix-section-head':''}"><span class="eyebrow">${escapeHtml(svc.name.toUpperCase())}</span><h2>${escapeHtml(svc.public_title||svc.name)}</h2>${svc.description?`<p>${escapeHtml(svc.description)}</p>`:''}</div><div class="digital-service-grid ${svc.slug==='netflix'?'netflix-grid':''}">${body}</div></div></section>`;
+      const body=products.length?products.map(p=>digitalCard(p,svc)).join(''):`<div class="digital-empty"><span class="digital-service-logo ${svc.slug==='netflix'?'netflix-logo':''}" style="--service-accent:${escapeHtml(safeAccent(svc.accent_color))}">${escapeHtml(icon)}</span><div><b>لا توجد اشتراكات ${escapeHtml(svc.name)} متاحة حالياً</b><p>ستظهر المنتجات هنا عند تفعيلها.</p></div></div>`;
+      return `<section class="section-space digital-service-section ${svc.slug==='netflix'?'netflix-section':''}" id="service-${escapeHtml(svc.slug)}" data-digital-service-id="${escapeHtml(svc.id)}" style="--service-accent:${escapeHtml(safeAccent(svc.accent_color))}"><div class="container"><div class="section-head digital-service-head ${svc.slug==='netflix'?'netflix-section-head':''}"><span class="eyebrow">${escapeHtml(svc.name.toUpperCase())}</span><h2>${escapeHtml(svc.public_title||svc.name)}</h2>${svc.description?`<p>${escapeHtml(svc.description)}</p>`:''}</div><div class="digital-service-grid ${svc.slug==='netflix'?'netflix-grid':''}">${body}</div></div></section>`;
     }).join('');
   }
 
